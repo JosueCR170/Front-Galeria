@@ -140,11 +140,60 @@ button:active {
     line-height: 1;
   }
   /*-----------------------------------------------*/
- /* .colums{
+  .colums{
+    display: grid;
+    grid-template-columns:  1fr 1fr 1fr;
+    width: 100%;
+    justify-items: center;
+    flex-wrap: wrap;
+    margin-top: 50px;
+    gap:4%;
+  }
+  .colum1{
+    color: white;
+    height: 100%;
+    
+    
+  }
+  .colum2{
+    color: white;
+    height: 100%;
+  }
+  .cardColm-a{
+    margin-bottom: 5%;
+    position: relative;
+    border-radius: 10px;
+    width: 22vw;
+    height: 25vw;
+    background-color: cadetblue;
+  }
+  .cardColm-s{
+    margin-bottom: 5%;
+    position: relative;
+    border-radius: 10px;
+    width: 22vw;
+    height: 10vw;
+    background-color: #DBB385;
+  }
 
-  }*/
+  .social-footer{
+    display: flex;
+    justify-content: space-around;
+  }
+  .social-footer a {
+    color: white;
+    margin: 0 10px;
+    font-size: 20px;
+    text-decoration: none;
+    font-family: "Righteous", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
 
-
+.social-footer .designers {
+    margin-top: 10px;
+    color: #ccc;
+}
   @media screen and (max-width: 700px){
    .cabeza{
     height: 40%;
