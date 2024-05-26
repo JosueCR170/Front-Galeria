@@ -25,10 +25,10 @@
     background-position: 30% 45% ;
    background-size:cover;
    background-repeat: no-repeat;
-   font-size: clamp(5em,7vw, 7em);
+   font-size: clamp(5em,10vw, 10em);
 }
 .look {
-    line-height: 1.4;
+    line-height: 1.2;
     color: white;
     font-family: "Righteous", sans-serif;
     font-weight: 400;
@@ -42,40 +42,121 @@
     color: #DBB385; /* Color de texto que desees */
   }
   .introducction{
+    margin-bottom: 0;
     margin-top: 60px;
     display: flex;
     color: white;
-    align-items: center;
+
     justify-content: space-between;
-    font-size: clamp(1rem,2vw, 3em);
-    
+   
     border-bottom: solid 5px white;
   }
   .text-Intro{
-    height: 6em;
-    width: 31%;
+  font-family: "Arimo", sans-serif;
+   font-style:normal;
+    font-weight: 400;
+  font-size: clamp(1rem,3vw, 3em);
+   margin-bottom: 0;
+   line-height: 1;
+
+  }
+  
+ button {
+ --glow-color: rgb(255, 217, 176);
+ --glow-spread-color: rgba(255, 209, 123, 0.781);
+ --enhanced-glow-color: rgb(255, 229, 206);
+ --btn-color: rgb(136, 103, 61);
+ border: .25em solid var(--glow-color);
+/* padding: 1em 3em;*/
+ color: var(--glow-color);
+ font-size: 15px;
+ font-weight: bold;
+ background-color: var(--btn-color);
+ border-radius: 1em;
+ outline: none;
+ box-shadow: 0 0 1em .25em var(--glow-color),
+        0 0 4em 1em var(--glow-spread-color),
+        inset 0 0 .75em .25em var(--glow-color);
+ text-shadow: 0 0 .5em var(--glow-color);
+ position: relative;
+ transition: all 0.3s;
+ height: 40px;
+ width: clamp(5rem, 9em, 14rem);
+ font-size: clamp(0.7rem, 0.5vw, 1rem); 
+}
+
+
+button::after {
+ pointer-events: none;
+ content: "";
+ position: absolute;
+ top: 120%;
+ left: 0;
+ height: 100%;
+ width: 100%;
+ background-color: var(--glow-spread-color);
+ filter: blur(2em);
+ opacity: .7;
+ transform: perspective(1.5em) rotateX(35deg) scale(1, .6);
+}
+
+button:hover {
+ color: var(--btn-color);
+ background-color: var(--glow-color);
+ box-shadow: 0 0 1em .25em var(--glow-color),
+        0 0 4em 2em var(--glow-spread-color),
+        inset 0 0 .75em .25em var(--glow-color);
+}
+
+button:active {
+ box-shadow: 0 0 0.6em .25em var(--glow-color),
+        0 0 2.5em 2em var(--glow-spread-color),
+        inset 0 0 .5em .25em var(--glow-color);
+}
+/* ------------------------------------------*/  
+
+   .container-text{
+    margin-top: 4rem;
+    width: 100%;
+    color: white;
+  }
+  .container_tex1{
+    width: 100%;
+    font-size: clamp(2em,7vw, 8em);
+     font-family: "Arimo", sans-serif;
+   font-style:normal;
+    font-weight: 400;
+    line-height: 1;
   }
 
-  .bottom-log{
-    width: 30%;
-    height: 50px;
-    color: white;
-    background: transparent;
-    border-color: #DBB385;
-    border-radius: 30px;
-    font-size: 10%;
+  .container_tex2{
+    color: gray;
+    margin-top: 9rem;
+    width: 100%;
+    font-size: clamp(2em,7vw, 8em);
+    font-family: "Righteous", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    line-height: 1;
   }
+  /*-----------------------------------------------*/
+ /* .colums{
+
+  }*/
+
 
   @media screen and (max-width: 700px){
    .cabeza{
     height: 40%;
    }
- 
-  }
+   .container_tex2{
+    margin-top: 4rem;
+   }
+   .btna {
+    /* Ajusta el ancho del botón en pantallas pequeñas */
+    font-size: 0.8rem; /* Ajusta el tamaño de la fuente para pantallas pequeñas */
+}
+@media (max-width: 480px) {
   
-  @media screen and (max-width: 684px){
-    
-    .text-Intro{
-     width: 35%;
-   }
-   }
+}
+  }
