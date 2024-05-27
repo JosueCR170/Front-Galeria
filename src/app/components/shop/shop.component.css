@@ -91,6 +91,10 @@
     background-color: rgb(246, 246, 246);
     border-radius: 4px;
   }
+.nav-left{
+  display: flex; width: 20%; justify-content: space-around;
+}
+
   #bar2 {
     transition-duration: .8s;
   }
@@ -135,7 +139,7 @@
     }
     
   }
-  @media (max-width:900px) {
+  @media (max-width:991px) {
     .miniMenu{
         min-height: 70px;
     }
@@ -174,4 +178,7 @@
     #checkbox:checked ~ nav{
         display: initial;
     } 
+    .nav-left{
+      width: 30%;
+    }
 }
