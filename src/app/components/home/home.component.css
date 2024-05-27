@@ -39,7 +39,7 @@
     white-space: pre-wrap;
 }
 .colored-text {
-    color: #DBB385; /* Color de texto que desees */
+    color: hsl(32, 54%, 69%); /* Color de texto que desees */
   }
   .introducction{
     margin-bottom: 0;
