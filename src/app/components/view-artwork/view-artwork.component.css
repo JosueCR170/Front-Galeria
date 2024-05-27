@@ -1,0 +1,129 @@
+.view-body {
+    height: 100vh;
+    width: 100%;
+    background-color: #000;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #111;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #ccc;
+    font-size: 18px;
+}
+
+.nav-links a:hover {
+    color: #fff;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+}
+
+.search-container input {
+    padding: 5px;
+    border: none;
+    border-radius: 3px;
+    outline: none;
+}
+
+.search-container button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #ccc;
+    font-size: 18px;
+    margin-left: 5px;
+}
+
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.user-actions a {
+    text-decoration: none;
+    color: #ccc;
+    font-size: 18px;
+}
+
+.user-actions a.logout {
+    color: #ff0000;
+}
+
+.user-actions a:hover {
+    color: #fff;
+}
+.view-container{
+    justify-content: center;
+    align-items: center;
+    width: 70%;
+}
+
+main {
+    height: 50%;
+    width: 50%;
+    display: flex;
+}
+
+.card-container {
+    display: flex;
+    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
+}
+
+img {
+    height: 70%;
+    width: 70%;
+    border-radius: 10px;
+}
+
+.btn-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 600px;
+    margin-top: 20px;
+}
+
+.back-btn {
+    color: #ff0000;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.cart-btn {
+    background-color: #f5deb3;
+    color: #000;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.cart-btn:hover {
+    background-color: #e6cba8;
+}
