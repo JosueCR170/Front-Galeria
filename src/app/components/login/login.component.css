@@ -9,10 +9,12 @@
 }
 
 .login-container {
-    background-color: rgba(0, 0, 0, 0.8);
-    border-radius: 10px;
+    border: 2px solid #ffffff;
+    border-radius: 20px;
     padding: 20px;
     color: white;
+    background-color: rgba(0, 0, 0, 0.5); 
+    backdrop-filter: blur(10px); 
 }
 
 h3 {
