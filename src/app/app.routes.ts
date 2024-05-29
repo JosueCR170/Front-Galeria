@@ -3,7 +3,6 @@ import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { ViewArtworkComponent } from './components/view-artwork/view-artwork.component';
-
 import { ShopComponent } from './components/shop/shop.component';
 import { SaleComponent } from './components/sale/sale.component';
 
