@@ -142,6 +142,15 @@
   font-size: 18px;
   margin-top: 10px;
 }
+.dropdown-menu.show {
+ border: solid 2px white;
+ background-color: black;
+}
+.dropdown-menu li{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
 
 @media (max-width: 993px) {
   .miniMenu {
@@ -168,10 +177,6 @@
       display: none;
   }
   .menu nav ul {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
       margin: 0;
       padding: 0;
       width: 100%;
@@ -191,7 +196,7 @@
   }
   #checkbox:checked ~ nav {
       display: initial;
-  } 
+  }
   .UserIcon {
       display: none;
   }
@@ -205,6 +210,7 @@
       width: 60% !important;
   }
 }
+
 /*-----------------------------------Navbar----------------------------------*/
 .work{
   margin-top: 4rem;
@@ -233,7 +239,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
-  width: 90%;
+  width: 100%;
   margin-bottom: 60px;
 }
 
