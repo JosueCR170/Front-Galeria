@@ -15,13 +15,23 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Category</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="downItem" href="#">Action</a></li>
-                                <li><a class="downItem" href="#">Another action</a></li>
-                                <li><a class="downItem" href="#">Something else here</a></li>
-                                <li><a class="downItem" href="#">Separated link</a></li>
+                              <li><a class="downItem"   (click)="selectCategory('Cubism')">Cubism</a></li>
+                              <li><a class="downItem" href="#" (click)="selectCategory('Impressionism')">Impressionism</a></li>
+                              <li><a class="downItem" href="#" (click)="selectCategory('Expressionism')">Expressionism</a></li>
+                              <li><a class="downItem" href="#" (click)="selectCategory('Realism')">Realism</a></li>
+                              <li><a class="downItem" href="#" (click)="selectCategory('Surrealism')">Surrealism</a></li>
+                              <li><a class="downItem" href="#" (click)="selectCategory('Abstract')">Abstract</a></li>
+                              <li><a class="downItem" href="#" (click)="selectCategory('Renaissance')">Renaissance</a></li>
+                              <li><a class="downItem" href="#" (click)="selectCategory('Baroque')">Baroque</a></li>
+                              <li><a class="downItem" href="#" (click)="selectCategory('Rococo')">Rococo</a></li>
+                              <li><a class="downItem" href="#" (click)="selectCategory('Romanticism')">Romanticism</a></li>
+                              <li><a class="downItem" href="#" (click)="selectCategory('Neoclassicism')">Neoclassicism</a></li>
+                              <li><a class="downItem" href="#" (click)="selectCategory('Modernism')">Modernism</a></li>
+                              <li><a class="downItem" href="#" (click)="selectCategory('Pop Art')">Pop Art</a></li>
+                              <li><a class="downItem" href="#" (click)="selectCategory('Naïve Art')">Naïve Art</a></li>
                             </ul>
                         </li>
-                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="contact.html">Home</a></li>
                         <li class="logout"><a href="#">Log out</a></li>
                     </ul>
                 </nav>
@@ -45,6 +55,7 @@
             <p class="work"><span class="workGradient">WORK</span> ART</p>
             
         </div>
+
         <div *ngFor="let categoria of categorias">
             @if(getNumeroDeObras(categoria) >= 1){
             <div style="border-bottom: solid 2px gray;">
@@ -59,16 +70,38 @@
                       <div style="display: flex; justify-content: space-between; align-items: center;">
                         <a href="#" class="btn btn-primary" style="width: 100%; background: linear-gradient(90deg,rgba(219, 133, 133, 1),rgba(54, 0, 207, 1)); border: none;">View</a>
                       </div>
-                   
                     </div>
                   </div>
                 </div>
               </div>
             </div>   
-        }@else{<div>
+        }@else{<div></div>} 
+      </div>
 
-        </div>} </div>
-</div>
+      @if (selectedCategory) {
+        <div style="border-bottom: solid 2px gray;">
+          <div class="categoria">{{ selectedCategory }}</div>
+          <div class="colums">
+            <div class="cardColm-a" *ngFor="let obra of getObrasByCategory(selectedCategory)">
+              <div class="card" style="height: 100%;">
+                <img [src]="obra.imagen" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">{{ obra.nombre }}</h5>
+                  <p class="card-text"><strong>$ {{ obra.precio}}</strong></p>
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <a href="#" class="btn btn-primary" style="width: 100%; background: linear-gradient(90deg,rgba(219, 133, 133, 1),rgba(54, 0, 207, 1)); border: none;">View</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>}
+    
+
+
+
+    </div>
+ </div>
 
 
 
