@@ -57,4 +57,11 @@ export class ShopComponent {
     const categoria = this.categorias.find(cat => cat.nombre === category);
     return categoria ? categoria.obras : [];
   }
+  showHome() {
+    this.selectedCategory = 'Home';}
+
+   /* showAll() {
+      this.selectedCategory = 'All';
+      this.obrasToShow = this.categorias.reduce((obras, categoria) => obras.concat(categoria.obras), []);
+    }*/
 }
