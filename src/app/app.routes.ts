@@ -5,8 +5,6 @@ import { SignupComponent } from './components/signup/signup.component';
 import { ViewArtworkComponent } from './components/view-artwork/view-artwork.component';
 import { ShopComponent } from './components/shop/shop.component';
 import { SaleComponent } from './components/sale/sale.component';
-import { LoginArtistComponent } from './components/login-artist/login-artist.component';
-import { SignupArtistComponent } from './components/signup-artist/signup-artist.component';
 
 export const routes: Routes = [
     {path:'',component: HomeComponent},
@@ -14,7 +12,6 @@ export const routes: Routes = [
     {path:'login/signup', component: SignupComponent},
     {path:'viewArtwork', component: ViewArtworkComponent},
     {path:'shop',component:ShopComponent},
-    {path: 'sale',component:SaleComponent},
-    {path:'loginArtist', component:LoginArtistComponent},
-    {path:'signupArtist', component:SignupArtistComponent}
+    {path: 'sale',component:SaleComponent}
+
 ];

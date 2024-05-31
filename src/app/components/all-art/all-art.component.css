@@ -1,15 +1,15 @@
-.sale-body {
+.shop-body {
     top: 0;
     left: 0;
     height: 100vh;
     width: 100%;
     display: flex;
     justify-content: center;
-    background-image: repeating-linear-gradient(0deg, rgb(6, 6, 6) 0px, rgb(6, 6, 6) 1px,transparent 1px, transparent 21px),repeating-linear-gradient(90deg, rgb(6, 6, 6) 0px, rgb(6, 6, 6) 1px,transparent 1px, transparent 21px),linear-gradient(90deg, hsl(144,0%,9%),hsl(144,0%,9%));
+    background-color: black;
     overflow: auto;
   }
   .conteiner {
-    width: 70%;
+    width: 90%;
     height: auto;
   }
   
@@ -19,15 +19,14 @@
     font-weight: 400;
     font-style: normal;
     width: 100%;
-    z-index: 1000;
   }
   .menu {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    /* Fija el navbar */
+    position: fixed; /* Fija el navbar */
     top: 0; /* Posición superior */
-    width: 100%; /* Ocupa todo el ancho */
+    width: 90%; /* Ocupa todo el ancho */
     z-index: 1000; /* Asegura que el navbar esté por encima de otros elementos */
     backdrop-filter: blur(5px); /* Ajusta según el diseño */
     border-bottom: 1px solid white;
@@ -143,6 +142,15 @@
     font-size: 18px;
     margin-top: 10px;
   }
+  .dropdown-menu.show {
+   border: solid 2px white;
+   background-color: black;
+  }
+  .dropdown-menu li{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
   
   @media (max-width: 993px) {
     .miniMenu {
@@ -169,10 +177,6 @@
         display: none;
     }
     .menu nav ul {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
         margin: 0;
         padding: 0;
         width: 100%;
@@ -192,7 +196,7 @@
     }
     #checkbox:checked ~ nav {
         display: initial;
-    } 
+    }
     .UserIcon {
         display: none;
     }
@@ -206,92 +210,19 @@
         width: 60% !important;
     }
   }
-  /*------------------------------------------*/
-  .contenido{
-    margin-top: 6rem; 
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    width: 100%;
-    height: 100%;
-  }
-  .formG-rigth{
-    background-color: rgb(255, 255, 255);
-  }
-  .formG{
-    color: white;
-    backdrop-filter: blur(5px);
-    padding: 20px;
-  }
-  .email{
-    margin-bottom: 20px;
-  }
-  .simpe{
-    color: #000;
-    border: solid 1px black; 
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    background-color: rgb(156, 193, 194);
-    height: 50%; 
-    padding: 12px 40px 0; 
-    margin: 0;
-  }
-  .transaccion{
-    color: #000;
-    border: solid 1px black;
-    background-color:rgb(156, 193, 194);
-    border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
-  }
-  /*acordion*/
-  .compra {
-    width: 9em;
-    height: 3em;
-    border-radius: 30em;
-    font-size: 15px;
-    font-family: inherit;
-    border: none;
-    position: relative;
-    overflow: hidden;
-    z-index: 1;
-    box-shadow: 6px 6px 12px #343333,
-                -6px -6px 12px #000000;
-   }
-   
-   .compra::before {
-    content: '';
-    width: 0;
-    height: 3em;
-    border-radius: 30em;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-image: linear-gradient(to right, #7d0fd8 0%, #47eaf9 100%);
-    transition: .5s ease;
-    display: block;
-    z-index: -1;
-   }
-   
-   .compra:hover::before {
-    width: 9em;
-   }
-   .location{
-    display: grid; 
-    grid-template-columns:  1fr 1fr 1fr; 
-    gap: 2%;
-    margin-bottom: 30px;
-    margin-bottom: 40px;
-    height: 15vh;
-    border-bottom: solid 2px rgb(136, 136, 136);
-   }
-   .datosResivo{
-    display: flex; justify-content: space-between; size: 18px; 
-   }
   
-  @media (max-width: 700px) {
-    .conteiner{
-      width: 100%;
-    }
-    .contenido{
-      grid-template-columns: 1fr;
-    }
+  /*-----------------------------------Navbar----------------------------------*/
+  .work{
+    margin-top: 4rem;
+    font-family: "Righteous", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: clamp(4em,10vw, 9em);
+    
+  }
+  .workGradient{
+    background: linear-gradient(90deg,rgba(219, 133, 133, 1),rgba(54, 0, 207, 1));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
