@@ -1,11 +1,10 @@
-export class User{
+export class Artista{
     constructor(
         public id:number,
         public nombre:string,
-        public tipoUsuario:boolean,
-        public email:string,
         public password:string,
         public telefono:string,
-        public nombreUsuario:string
+        public correo:string,
+        public nombreArtista:string
     ){}
 }
