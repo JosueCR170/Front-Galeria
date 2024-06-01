@@ -135,4 +135,5 @@ export class ShopComponent {
     this.flag = false;
     this.onClick = false;
   }
+
 }

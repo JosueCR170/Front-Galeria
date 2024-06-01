@@ -1,4 +1,4 @@
-.shop-body {
+.artist-body {
     top: 0;
     left: 0;
     height: 100vh;
@@ -236,5 +236,30 @@
     .busqueda {
         width: 60% !important;
     }
+  }
+
+  /*------------------------*/
+  .work{
+    margin-top: 4rem;
+    font-family: "Righteous", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: clamp(4em,10vw, 9em);
+    
+  }
+  .workGradient{
+    background: linear-gradient(90deg,rgba(219, 133, 133, 1),rgba(54, 0, 207, 1));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .categoria{
+    color: white;
+    margin-top: 2rem;
+    margin-bottom: 1em;
+    font-family: "Righteous", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: clamp(2em,3vw, 3em);
   }
   
