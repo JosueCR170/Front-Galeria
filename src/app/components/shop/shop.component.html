@@ -10,7 +10,11 @@
                 </label>
                 <nav class="nav">
                     <ul style="margin-bottom: 0; padding: 0 0">
+<<<<<<< HEAD
                         <li><a href="index.html">See all</a></li> <!--Cambie acá-->
+=======
+                        <li><a style="cursor: pointer;" (click)="showAll(true)">See all</a></li> <!--Cambie acá-->
+>>>>>>> b57b57fd737d713984d6bb4459b652cb9314f71a
                         <li><a href="skills.html">Artists</a></li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Category</a>
@@ -31,7 +35,7 @@
                               <li><a class="downItem" (click)="selectCategory('Naïve Art')">Naïve Art</a></li>
                             </ul>
                         </li>
-                        <li><a href="/shop">Home</a></li>
+                        <li><a href="/shop" (click)="showHome(true)">Home</a></li>
                         <li class="logout"><a href="#">Log out</a></li>
                     </ul>
                 </nav>
@@ -51,12 +55,14 @@
             </div>
         </header>
         <!--Abajo del nav-->
-        <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
+
+        <!--Cambie acá-->
+
+        @if (getObrasByCategory(selectedCategory).length >= 1) {
+          <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
             <p class="work"><span class="workGradient">WORK</span> ART</p>
             
         </div>
-        <!--Cambie acá-->
-        @if (getObrasByCategory(selectedCategory).length >= 1) { 
           <div style="border-bottom: solid 2px gray;">
             <div class="categoria">{{ selectedCategory }}</div>
             <div class="colums">
@@ -74,10 +80,21 @@
               </div>
             </div>
           </div>
-        }@else {
+        }@else if(onClick){
+          <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
+            <p class="work"><span class="workGradient">Error</span> :C</p>
+            
+        </div>
+          <div class="no-obras">No artworks available for this category.</div>
+        }
 
+        @if(flag){
+            <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
+                <p class="work"><span class="workGradient">WORK</span> ART</p>
+                </div>
         <div *ngFor="let categoria of categorias">
             @if(getNumeroDeObras(categoria) >= 1){
+            
             <div style="border-bottom: solid 2px gray;">
               <div class="categoria">{{ categoria.nombre }}</div>
               <div class="colums">
@@ -95,10 +112,32 @@
                 </div>
               </div>
             </div>   
-        }@else{<div></div>} 
+        }@else{<div></div>}
       </div>
+    }@else{<div></div>}
+
+      @if(all){
+        <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
+          <p class="work"><span class="workGradient">All</span> ART</p>
+          </div>
+          <div *ngFor="let categoria of categorias">
+              <div class="colums">
+                <div class="cardColm-a" *ngFor="let obra of categoria.obras">
+                  <div class="card" style="height: 100%;">
+                    <img [src]="obra.imagen" class="card-img-top" alt="...">
+                    <div class="card-body">
+                      <h5 class="card-title">{{ obra.nombre }}</h5>
+                      <p class="card-text"><strong>$ {{ obra.precio }}</strong></p>
+                      <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <a href="#" class="btn btn-primary" style="width: 100%; background: linear-gradient(90deg, rgba(219, 133, 133, 1), rgba(54, 0, 207, 1)); border: none;">View</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+         
+          </div>
       }
-      <!--Hasta acá-->
     </div>
  </div>
 

@@ -12,6 +12,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 })
 export class ShopComponent {
   selectedCategory: string = '';
+  flag: boolean = true;
+  onClick: boolean = false;
+  all: boolean = false;
 
   categorias = [
     {
@@ -47,21 +50,30 @@ export class ShopComponent {
   // Método para manejar la selección de una categoría
   selectCategory(category: string) {
     this.selectedCategory = category;
+    this.onClick = true;
+    this.flag = false;
   }
   selectNav(category: string) {
     this.selectedCategory = category;
   }
 
   // Método para obtener las obras por categoría
+
   getObrasByCategory(category: string) {
     const categoria = this.categorias.find(cat => cat.nombre === category);
     return categoria ? categoria.obras : [];
   }
-  showHome() {
-    this.selectedCategory = 'Home';}
 
-   /* showAll() {
-      this.selectedCategory = 'All';
-      this.obrasToShow = this.categorias.reduce((obras, categoria) => obras.concat(categoria.obras), []);
-    }*/
+  showHome(show: boolean) {
+    this.flag = show;
+    this.onClick = false;
+    this.all = false;
+  }
+
+   showAll(all: boolean) {
+    this.selectedCategory = '';
+      this.all = all;
+      this.flag = false;
+      this.onClick = false;
+    }
 }
