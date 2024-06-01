@@ -27,10 +27,23 @@ export class LoginComponent {
   onSubmit(form:any){
     this._userService.login(this.user).subscribe({
       next:(response:any)=>{
-        console.log(response);
-        localStorage.setItem('token', response);
+        if(response.status != 401){
+          sessionStorage.setItem("token", response);
+          this._userService.getIdentityFromAPI().subscribe({
+            next:(resp:any)=>{
+              sessionStorage.setItem('identity', resp);
+              this._router.navigate(['/shop'])
+            },
+            error:(error:Error)=>{
+
+            }
+          })
+        } else {
+          this.status = 0;
+        }
       },
       error:(err:any)=>{
+        this.status = -1;
       }
     })
   }
