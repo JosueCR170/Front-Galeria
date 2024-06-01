@@ -7,7 +7,7 @@ import { ShopComponent } from './components/shop/shop.component';
 import { SaleComponent } from './components/sale/sale.component';
 import { LoginArtistComponent } from './components/login-artist/login-artist.component';
 import { SignupArtistComponent } from './components/signup-artist/signup-artist.component';
-import { AllArtComponent } from './components/all-art/all-art.component';
+
 
 
 export const routes: Routes = [
@@ -19,5 +19,4 @@ export const routes: Routes = [
     {path: 'sale',component:SaleComponent},
     {path:'loginArtist', component:LoginArtistComponent},
     {path:'signupArtist', component:SignupArtistComponent},
-    {path: 'all',component:AllArtComponent}
 ];
