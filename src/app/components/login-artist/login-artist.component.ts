@@ -18,6 +18,6 @@ export class LoginArtistComponent {
     private _routes:ActivatedRoute
   ){
     this.status=-1;
-    this.user=new User(1, "","", "", "", "","")
+    this.user=new User(1, "",true, "", "", "","")
   }
 }
