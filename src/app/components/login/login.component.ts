@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UserService } from '../../services/user.service';
-import { User } from '../../models/User';
+import { User } from '../../models/user';
 import { consumerPollProducersForChange } from '@angular/core/primitives/signals';
 
 @Component({
