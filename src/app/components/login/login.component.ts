@@ -34,7 +34,7 @@ export class LoginComponent {
             next:(resp:any)=>{
               sessionStorage.setItem('identity', JSON.stringify(resp));
               this._router.navigate(['/shop'])
-              console.log(resp);
+              //console.log(resp);
             },
             error:(error:Error)=>{
 

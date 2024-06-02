@@ -36,7 +36,7 @@
             [(ngModel)]="user.password" required/>
 
 
-            <label for="user">UserName</label>
+            <label for="userName">UserName</label>
             <input id="userName" type="text" #userName="ngModel" class="form-control" name="userName" 
                  pattern="^(?=.*[a-zA-Z0-9_-])[a-zA-Z0-9_-]{4,}$" [(ngModel)]="user.nombreUsuario" required/>
                 @if(!userName.valid && userName.touched){
