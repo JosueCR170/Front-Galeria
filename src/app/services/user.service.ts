@@ -40,7 +40,7 @@ export class UserService{
         let options = {
             headers
         };
-<<<<<<< HEAD
+
         return this._http.get(this.urlAPI+'user/getidentity', options);
     }
 
@@ -53,8 +53,5 @@ export class UserService{
         }
         return this._http.post(this.urlAPI+'user/store',params,options);
     }
-=======
-        return this._http.get(this.urlAPI+'user/getidentity', options)
-        }
->>>>>>> 83157012c1ca64e58f86850ed033904c9842a7ef
+
 }

@@ -35,22 +35,25 @@
             <input id="password" type="password" #password="ngModel" class="form-control" name="password"
             [(ngModel)]="user.password" required/>
 
-            
+
             <label for="user">UserName</label>
             <input id="userName" type="text" #userName="ngModel" class="form-control" name="userName" 
-                pattern="\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b" [(ngModel)]="user.nombreUsuario" required/>
+                 pattern="^(?=.*[a-zA-Z0-9_-])[a-zA-Z0-9_-]{4,}$" [(ngModel)]="user.nombreUsuario" required/>
                 @if(!userName.valid && userName.touched){
                     <small class="invalid-feedback d-block">Formato invalido</small>
-                }
+                }   
 
 
             <label for="phone">Phone</label>
-            <input id="phone" type="phone" #phone="ngModel" class="form-control" name="phone"
+            <input id="phone" type="number" #phone="ngModel" class="form-control" name="phone"
             [(ngModel)]="user.telefono"/>
+                @if(phone == null){
+                    
+                }
 
         </div> 
         <div class="btn-div">      
-        <input type="submit" class="btn mt-2" value="Sign-In" [disabled]="signupForm.invalid">
+        <input type="submit" class="btn mt-2" value="Sign-In"   [disabled]="signupForm.invalid">
         </div> 
         
     </form>

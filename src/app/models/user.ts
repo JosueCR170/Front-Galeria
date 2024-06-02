@@ -5,7 +5,7 @@ export class User{
         public tipoUsuario:boolean,
         public email:string,
         public password:string,
-        public telefono:string | null,
+        public telefono:number | null,
         public nombreUsuario:string
     ){}
 }
