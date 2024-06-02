@@ -6,6 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ObraService } from '../../services/obra.service';
 import { Obra } from '../../models/Obra';
+import { UserService } from '../../services/user.service';
+import { User } from '../../models/User';
 
 @Component({
   selector: 'app-shop',
@@ -19,10 +21,12 @@ export class ShopComponent {
   public status: number;
   public obra: Obra;
 
+
   constructor(
     private _obraService: ObraService,
     private _router: Router,
-    private _routes: ActivatedRoute
+    private _routes: ActivatedRoute,
+    private _userService: UserService
   ) {
     this.status = -1;
     this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, null);
@@ -36,7 +40,7 @@ export class ShopComponent {
   flag: boolean = true;
   onClick: boolean = false;
   all: boolean = false;
-
+  user: any;
   categorias = [
     {
       nombre: 'Cubism',
@@ -63,9 +67,15 @@ export class ShopComponent {
     // Añade más categorías si es necesario
   ];
 
-  ngOnInit(): void {
+  ngOnInit():void {
     // Aquí puedes llamar al método que desees que se ejecute al cargar el componente
     this.index();
+    this.loadLoggedUser();
+  }
+
+  logOut(){
+    sessionStorage.clear();
+    this._router.navigate([''])
   }
 
   index() {
@@ -80,6 +90,15 @@ export class ShopComponent {
     })
   }
 
+  getImage(obra: Obra): string | null {
+    if (obra.imagen) {
+      // Decodificar la imagen base64 y devolverla como una URL base64
+      return 'data:image/jpeg;base64,' + obra.imagen;
+    } else {
+      return null;
+    }
+  }
+
   loadCategorysExists() {
     if (this.obras.length >= 1) {
       this.obras.forEach(obra => {
@@ -88,7 +107,6 @@ export class ShopComponent {
         }
       });
     }
-    console.log(this.categoryExists);
   }
 
   loadAuxObras(category:string){
@@ -96,11 +114,20 @@ export class ShopComponent {
   }
 
   categoryExistsLength(category:string){
-    console.log(1);
     this.loadAuxObras(category);
     return this.categoryExists.length;
   }
 
+  loadObrasLength(category:string){
+    this.loadAuxObras(category);
+    return this.auxObras.length;
+  }
+
+  loadLoggedUser(){
+    this.user = sessionStorage.getItem('identity');
+    this.user = JSON.parse(this.user);
+  }
+  
   getNumeroDeObras(categoria: { nombre: string, obras: any[] }): number {
     return categoria.obras.length;
   }
@@ -111,16 +138,7 @@ export class ShopComponent {
     this.selectedCategory = category;
     this.onClick = true;
     this.flag = false;
-  }
-  selectNav(category: string) {
-    this.selectedCategory = category;
-  }
-
-  // Método para obtener las obras por categoría
-
-  getObrasByCategory(category: string) {
-    const categoria = this.categorias.find(cat => cat.nombre === category);
-    return categoria ? categoria.obras : [];
+    this.all = false;
   }
 
   showHome(show: boolean) {

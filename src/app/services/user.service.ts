@@ -1,8 +1,9 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { server } from "./global";
-import { Observable } from "rxjs";
 import { User } from "../models/User";
+import { BehaviorSubject, Observable, tap } from "rxjs";
+
 
 @Injectable({
     providedIn: 'root'
@@ -10,7 +11,8 @@ import { User } from "../models/User";
 
 export class UserService{
     private urlAPI:string;
-
+    private userSubject = new BehaviorSubject<any>(null);
+    public user$ = this.userSubject.asObservable();
     constructor(
         private _http:HttpClient
     ){
@@ -38,6 +40,7 @@ export class UserService{
         let options = {
             headers
         };
+<<<<<<< HEAD
         return this._http.get(this.urlAPI+'user/getidentity', options);
     }
 
@@ -50,4 +53,8 @@ export class UserService{
         }
         return this._http.post(this.urlAPI+'user/store',params,options);
     }
+=======
+        return this._http.get(this.urlAPI+'user/getidentity', options)
+        }
+>>>>>>> 83157012c1ca64e58f86850ed033904c9842a7ef
 }
