@@ -19,7 +19,7 @@ export class SignupComponent {
     private _userService:UserService
   ){
     this.status=-1;
-    this.user=new User(1,"",false,"","","","");
+    this.user=new User(1,"",false,"","",1,"");
   }
 
   onSubmit(form:any){
@@ -35,6 +35,7 @@ export class SignupComponent {
         }
       },
       error:(error:Error)=>{
+        console.log(error);
         this.changeStatus(2);
       }
     })
