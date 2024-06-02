@@ -45,8 +45,11 @@
 
 
             <label for="phone">Phone</label>
-            <input id="phone" type="phone" #phone="ngModel" class="form-control" name="phone"
+            <input id="phone" type="number" #phone="ngModel" class="form-control" name="phone"
             [(ngModel)]="user.telefono"/>
+                @if(phone == null){
+                    
+                }
 
         </div> 
         <div class="btn-div">      

@@ -19,11 +19,14 @@ export class SignupComponent {
     private _userService:UserService
   ){
     this.status=-1;
-    this.user=new User(1,"",false,"","",1,"");
+    this.user=new User(1,"",false,"","",null,"");
   }
 
   onSubmit(form:any){
     this.user.tipoUsuario=false;
+    if(this.user.telefono==null){
+      this.user.telefono=null
+    }
     this._userService.create(this.user).subscribe({
       next:(response)=>{
         console.log(response);
