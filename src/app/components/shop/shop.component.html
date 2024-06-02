@@ -46,7 +46,7 @@
             <a class="nav-link dropdown-toggle user-name" href="#" id="DropdownUser" role="button"
               data-bs-toggle="dropdown" aria-expanded="false"></a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="downItem" href="#">Be artist</a></li>
+              <li><a class="downItem" [routerLink]="['loginArtist']">Be artist</a></li>
               <li><a class="downItem" href="#" style="color: rgb(184, 72, 72);">Log Out</a></li>
             </ul>
           </li>
@@ -60,7 +60,6 @@
     @if (getObrasByCategory(selectedCategory).length >= 1) {
     <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
       <p class="work"><span class="workGradient">WORK</span> ART</p>
-
     </div>
     <div style="border-bottom: solid 2px gray;">
       <div class="categoria">{{ selectedCategory }}</div>
