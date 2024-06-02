@@ -1,14 +1,18 @@
 <div class="col-md-12 signup-body">
     <span>
         @switch (status) {
-            @case (0) {
-                <div class="alert alert-success"><p>Registro exitoso!</p></div>
-            }
+            <!-- @case (0) {
+                <div class="alert alert-success"><p>Registro exitoso! </p></div>
+                
+            } -->
             @case (1) {
                 <div class="alert alert-warning"><p>No se pudo agregar el usuario!</p></div>
             }
             @case (2) {
-                <div class="alert alert-danger"><p>Error de servidor!</p></div>
+                <div *ngFor="let error of errors" class="alert alert-danger">
+                    <p>{{ error }}</p>
+                </div>
+                <!-- <div class="alert alert-danger"><p>Error de servidor!</p></div> -->
             }
         }
         </span>
@@ -40,7 +44,7 @@
             <input id="userName" type="text" #userName="ngModel" class="form-control" name="userName" 
                  pattern="^(?=.*[a-zA-Z0-9_-])[a-zA-Z0-9_-]{4,}$" [(ngModel)]="user.nombreUsuario" required/>
                 @if(!userName.valid && userName.touched){
-                    <small class="invalid-feedback d-block">Formato invalido</small>
+                    <small class="invalid-feedback d-block">Formato invalido</small> 
                 }   
 
 

@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user';
 import { consumerPollProducersForChange } from '@angular/core/primitives/signals';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -42,11 +43,21 @@ export class LoginComponent {
           })
         } else {
           this.status = 0;
+          this.msgAlert('Usuario y/o contraseña incorrecta','error');
+          form.reset(); 
         }
       },
       error:(err:any)=>{
-        this.status = -1;
+        this.status = 1;
+        this.msgAlert('Error, desde el servidor. Contacte al administrador','error');
       }
+    })
+  }
+
+  msgAlert= (title:any, icon:any) =>{
+    Swal.fire({
+      title,
+      icon,
     })
   }
 }
