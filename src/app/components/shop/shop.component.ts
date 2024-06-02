@@ -101,6 +101,7 @@ export class ShopComponent {
     return this.categoryExists.length;
   }
 
+  
   getNumeroDeObras(categoria: { nombre: string, obras: any[] }): number {
     return categoria.obras.length;
   }
