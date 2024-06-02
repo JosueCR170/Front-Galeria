@@ -1,32 +1,30 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { server } from "./global";
-import { User } from "../models/User";
-import { BehaviorSubject, Observable, tap } from "rxjs";
-
+import { Artista } from "../models/Artista";
+import { Observable } from "rxjs";
 
 @Injectable({
     providedIn: 'root'
 })
 
-export class UserService{
+export class ArtistService{
     private urlAPI:string;
-    private userSubject = new BehaviorSubject<any>(null);
-    public user$ = this.userSubject.asObservable();
+
     constructor(
         private _http:HttpClient
     ){
         this.urlAPI = server.url;
     }
 
-    login(user:User):Observable<any>{
-        let userJson = JSON.stringify(user);
-        let params = 'data='+userJson;
+    loginArtist(artist:Artista):Observable<any>{
+        let artistJSON = JSON.stringify(artist);
+        let params = 'data='+artistJSON;
         let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
         let options = {
             headers
         };
-        return this._http.post(this.urlAPI+'user/login', params, options);
+        return this._http.post(this.urlAPI+'artist/login', params, options);
     }
 
     getIdentityFromAPI():Observable<any>{
@@ -40,6 +38,7 @@ export class UserService{
         let options = {
             headers
         };
-        return this._http.get(this.urlAPI+'user/getidentity', options)
-        }
+        return this._http.get(this.urlAPI+'artista/getidentity', options);
+    }
+
 }

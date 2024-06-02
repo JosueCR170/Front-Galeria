@@ -14,7 +14,7 @@ import { User } from '../../models/User';
 })
 export class LoginComponent {
   public status:number;
-  public user:User;
+  public user: User;
   constructor(
     private _userService:UserService,
     private _router:Router,
