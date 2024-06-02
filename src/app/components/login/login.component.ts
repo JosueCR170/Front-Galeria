@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/User';
+import { consumerPollProducersForChange } from '@angular/core/primitives/signals';
 
 @Component({
   selector: 'app-login',
@@ -31,8 +32,9 @@ export class LoginComponent {
           sessionStorage.setItem("token", response);
           this._userService.getIdentityFromAPI().subscribe({
             next:(resp:any)=>{
-              sessionStorage.setItem('identity', resp);
+              sessionStorage.setItem('identity', JSON.stringify(resp));
               this._router.navigate(['/shop'])
+              console.log(resp);
             },
             error:(error:Error)=>{
 

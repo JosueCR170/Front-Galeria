@@ -44,7 +44,7 @@
         <div class="nav-left">
           <li class="nav-item dropdown" style="list-style: none;">
             <a class="nav-link dropdown-toggle user-name" href="#" id="DropdownUser" role="button"
-              data-bs-toggle="dropdown" aria-expanded="false"></a>
+              data-bs-toggle="dropdown" aria-expanded="false">{{user.nombreUsuario}}</a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li><a class="downItem" [routerLink]="['loginArtist']">Be artist</a></li>
               <li><a class="downItem" href="#" style="color: rgb(184, 72, 72);">Log Out</a></li>
@@ -57,14 +57,14 @@
 
     <!--Cambie acá-->
 
-    @if (getObrasByCategory(selectedCategory).length >= 1) {
+    @if (loadObrasLength(selectedCategory) >= 1) {
     <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
       <p class="work"><span class="workGradient">WORK</span> ART</p>
     </div>
     <div style="border-bottom: solid 2px gray;">
       <div class="categoria">{{ selectedCategory }}</div>
       <div class="colums">
-        <div class="cardColm-a" *ngFor="let obra of getObrasByCategory(selectedCategory)">
+        <div class="cardColm-a" *ngFor="let obra of auxObras">
           <div class="card" style="height: 100%;">
             <img [src]="obra.imagen" class="card-img-top" alt="...">
             <div class="card-body">
@@ -84,7 +84,7 @@
       <p class="work"><span class="workGradient">Error</span> :C</p>
 
     </div>
-    <div class="no-obras">No artworks available for this category.</div>
+    <div class="no-obras" style="color: #fff;">No artworks available for this category.</div>
     }
 
     @if(flag){
@@ -123,9 +123,8 @@
     <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
       <p class="work"><span class="workGradient">All</span> ART</p>
     </div>
-    <div *ngFor="let categoria of categorias">
       <div class="colums">
-        <div class="cardColm-a" *ngFor="let obra of categoria.obras">
+        <div class="cardColm-a" style="margin-top: 20px;" *ngFor="let obra of obras">
           <div class="card" style="height: 100%;">
             <img [src]="obra.imagen" class="card-img-top" alt="...">
             <div class="card-body">
@@ -139,8 +138,6 @@
           </div>
         </div>
       </div>
-
-    </div>
     }
   </div>
 </div>

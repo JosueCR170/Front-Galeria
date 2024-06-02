@@ -40,7 +40,7 @@ export class ShopComponent {
   flag: boolean = true;
   onClick: boolean = false;
   all: boolean = false;
-  usuario: any;
+  user: any;
   categorias = [
     {
       nombre: 'Cubism',
@@ -70,6 +70,7 @@ export class ShopComponent {
   ngOnInit():void {
     // Aquí puedes llamar al método que desees que se ejecute al cargar el componente
     this.index();
+    this.loadLoggedUser();
   }
 
   index() {
@@ -92,7 +93,6 @@ export class ShopComponent {
         }
       });
     }
-    console.log(this.categoryExists);
   }
 
   loadAuxObras(category:string){
@@ -100,11 +100,20 @@ export class ShopComponent {
   }
 
   categoryExistsLength(category:string){
-    console.log(1);
     this.loadAuxObras(category);
     return this.categoryExists.length;
   }
 
+  loadObrasLength(category:string){
+    this.loadAuxObras(category);
+    return this.auxObras.length;
+  }
+
+  loadLoggedUser(){
+    this.user = sessionStorage.getItem('identity');
+    this.user = JSON.parse(this.user);
+    console.log(this.user);
+  }
   
   getNumeroDeObras(categoria: { nombre: string, obras: any[] }): number {
     return categoria.obras.length;
@@ -116,16 +125,6 @@ export class ShopComponent {
     this.selectedCategory = category;
     this.onClick = true;
     this.flag = false;
-  }
-  selectNav(category: string) {
-    this.selectedCategory = category;
-  }
-
-  // Método para obtener las obras por categoría
-
-  getObrasByCategory(category: string) {
-    const categoria = this.categorias.find(cat => cat.nombre === category);
-    return categoria ? categoria.obras : [];
   }
 
   showHome(show: boolean) {
