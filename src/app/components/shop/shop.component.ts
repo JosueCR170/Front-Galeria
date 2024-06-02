@@ -41,31 +41,6 @@ export class ShopComponent {
   onClick: boolean = false;
   all: boolean = false;
   user: any;
-  categorias = [
-    {
-      nombre: 'Cubism',
-      obras: [
-        { nombre: 'Obra 1', precio: 1900, imagen: '/assets/img/prueba2.jpg' },
-        { nombre: 'Obra 2', precio: 1900, imagen: '/assets/img/prueba2.jpg' },
-        { nombre: 'Obra 4', precio: 1900, imagen: '/assets/img/prueba2.jpg' },
-        { nombre: 'Obra 5', precio: 1900, imagen: '/assets/img/prueba2.jpg' },
-        { nombre: 'Obra 6', precio: 1900, imagen: '/assets/img/prueba2.jpg' },
-        { nombre: 'Obra 7', precio: 1900, imagen: '/assets/img/prueba2.jpg' },
-        { nombre: 'Obra 8', precio: 1900, imagen: '/assets/img/prueba2.jpg' },
-        { nombre: 'Obra 9', precio: 1900, imagen: '/assets/img/prueba2.jpg' },
-        // Añade las demás obras de cubismo aquí
-      ]
-    },
-    {
-      nombre: 'Impressionism',
-      obras: [
-        { nombre: 'Obra 1', precio: 1900, imagen: '/assets/img/prueba2.jpg' },
-        { nombre: 'Obra 2', precio: 1900, imagen: '/assets/img/prueba2.jpg' },
-        // Añade las demás obras de realismo aquí
-      ]
-    },
-    // Añade más categorías si es necesario
-  ];
 
   ngOnInit():void {
     // Aquí puedes llamar al método que desees que se ejecute al cargar el componente

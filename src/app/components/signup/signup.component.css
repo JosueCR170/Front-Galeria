@@ -72,3 +72,19 @@ label{
     box-shadow: none;
     border-color: #ffc107;
 }
+
+.buttom-btn{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+}
+
+ .back{
+    text-decoration: none;
+    color: #b32727;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+ }
+
+ .back:hover{
+    color: #7f1e1e;
+ }

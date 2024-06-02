@@ -52,10 +52,17 @@
                 }
 
         </div> 
-        <div class="btn-div">      
-        <input type="submit" class="btn mt-2" value="Sign-In"   [disabled]="signupForm.invalid">
-        </div> 
-        
+
+        <div class="buttom-btn">
+            <div class="btn-div">      
+                <input type="submit" class="btn mt-2" value="Sign-In"   [disabled]="signupForm.invalid">
+            </div>
+    
+                <div class="btn-div">      
+                    <a class="back" [routerLink]="['/login']" >Back</a>
+                 </div> 
+         </div>
+     
     </form>
     </div>
 </div>

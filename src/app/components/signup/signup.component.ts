@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { User } from '../../models/User';
+import { User } from '../../models/user';
 import { UserService } from '../../services/user.service';
 import { timer } from 'rxjs';
 import { FormsModule } from '@angular/forms';
