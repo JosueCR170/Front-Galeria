@@ -6,6 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ObraService } from '../../services/obra.service';
 import { Obra } from '../../models/Obra';
+import { UserService } from '../../services/user.service';
+import { User } from '../../models/User';
 
 @Component({
   selector: 'app-shop',
@@ -19,10 +21,12 @@ export class ShopComponent {
   public status: number;
   public obra: Obra;
 
+
   constructor(
     private _obraService: ObraService,
     private _router: Router,
-    private _routes: ActivatedRoute
+    private _routes: ActivatedRoute,
+    private _userService: UserService
   ) {
     this.status = -1;
     this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, null);
@@ -36,7 +40,7 @@ export class ShopComponent {
   flag: boolean = true;
   onClick: boolean = false;
   all: boolean = false;
-
+  usuario: any;
   categorias = [
     {
       nombre: 'Cubism',
@@ -63,7 +67,7 @@ export class ShopComponent {
     // Añade más categorías si es necesario
   ];
 
-  ngOnInit(): void {
+  ngOnInit():void {
     // Aquí puedes llamar al método que desees que se ejecute al cargar el componente
     this.index();
   }

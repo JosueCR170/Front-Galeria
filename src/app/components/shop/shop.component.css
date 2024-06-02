@@ -173,6 +173,7 @@
   /*height: 4vh;*/
   padding-top: 5px;
   display: block; /* Hace que todo el elemento sea clicable */
+
 }
 .dropdown-menu li:hover .downItem{
   color: black; /* Esto cambia el color del texto al pasar el mouse por encima */
