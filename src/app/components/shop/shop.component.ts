@@ -73,6 +73,11 @@ export class ShopComponent {
     this.loadLoggedUser();
   }
 
+  logOut(){
+    sessionStorage.clear();
+    this._router.navigate([''])
+  }
+
   index() {
     this._obraService.index().subscribe({
       next: (response: any) => {
@@ -83,6 +88,15 @@ export class ShopComponent {
 
       }
     })
+  }
+
+  getImage(obra: Obra): string | null {
+    if (obra.imagen) {
+      // Decodificar la imagen base64 y devolverla como una URL base64
+      return 'data:image/jpeg;base64,' + obra.imagen;
+    } else {
+      return null;
+    }
   }
 
   loadCategorysExists() {
@@ -112,7 +126,6 @@ export class ShopComponent {
   loadLoggedUser(){
     this.user = sessionStorage.getItem('identity');
     this.user = JSON.parse(this.user);
-    console.log(this.user);
   }
   
   getNumeroDeObras(categoria: { nombre: string, obras: any[] }): number {
@@ -125,6 +138,7 @@ export class ShopComponent {
     this.selectedCategory = category;
     this.onClick = true;
     this.flag = false;
+    this.all = false;
   }
 
   showHome(show: boolean) {
