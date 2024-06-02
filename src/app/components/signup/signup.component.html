@@ -1,30 +1,59 @@
 <div class="col-md-12 signup-body">
-    
+    <span>
+        @switch (status) {
+            @case (0) {
+                <div class="alert alert-success"><p>Registro exitoso!</p></div>
+            }
+            @case (1) {
+                <div class="alert alert-warning"><p>No se pudo agregar el usuario!</p></div>
+            }
+            @case (2) {
+                <div class="alert alert-danger"><p>Error de servidor!</p></div>
+            }
+        }
+        </span>
     <div class="col-md-4 mx-auto signup-container">
     <h3>Sign-<span class="colored-text">In</span></h3>
-    <form class="col-md-8 mx-auto" >
+    <form class="col-md-8 mx-auto" #signupForm="ngForm" (ngSubmit)="onSubmit(signupForm)">
         <div class="form-group">            
             <label for="name">Name</label>
-            <input id="name" type="text"  class="form-control" name="name" 
-                pattern="^(?=.*[a-z])(?=.*[A-Z]).{4,}$"/>
-             
+            <input id="name" type="text"  #name="ngModel" class="form-control" name="name" 
+                pattern="^(?=.*[a-z])(?=.*[A-Z]).{4,}$" [(ngModel)]="user.nombre" required/>
+                @if(!name.valid && name.touched){
+                    <small class="invalid-feedback d-block">Formato invalido</small>
+                }   
+
             <label for="email">Email</label>
-            <input id="email" type="email" class="form-control" name="email" 
-                pattern="\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b" />
+            <input id="email" type="email" #email="ngModel" class="form-control" name="email" 
+                pattern="\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b" [(ngModel)]="user.email" required/>
+                @if(!email.valid && email.touched){
+                    <small class="invalid-feedback d-block">Formato invalido</small>
+                }
+
 
             <label for="password">Password</label>
-            <input id="password" type="password"  class="form-control" name="password">
+            <input id="password" type="password" #password="ngModel" class="form-control" name="password"
+            [(ngModel)]="user.password" required/>
 
-            <label for="user">User</label>
-            <input id="user" type="text" class="form-control" name="user" 
-                pattern="\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b" />
+
+            <label for="user">UserName</label>
+            <input id="userName" type="text" #userName="ngModel" class="form-control" name="userName" 
+                 pattern="^(?=.*[a-zA-Z0-9_-])[a-zA-Z0-9_-]{4,}$" [(ngModel)]="user.nombreUsuario" required/>
+                @if(!userName.valid && userName.touched){
+                    <small class="invalid-feedback d-block">Formato invalido</small>
+                }   
+
 
             <label for="phone">Phone</label>
-            <input id="phone" type="phone"  class="form-control" name="phone">
+            <input id="phone" type="number" #phone="ngModel" class="form-control" name="phone"
+            [(ngModel)]="user.telefono"/>
+                @if(phone == null){
+                    
+                }
 
         </div> 
         <div class="btn-div">      
-        <input type="submit" class="btn mt-2" value="Sign-In">
+        <input type="submit" class="btn mt-2" value="Sign-In"   [disabled]="signupForm.invalid">
         </div> 
         
     </form>
