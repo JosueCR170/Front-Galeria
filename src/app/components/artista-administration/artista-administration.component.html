@@ -11,8 +11,8 @@
                 <nav class="nav">
                     <ul style="margin-bottom: 0; padding: 0 0">
                         <li><a style="cursor: pointer;" (click)="showHome(true)">Your Art</a></li>
-                        <li><a style="cursor: pointer;" (click)="showHome(true)">Manage works</a></li>
-                        <li><a style="cursor: pointer;" (click)="showHome(true)">Manage shipments</a></li>
+                        <li><a style="cursor: pointer;" (click)="adminObras(true)">Manage works</a></li>
+                        <li><a style="cursor: pointer;" (click)="showDelivery(true)">Manage shipments</a></li>
                         <li class="logout"><a href="#">Log out</a></li>
                     </ul>
                 </nav>
@@ -31,10 +31,22 @@
             </div>
         </header>
         <!--Abajo del nav-->
-        <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
+        @if(flag){
+           <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
         <p class="work">YOU <span class="workGradient">WORK</span> </p>
-        </div>
+        </div> 
+        }@else{<div>Error</div>}
+
+        @if(delivry){
+            <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
+         <p class="work">YOUR <span class="workGradient">SHIPMENTS</span> </p>
+         </div> 
+         }
+         @if(administration){
+            <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
+         <p class="work">YOU <span class="workGradient">WORK</span> </p>
         
-        
-</div>
+         </div>
+        }
+    </div>
 </div>
