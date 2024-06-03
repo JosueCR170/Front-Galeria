@@ -22,8 +22,9 @@
             <button class="btn btn-outline-success" type="submit">Search</button>
             </div>
             <div class="nav-left">
-                <span class="user-name"><i class="UserIcon fa-solid fa-circle-user"></i>Josu77Fire</span>
-                <p class="loOUt" style="color: rgb(215, 124, 124); width: 35%; border-left: solid 2px  rgb(215, 124, 124);
+                <a class="nav-link dropdown-toggle user-name" href="#" id="DropdownUser" role="button"
+                data-bs-toggle="dropdown" aria-expanded="false">{{user.nombreUsuario}}</a>
+                <p class="loOUt"  (click)="logOut()"  style="color: rgb(215, 124, 124); width: 35%; border-left: solid 2px  rgb(215, 124, 124);
                 margin:10px 0 10px 0; display: flex;     align-items: flex-end; font-size: 18px;
                  justify-content: flex-end;">Log out</p>
             </div>
@@ -33,38 +34,39 @@
         <main>
             <div class="main-container">
                 <div class="image-container">
-                    <img src="../../../assets/img/ejemploObra.jpg" alt="idk" >
+                    <img [src]="getImage(obra)" alt="idk" >
                 </div>
                 <div class="info-container">
                     <div class="info">
                         <div class="info-name">
-                            <span>Nombre de la Obra</span>
+                            <h5  class="card-title">{{ obra.nombre }}</h5>
+                            <!--<span{{ obra.nombre }}</span>-->
                             <div class="info-item">
                                 <span class="info-label">Precio:</span>
-                                <span class="info-value">$100</span>
+                                <span class="info-value"><strong>$ {{ obra.precio}}</strong></span>
                             </div>
                         </div>
                         <div style="display: flex; flex-direction: column;">
                         <div class="info-item">
                             <span class="info-label">Autor:</span>
-                            <span class="info-value">Autor de la Obra</span>
+                            <span class="info-value">{{ obra.idArtista }}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Tamaño:</span>
-                            <span class="info-value">Tamaño de la Obra</span>
+                            <span class="info-value">{{ obra.tamano }}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Tecnica:</span>
-                            <span class="info-value">Tecnica de la Obra</span>
+                            <span class="info-value">{{ obra.tecnica }}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Categoria:</span>
-                            <span class="info-value">Categoria de la Obra</span>
+                            <span class="info-value">{{ obra.categoria }}</span>
                         </div>
                         </div>
                     </div>
                     <div class="btn-container">
-                        <a href="#" class="back-btn">BACK</a>
+                        <a class="back-btn" [routerLink]="['/shop']">BACK</a>
                         <button class="cart-btn">Buy</button>
                     </div>
                 </div>
