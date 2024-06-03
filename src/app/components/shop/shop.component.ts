@@ -129,4 +129,8 @@ export class ShopComponent {
     this.onClick = false;
   }
 
+  redirectToLoginArtist() {
+    this._router.navigate(['/loginArtist']);
+  }
+
 }

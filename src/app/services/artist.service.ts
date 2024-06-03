@@ -41,4 +41,14 @@ export class ArtistService{
         return this._http.get(this.urlAPI+'artista/getidentity', options);
     }
 
+    create(artista:Artista):Observable<any>{
+        let artistaJson=JSON.stringify(artista);
+        let params='data='+artistaJson;
+        let headers=new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
+        let options={
+            headers
+        }
+        return this._http.post(this.urlAPI+'/artista/store',params,options);
+    }
+
 }
