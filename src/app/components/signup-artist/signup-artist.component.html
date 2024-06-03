@@ -19,31 +19,59 @@
         </span>
     
     <div class="col-md-4 mx-auto signup-container">
-    <h3>Sign-<span class="colored-text">In</span></h3>
+
+    <h3>Sign-<span class="colored-text">In</span> ARTIST</h3>
     <form class="col-md-8 mx-auto" #signupForm="ngForm" (ngSubmit)="onSubmit(signupForm)">
         <div class="form-group">            
             <label for="name">Name</label>
             <input id="name" type="text"  class="form-control" name="name" 
-                pattern="^(?=.*[a-z])(?=.*[A-Z]).{4,}$"/>
-             
+                pattern="^(?=.*[a-z])(?=.*[A-Z]).{4,}$" #name="ngModel" [(ngModel)]="artista.nombre" required/>
+                @if(!name.valid && name.touched){
+                    <small class="invalid-feedback d-block">Formato invalido</small>
+                } 
+
+
             <label for="email">Email</label>
             <input id="email" type="email" class="form-control" name="email" 
-                pattern="\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b" />
+                pattern="\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b" #email="ngModel" [(ngModel)]="artista.correo" required/>
+                @if(!email.valid && email.touched){
+                    <small class="invalid-feedback d-block">Formato invalido</small>
+                }
+
 
             <label for="password">Password</label>
-            <input id="password" type="password"  class="form-control" name="password">
+            <input id="password" type="password"  class="form-control" 
+            name="password" #password="ngModel" [(ngModel)]="artista.password" required>
+            @if(!password.valid && password.touched){
+                <small class="invalid-feedback d-block">Formato invalido</small>
+            }
 
             <label for="user">Artist User</label>
             <input id="user" type="text" class="form-control" name="user" 
-                pattern="\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b" />
+                pattern="^(?=.*[a-z])(?=.*[A-Z]).{4,}$" #artistName="ngModel" [(ngModel)]="artista.nombreArtista" required/>
+
+                @if(!artistName.valid && artistName.touched){
+                    <small class="invalid-feedback d-block">Formato invalido</small>
+                }
 
             <label for="phone">Phone</label>
-            <input id="phone" type="phone"  class="form-control" name="phone">
+            <input id="phone" type="number"  class="form-control" name="phone" 
+            #phone="ngModel" [(ngModel)]="artista.telefono" required>
+            @if(!phone.valid && phone.touched){
+                <small class="invalid-feedback d-block">Formato invalido</small>
+            }
 
+            <div class="buttom-btn">
+                <div class="btn-div">      
+                    <input type="submit" class="btn mt-2" value="Sign-In" [disabled]="signupForm.invalid">
+                </div> 
+        
+                <div class="btn-div">      
+                    <a class="back" [routerLink]="['/loginArtist']" >Back</a>
+                </div> 
+             </div>
         </div> 
-        <div class="btn-div">      
-        <input type="submit" class="btn mt-2" value="Sign-In">
-        </div> 
+        
         
     </form>
     </div>

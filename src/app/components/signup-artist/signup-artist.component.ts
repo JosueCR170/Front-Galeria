@@ -44,10 +44,11 @@ export class SignupArtistComponent {
         }
       },
       error:(error:HttpErrorResponse)=>{
-        //console.error('Error:', error);
-        if (error.status === 406 && error.error && error.error.error) {
+        // console.error('Errors:', error.error.errors);
+        // console.error('Error:', error.error.error);
+        if (error.status === 406 && error.error && error.error.errors) {
           this.errors = [];
-          const errorObj = error.error.error;
+          const errorObj = error.error.errors;
           for (const key in errorObj) {
             if (errorObj.hasOwnProperty(key)) {
               this.errors.push(...errorObj[key]);
