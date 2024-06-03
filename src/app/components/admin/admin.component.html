@@ -1,53 +1,69 @@
-<div class="artist-body">
+<div class="admin-body">
     <div class="conteiner">
         <header class="miniMenu">
             <div class="menu">
-                <input type="checkbox" id="checkbox">
-                <label for="checkbox" class="toggle">
-                    <div class="bars" id="bar1"></div>
-                    <div class="bars" id="bar2"></div>
-                    <div class="bars" id="bar3"></div>
-                </label>
-                <nav class="nav">
-                    <ul style="margin-bottom: 0; padding: 0 0">
-                        <li><a style="cursor: pointer;" (click)="showHome(true)">Your Art</a></li>
-                        <li><a style="cursor: pointer;" (click)="adminObras(true)">Manage works</a></li>
-                        <li><a style="cursor: pointer;" (click)="showDelivery(true)">Manage shipments</a></li>
-                        <li class="logout"><a href="#">Log out</a></li>
-                    </ul>
-                </nav>
-                <div class="busqueda" style="display: flex; width: 35%;">
-                    <input class="form-control me-2" style="padding-top: 10px;" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" style="padding-top: 10px;" type="submit">Search</button>
-                </div>
-                <div class="nav-left">
-                  <li class="nav-item dropdown" style="list-style: none;">
-                    <a class="nav-link dropdown-toggle user-name" href="#" id="DropdownUser" role="button" data-bs-toggle="dropdown" aria-expanded="false">Josue777</a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="downItem" href="#" style="color: rgb(184, 72, 72);">Log Out</a></li>
-                    </ul>
-                  </li>
-                </div>
+              <input type="checkbox" id="checkbox">
+              <label for="checkbox" class="toggle">
+                <div class="bars" id="bar1"></div>
+                <div class="bars" id="bar2"></div>
+                <div class="bars" id="bar3"></div>
+              </label>
+              <nav class="nav">
+                <ul style="margin-bottom: 0; padding: 0 0">
+                  <li><a style="cursor: pointer;" (click)="showHome(true)">Home</a></li> <!--Cambie acá-->
+                  <li><a style="cursor: pointer;" (click)="showUser(true)">Users</a></li> <!--Cambie acá-->
+                  <li><a style="cursor: pointer;" (click)="showArtist(true)">Artist</a></li> <!--Cambie acá-->
+                  <li><a style="cursor: pointer;" (click)="showWork(true)">Art Work</a></li> <!--Cambie acá-->
+                  <li><a style="cursor: pointer;" (click)="showInvoice(true)">Invoices</a></li> <!--Cambie acá-->
+                  <li><a style="cursor: pointer;" (click)="showShipping(true)">Shipping</a></li> <!--Cambie acá-->
+                  <li class="logout"><a (click)="logOut()">Log out</a></li>
+                </ul>
+              </nav>
+              
+              <div class="nav-left">
+                <li class="nav-item dropdown" style="list-style: none;">
+                  <a class="nav-link dropdown-toggle user-name" href="#" id="DropdownUser" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">{{user.nombreUsuario}}</a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="downItem">Be artist</a></li> 
+                    <li><a class="downItem" (click)="logOut()" style="color: rgb(184, 72, 72);">Log Out</a></li>
+                    @if(user.tipoUsuario){
+                      <li><a class="downItem" (click)="loadAdmin()">User</a></li>
+                    }
+                  </ul>
+                </li>
+              </div>
             </div>
-        </header>
+          </header>
         <!--Abajo del nav-->
         @if(flag){
            <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
-        <p class="work">YOU <span class="workGradient">WORK</span> </p>
+        <p class="work"><span class="workGradient">Select </span>some model</p>
         </div> 
-
-
-        }@else{<div>Error</div>}
-
-        @if(delivry){
+        }
+        @if(userClick){
             <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
-         <p class="work">YOUR <span class="workGradient">SHIPMENTS</span> </p>
+         <p class="work"><span class="workGradient">Users</span> </p>
          </div> 
          }
-         @if(administration){
+         @if(artistClick){
             <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
-         <p class="work">YOU <span class="workGradient">WORK</span> </p>
-        
+         <p class="work"><span class="workGradient">Artist</span> </p>
+         </div>
+        }
+        @if(invoiceClick){
+            <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
+         <p class="work"><span class="workGradient">Invoices</span> </p>
+         </div>
+        }
+        @if(shippingClick){
+            <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
+         <p class="work"><span class="workGradient">Shipping</span> </p>
+         </div>
+        }
+        @if(workClick){
+            <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
+         <p class="work">Art <span class="workGradient">WORK</span> </p>
          </div>
         }
     </div>
