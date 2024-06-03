@@ -130,6 +130,11 @@ export class ShopComponent {
   }
 
   loadAdmin(){
-  this._router.navigate(['/admin'])
+    this._router.navigate(['/admin'])
+    }
+    
+  redirectToLoginArtist() {
+    this._router.navigate(['/loginArtist']);
   }
+
 }

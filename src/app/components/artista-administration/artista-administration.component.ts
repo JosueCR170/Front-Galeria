@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Obra } from '../../models/Obra';
 import { MessageService, PrimeNGConfig } from 'primeng/api';
 import { ProductService } from '../../services/productservice';
-import { Product } from '../../models/Product';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { CommonModule } from '@angular/common';
@@ -20,18 +19,12 @@ import { FormsModule } from '@angular/forms';
   imports: [TableModule, ToastModule,FormsModule, CommonModule, TagModule, DropdownModule, ButtonModule, InputTextModule],
   templateUrl: './artista-administration.component.html',
   styleUrl: './artista-administration.component.css',
-  providers: [ProductService, MessageService]
+  providers: [ProductService, MessageService,ObraService]
 })
 export class ArtistaAdministrationComponent {
   productDialog: boolean = false;
 
-    products!: Product[];
-
-    cantidad!: Product[];
-
-    product!: Product;
-
-    selectedProducts!: Product[] | null;
+    selectedObras!: Obra[] | null;
 
     submitted: boolean = false;
 
@@ -39,10 +32,10 @@ export class ArtistaAdministrationComponent {
 
     selectAll: boolean = false;
 
-    selectedProduct!: Product[];
+    selectedObra!: Obra[];
     totalRecords!: number;
 
-    clonedProducts: { [s: string]: Product } = {};
+    clonedProducts: { [s: string]: Obra } = {};
   
     editing: boolean = false;
   /*-------*/
@@ -51,13 +44,13 @@ export class ArtistaAdministrationComponent {
   delivry: boolean = false;
   administration: boolean = false;
   obras: Obra[] = [];
-  obrasPorArtista: any[] = [];
+  obrasPorArtista: Obra[] = [];
   public status: number;
   public obra: Obra;
   selectedArtistId: number = 1;
   constructor(
     private productService: ProductService,
-    private _obraService: ObraService,
+    private obraService: ObraService,
     private messageService: MessageService
     
   ) {
@@ -67,12 +60,12 @@ export class ArtistaAdministrationComponent {
 
 
   ngOnInit(): void {
-    this.loadProducts();
+    this.index();
   }
   
 
   index() {
-    this._obraService.index().subscribe({
+    this.obraService.index().subscribe({
       next: (response: any) => {
         this.obras = response['data'];
         this.filterObrasByArtista(this.selectedArtistId);
@@ -106,43 +99,53 @@ export class ArtistaAdministrationComponent {
   /************************* */
   onSelectionChange(value = []) {
     this.selectAll = value.length === this.totalRecords;
-    this.selectedProduct = value;
+    this.selectedObra = value;
+  }
+
+  getImage(obra: Obra): string | null {
+    if (obra.imagen) {
+      // Decodificar la imagen base64 y devolverla como una URL base64
+      return 'data:image/jpeg;base64,' + obra.imagen;
+    } else {
+      return null;
+    }
   }
   
-  onSelectAllChange(event: any) {
-    const checked = event.checked;
+//   onSelectAllChange(event: any) {
+//     const checked = event.checked;
 
-    if (checked) {
-        this.productService.getProducts().then((res) => {
-            this.selectedProduct = res;
-            this.selectAll = true;
-        });
-    } else {
-        this.selectedProduct = [];
-        this.selectAll = false;
-    }
-}
+//     if (checked) {
+//         this.obraService.getProducts().then((res) => {
+//             this.selectedObra = res;
+//             this.selectAll = true;
+//         });
+//     } else {
+//         this.selectedObra = [];
+//         this.selectAll = false;
+//     }
+// }
 
 
-loadProducts() {
-  this.products = this.productService.getProductsData();
-  this.totalRecords = this.products.length;
-}
+// loadProducts() {
+//   this.obras = this.obraService.index();
+//   this.totalRecords = this.obras.length;
+// }
 
-onRowEditInit(product: Product, index: number) {
-  this.clonedProducts[product.id as string] = { ...product };
-  this.editing = true;
-}
 
-onRowEditSave(product: Product) {
-  delete this.clonedProducts[product.id as string];
-  this.editing = false;
-}
+// onRowEditInit(product: Obra, index: number) {
+//   this.clonedProducts[product.id as string] = { ...product };
+//   this.editing = true;
+// }
 
-onRowEditCancel(product: Product, index: number) {
-  this.products[index] = this.clonedProducts[product.id as string];
-  delete this.clonedProducts[product.id as string];
-  this.editing = false;
-}
+// onRowEditSave(product: Obra) {
+//   delete this.clonedProducts[product.id as string];
+//   this.editing = false;
+// }
+
+// onRowEditCancel(product: Obra, index: number) {
+//   this.obras[index] = this.clonedProducts[product.id as string];
+//   delete this.clonedProducts[product.id as string];
+//   this.editing = false;
+// }
 
 }
