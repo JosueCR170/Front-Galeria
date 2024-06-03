@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { server } from "./global";
 import { Artista } from "../models/Artista";
-import { Observable } from "rxjs";
+import { BehaviorSubject, Observable, tap } from "rxjs";
 
 @Injectable({
     providedIn: 'root'
@@ -10,7 +10,8 @@ import { Observable } from "rxjs";
 
 export class ArtistService{
     private urlAPI:string;
-
+    private artistSubject = new BehaviorSubject<any>(null);
+    public user$ = this.artistSubject.asObservable();
     constructor(
         private _http:HttpClient
     ){
@@ -24,7 +25,7 @@ export class ArtistService{
         let options = {
             headers
         };
-        return this._http.post(this.urlAPI+'artist/login', params, options);
+        return this._http.post(this.urlAPI+'artista/login', params, options);
     }
 
     getIdentityFromAPI():Observable<any>{
@@ -48,7 +49,7 @@ export class ArtistService{
         let options={
             headers
         }
-        return this._http.post(this.urlAPI+'/artista/store',params,options);
+        return this._http.post(this.urlAPI+'artista/store',params,options);
     }
 
 }
