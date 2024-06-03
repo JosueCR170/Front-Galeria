@@ -4,6 +4,7 @@ import { ObraService } from '../../services/obra.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user';
+import { ArtistService } from '../../services/artist.service';
 
 @Component({
   selector: 'app-view-artwork',
@@ -11,7 +12,7 @@ import { User } from '../../models/user';
   imports: [RouterLink],
   templateUrl: './view-artwork.component.html',
   styleUrl: './view-artwork.component.css',
-  providers: [ObraService]
+  providers: [ObraService, ArtistService]
 })
 export class ViewArtworkComponent {
   public obra: Obra;
@@ -19,6 +20,7 @@ export class ViewArtworkComponent {
 
   constructor(
     private _obraService: ObraService,
+    private _artistService: ArtistService,
     private _router: Router,
     private _routes: ActivatedRoute,
     private _userService: UserService
@@ -27,6 +29,7 @@ export class ViewArtworkComponent {
     this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, null);
   }
   user: any;
+  artistName:string='Anonimo';
 
 
   ngOnInit(): void {
@@ -34,6 +37,8 @@ export class ViewArtworkComponent {
     console.log('ID obtenido de la ruta:', id); // Verificar que el ID se está obteniendo correctamente
     if (id) {
       this.getObra(id);
+      //console.log(this.obra);
+      //this.getArtista(this.obra.idArtista);
     }
     this.loadLoggedUser();
   }
@@ -43,6 +48,7 @@ export class ViewArtworkComponent {
       data => {
         //console.log('Obra obtenida:', data); // Verificar los datos obtenidos
         this.obra = data['obra'];
+        this.artistName=data['obra'].artista.nombreArtista;
         this.status = 1;
       },
       error => {
@@ -51,7 +57,7 @@ export class ViewArtworkComponent {
       }
     );
   }
-  
+
   
   loadLoggedUser(){
     this.user = sessionStorage.getItem('identity');

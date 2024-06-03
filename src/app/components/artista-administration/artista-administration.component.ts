@@ -84,6 +84,9 @@ export class ArtistaAdministrationComponent {
     });
   }
 
+  
+  
+
   filterObrasByArtista(idArtista: number) {
     this.obrasPorArtista = this.obras.filter(obra => obra.idArtista === idArtista);
   }

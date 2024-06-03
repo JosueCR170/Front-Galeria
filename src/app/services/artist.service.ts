@@ -52,4 +52,11 @@ export class ArtistService{
         return this._http.post(this.urlAPI+'artista/store',params,options);
     }
 
+    showArtist(artistId: number): Observable<any> {
+        let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+        let options = { headers };
+    
+        return this._http.get(`artista/${artistId}`, options);
+      }
+
 }
