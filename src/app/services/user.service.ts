@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { server } from "./global";
-import { User } from "../models/User";
+import { User } from "../models/user";
 import { BehaviorSubject, Observable, tap } from "rxjs";
 
 
@@ -40,6 +40,18 @@ export class UserService{
         let options = {
             headers
         };
-        return this._http.get(this.urlAPI+'user/getidentity', options)
+
+        return this._http.get(this.urlAPI+'user/getidentity', options);
+    }
+
+    create(user:User):Observable<any>{
+        let userJson=JSON.stringify(user);
+        let params='data='+userJson;
+        let headers=new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
+        let options={
+            headers
         }
+        return this._http.post(this.urlAPI+'user/store',params,options);
+    }
+
 }

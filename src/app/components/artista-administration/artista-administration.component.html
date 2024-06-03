@@ -11,8 +11,8 @@
                 <nav class="nav">
                     <ul style="margin-bottom: 0; padding: 0 0">
                         <li><a style="cursor: pointer;" (click)="showHome(true)">Your Art</a></li>
-                        <li><a style="cursor: pointer;" (click)="showHome(true)">Manage works</a></li>
-                        <li><a style="cursor: pointer;" (click)="showHome(true)">Manage shipments</a></li>
+                        <li><a style="cursor: pointer;" (click)="adminObras(true)">Manage works</a></li>
+                        <li><a style="cursor: pointer;" (click)="showDelivery(true)">Manage shipments</a></li>
                         <li class="logout"><a href="#">Log out</a></li>
                     </ul>
                 </nav>
@@ -31,10 +31,164 @@
             </div>
         </header>
         <!--Abajo del nav-->
-        <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
+        @if(flag){
+           <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
         <p class="work">YOU <span class="workGradient">WORK</span> </p>
-        </div>
+        </div> 
+
+        <div class="card">
+            <p-table 
+              [value]="obras" 
+              [rows]="7"
+              [totalRecords]="totalRecords"
+              [paginator]="true"
+              [selection]="selectedObra"
+              [selectAll]="selectAll"
+              [tableStyle]="{ 'min-width': '50rem' }"
+              [globalFilterFields]="['code', 'name', 'category']">
+              
+              <ng-template pTemplate="header">
+                <tr>
+                  <th style="width: 4rem"></th>
+                  <th style="width:20%" pSortableColumn="code">Code <p-sortIcon field="code" /></th>
+                  <th style="width:20%" pSortableColumn="name">Name <p-sortIcon field="name" /></th>
+                  <th style="width:20%" pSortableColumn="category">Category <p-sortIcon field="category"/></th>
+                  <th style="width:20%" pSortableColumn="quantity">tecnica <p-sortIcon field="tecnica"/></th>
+                  <th style="width:20%" pSortableColumn="quantity">tamano <p-sortIcon field="tamano"/></th>
+                  <th style="width:20%" pSortableColumn="quantity">fechaCreacion <p-sortIcon field="fechaCreacion"/></th>
+                  <th style="width:20%" pSortableColumn="quantity">fechaRegistro <p-sortIcon field="fechaRegistro"/></th>
+                  <th style="width:20%" pSortableColumn="quantity">disponibilidad <p-sortIcon field="disponibilidad"/></th>
+                  <th style="width:20%" pSortableColumn="quantity">imagen <p-sortIcon field="imagen"/></th>
+
+                  <th style="width:20%"></th>
+                </tr>
+                <!-- <tr>
+                  <th style="width: 4rem">
+                    <p-tableHeaderCheckbox/>
+                  </th>
+                  <th>
+                    <p-columnFilter type="text" field="code"/>
+                  </th>
+                  <th>
+                    <p-columnFilter type="text" field="name"/>
+                  </th>
+                  <th>
+                    <p-columnFilter type="text" field="category"/>
+                  </th>
+                  <th>
+                    <p-columnFilter type="text" field="price"/> 
+                  </th>
+                </tr> -->
+              </ng-template>
+              
+              <ng-template pTemplate="body" let-product let-ri="rowIndex">
+                <tr [pEditableRow]="obra">
+                  <td>
+                    <p-tableCheckbox [value]="obra"></p-tableCheckbox>
+                  </td>
+                  <td>
+                    <p-cellEditor>
+                      <ng-template pTemplate="input">
+                        <input 
+                          pInputText 
+                          type="text" 
+                          [(ngModel)]="obra.id" />
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                        {{obra.id}}
+                      </ng-template> 
+                    </p-cellEditor>
+                  </td>
+                  <td>
+                    <p-cellEditor>
+                      <ng-template pTemplate="input">
+                        <input 
+                          pInputText 
+                          type="text" 
+                          [(ngModel)]="obra.nombre" 
+                          required />
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                        {{obra.nombre}}
+                      </ng-template>
+                    </p-cellEditor>
+                  </td>
+                  <td>
+                    <p-cellEditor>
+                      <ng-template pTemplate="input">
+                        <input 
+                          pInputText 
+                          type="text" 
+                          [(ngModel)]="obra.categoria" 
+                          required />
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                        {{obra.categoria}}
+                      </ng-template>
+                    </p-cellEditor>
+                  </td>
+                  <td>
+                    <p-cellEditor>
+                      <ng-template pTemplate="input">
+                        <input 
+                          pInputText 
+                          type="text" 
+                          [(ngModel)]="obra.tecnica" 
+                          required />
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                        {{obra.tecnica}}
+                      </ng-template>
+                    </p-cellEditor>
+                  </td>
+                  <td>
+                    <div class="flex align-items-center justify-content-center gap-2">
+                      <!-- <button 
+                        *ngIf="!editing" 
+                        pButton 
+                        type="button" 
+                        pInitEditableRow 
+                        icon="pi pi-pencil" 
+                        (click)="onRowEditInit(product, ri)" 
+                        class="p-button-rounded p-button-text">
+                      </button>
+                      <button 
+                        *ngIf="editing" 
+                        pButton 
+                        type="button" 
+                        pSaveEditableRow 
+                        icon="pi pi-check" 
+                        (click)="onRowEditSave(product)" 
+                        class="p-button-rounded p-button-text p-button-success mr-2">
+                      </button>
+                      <button 
+                        *ngIf="editing" 
+                        type="button" 
+                        pCancelEditableRow 
+                        icon="pi pi-times" 
+                        (click)="onRowEditCancel(product, ri)" 
+                        class="p-button-rounded p-button-text p-button-danger">
+                      </button> -->
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+
+
+        }@else{<div>Error</div>}
+
+        @if(delivry){
+            <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
+         <p class="work">YOUR <span class="workGradient">SHIPMENTS</span> </p>
+         </div> 
+         }
+         @if(administration){
+            <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
+         <p class="work">YOU <span class="workGradient">WORK</span> </p>
         
-        
-</div>
+         </div>
+        }
+    </div>
 </div>

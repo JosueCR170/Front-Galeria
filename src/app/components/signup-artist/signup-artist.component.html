@@ -1,8 +1,26 @@
 <div class="col-md-12 signup-body">
+
+    <span>
+        @switch (status) {
+            <!-- @case (0) {
+                <div class="alert alert-success"><p>Registro exitoso! </p></div>
+                
+            } -->
+            @case (1) {
+                <div class="alert alert-warning"><p>No se pudo agregar el artista!</p></div>
+            }
+            @case (2) {
+                <div *ngFor="let error of errors" class="alert alert-danger">
+                    <p>{{ error }}</p>
+                </div>
+                <!-- <div class="alert alert-danger"><p>Error de servidor!</p></div> -->
+            }
+        }
+        </span>
     
     <div class="col-md-4 mx-auto signup-container">
     <h3>Sign-<span class="colored-text">In</span></h3>
-    <form class="col-md-8 mx-auto" >
+    <form class="col-md-8 mx-auto" #signupForm="ngForm" (ngSubmit)="onSubmit(signupForm)">
         <div class="form-group">            
             <label for="name">Name</label>
             <input id="name" type="text"  class="form-control" name="name" 
