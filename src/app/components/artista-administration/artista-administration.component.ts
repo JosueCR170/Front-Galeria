@@ -101,6 +101,15 @@ export class ArtistaAdministrationComponent {
     this.selectAll = value.length === this.totalRecords;
     this.selectedObra = value;
   }
+
+  getImage(obra: Obra): string | null {
+    if (obra.imagen) {
+      // Decodificar la imagen base64 y devolverla como una URL base64
+      return 'data:image/jpeg;base64,' + obra.imagen;
+    } else {
+      return null;
+    }
+  }
   
 //   onSelectAllChange(event: any) {
 //     const checked = event.checked;

@@ -36,6 +36,8 @@
         <p class="work">YOU <span class="workGradient">WORK</span> </p>
         </div> 
 
+        <!--Inicio tabla-->
+
         <div class="card">
             <p-table 
               [value]="obras" 
@@ -81,7 +83,7 @@
                 </tr> -->
               </ng-template>
               
-              <ng-template pTemplate="body" let-product let-ri="rowIndex">
+              <ng-template pTemplate="body" let-obra let-ri="rowIndex">
                 <tr [pEditableRow]="obra">
                   <td>
                     <p-tableCheckbox [value]="obra"></p-tableCheckbox>
@@ -142,6 +144,80 @@
                     </p-cellEditor>
                   </td>
                   <td>
+                    <p-cellEditor>
+                      <ng-template pTemplate="input">
+                        <input 
+                          pInputText 
+                          type="text" 
+                          [(ngModel)]="obra.tamano" 
+                          required />
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                        {{obra.tamano}}
+                      </ng-template>
+                    </p-cellEditor>
+                  </td>
+                  <td>
+                    <p-cellEditor>
+                      <ng-template pTemplate="input">
+                        <input 
+                          pInputText 
+                          type="text" 
+                          [(ngModel)]="obra.fechaCreacion" 
+                          required />
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                        {{obra.fechaCreacion}}
+                      </ng-template>
+                    </p-cellEditor>
+                  </td>
+                  <td>
+                    <p-cellEditor>
+                      <ng-template pTemplate="input">
+                        <input 
+                          pInputText 
+                          type="text" 
+                          [(ngModel)]="obra.fechaRegistro" 
+                          required />
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                        {{obra.fechaRegistro}}
+                      </ng-template>
+                    </p-cellEditor>
+                  </td>
+                  <td>
+                    <p-cellEditor>
+                      <ng-template pTemplate="input">
+                        <input 
+                          pInputText 
+                          type="text" 
+                          [(ngModel)]="obra.disponibilidad" 
+                          required />
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                        @if(obra.disponibilidad){
+                            En venta
+                        } @else {
+                            Vendido
+                        }
+                      </ng-template>
+                    </p-cellEditor>
+                  </td>
+                  <td>
+                    <p-cellEditor>
+                      <ng-template pTemplate="input">
+                        <input 
+                          pInputText 
+                          type="image" 
+                          [(ngModel)]="obra.imagen" 
+                          required />
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                        <img [src]="getImage(obra)" alt="hola" style="width: 100px;"/>
+                      </ng-template>
+                    </p-cellEditor>
+                  </td>
+                  <td>
                     <div class="flex align-items-center justify-content-center gap-2">
                       <!-- <button 
                         *ngIf="!editing" 
@@ -175,6 +251,8 @@
               </ng-template>
             </p-table>
           </div>
+
+          <!--Cierre tabla-->
 
 
         }@else{<div>Error</div>}
