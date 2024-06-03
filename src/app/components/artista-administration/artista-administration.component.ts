@@ -12,6 +12,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
+import { Token } from '@angular/compiler';
 
 @Component({
   selector: 'app-artista-administration',
@@ -47,7 +48,7 @@ export class ArtistaAdministrationComponent {
   obrasPorArtista: Obra[] = [];
   public status: number;
   public obra: Obra;
-  selectedArtistId: number = 1;
+  artist: any;
   constructor(
     private productService: ProductService,
     private obraService: ObraService,
@@ -60,15 +61,22 @@ export class ArtistaAdministrationComponent {
 
 
   ngOnInit(): void {
+    this.loadLoggedArtist();
     this.index();
   }
   
+  loadLoggedArtist(){
+    this.artist = sessionStorage.getItem('identity');
+    this.artist = JSON.parse(this.artist);
+  }
 
   index() {
     this.obraService.index().subscribe({
       next: (response: any) => {
         this.obras = response['data'];
-        this.filterObrasByArtista(this.selectedArtistId);
+        this.filterObrasByArtista(this.artist.iss);
+        console.log(this.obrasPorArtista);
+        this.obras=this.obrasPorArtista;
       },
       error: (err: Error) => {
         console.error('Error al cargar las obras', err);
