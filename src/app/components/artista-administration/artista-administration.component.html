@@ -22,7 +22,7 @@
                 </div>
                 <div class="nav-left">
                   <li class="nav-item dropdown" style="list-style: none;">
-                    <a class="nav-link dropdown-toggle user-name" href="#" id="DropdownUser" role="button" data-bs-toggle="dropdown" aria-expanded="false">nombreArtista</a>
+                    <a class="nav-link dropdown-toggle user-name" href="#" id="DropdownUser" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{artist.nombreArtista}}</a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="downItem" href="#" style="color: rgb(184, 72, 72);">Log Out</a></li>
                     </ul>
@@ -49,6 +49,8 @@
               [tableStyle]="{ 'min-width': '50rem' }"
               [globalFilterFields]="['code', 'name', 'category']">
               
+            
+
               <ng-template pTemplate="header">
                 <tr>
                   <th style="width: 4rem"></th>
