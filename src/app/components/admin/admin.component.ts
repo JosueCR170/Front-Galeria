@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { ObraService } from '../../services/obra.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { Obra } from '../../models/Obra';
 
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.css'
 })

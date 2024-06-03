@@ -3,11 +3,12 @@ import { Obra } from '../../models/Obra';
 import { ObraService } from '../../services/obra.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UserService } from '../../services/user.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-sale',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, FormsModule],
   templateUrl: './sale.component.html',
   styleUrl: './sale.component.css'
 })
@@ -16,9 +17,6 @@ export class SaleComponent {
    shippingCost: string = '';
    totalCost: string = '';
    productPrice: number = 1;
-
-
-   
   public obra: Obra;
   public status: number;
 
@@ -96,4 +94,41 @@ export class SaleComponent {
       this.totalCost = this.obra.precio .toString();
     }
   }
+  /*
+  onSubmit(form:any){
+    this.user.tipoUsuario=false;
+    this._userService.create(this.user).subscribe({
+      next:(response)=>{
+        console.log(response);
+        if(response.status==201){
+          form.reset();            
+          this.changeStatus(0);
+          this.msgAlert('Usuario registrado con éxito','', 'success');
+          setTimeout(()=>{
+            this.redirectToLogin()
+          },1000);
+        }else{
+          this.changeStatus(1);
+        }
+      },
+      error:(error:HttpErrorResponse)=>{
+        //console.error('Error:', error);
+        if (error.status === 406 && error.error && error.error.error) {
+          this.errors = [];
+          const errorObj = error.error.error;
+          for (const key in errorObj) {
+            if (errorObj.hasOwnProperty(key)) {
+              this.errors.push(...errorObj[key]);
+            }
+          }
+          console.error(this.errors);
+        } else {
+          console.error('Otro tipo de error:', error.statusText);
+          this.msgAlert('Error, desde el servidor. Contacte al administrador','','error');
+        }
+        this.changeStatus(2);
+      }
+    })
+  }*/
+
 }
