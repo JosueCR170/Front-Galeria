@@ -27,8 +27,8 @@ export class LoginComponent {
   }
 
   onSubmit(form:any){
+    console.log(this.user)
     this._userService.login(this.user).subscribe({
-      
       next:(response:any)=>{
         if(response.status != 401){
           sessionStorage.setItem("token", response);

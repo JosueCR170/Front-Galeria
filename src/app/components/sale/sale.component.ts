@@ -1,13 +1,13 @@
 import { Component, NgModule } from '@angular/core';
 import { Obra } from '../../models/Obra';
 import { ObraService } from '../../services/obra.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-sale',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './sale.component.html',
   styleUrl: './sale.component.css'
 })
@@ -15,7 +15,7 @@ export class SaleComponent {
 
    shippingCost: string = '';
    totalCost: string = '';
-   productPrice: number = 19000;
+   productPrice: number = 1;
 
 
    
@@ -55,6 +55,11 @@ export class SaleComponent {
     );
   }
 
+  logOut(){
+    sessionStorage.clear();
+    this._router.navigate([''])
+  }
+
   getImage(obra: Obra): string | null {
     if (obra.imagen) {
       // Decodificar la imagen base64 y devolverla como una URL base64
@@ -69,20 +74,26 @@ export class SaleComponent {
   loadLoggedUser(){
     this.user = sessionStorage.getItem('identity');
     this.user = JSON.parse(this.user);
+    console.log( this.user)
   }
 
+
+  
+  loadAdmin(){
+    this._router.navigate(['/admin'])
+    }
     updateShippingMethod(event: Event): void {
     const selectElement = event.target as HTMLSelectElement;
     const selectedValue = selectElement.value;
     if (selectedValue === 'Home delivery') {
       this.shippingCost = '3.000';
-      this.totalCost = (this.productPrice + 3000).toString();
+      this.totalCost = (this.obra.precio + 3000).toString();
     } else if (selectedValue === 'Product recall') {
       this.shippingCost = 'Free';
-      this.totalCost = this.productPrice.toString();
+      this.totalCost = this.obra.precio .toString();
     } else {
       this.shippingCost = '';
-      this.totalCost = this.productPrice.toString();
+      this.totalCost = this.obra.precio .toString();
     }
   }
 }

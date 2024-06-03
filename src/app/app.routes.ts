@@ -23,5 +23,6 @@ export const routes: Routes = [
     {path:'signupArtist', component:SignupArtistComponent},
     {path:'artistaAdministration', component:ArtistaAdministrationComponent},
     {path:'admin', component:AdminComponent},
+    { path: 'shop/viewArtwork/:id/sale/:saleId', component: SaleComponent},
 
 ];

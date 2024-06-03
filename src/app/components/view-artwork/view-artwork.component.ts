@@ -73,7 +73,9 @@ export class ViewArtworkComponent {
     return null;
   }
 }
-
+redirectToSale() {
+  this._router.navigate(['sale', this.obra.id]);
+}
 
 }
 
