@@ -35,6 +35,143 @@
            <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
         <p class="work">YOU <span class="workGradient">WORK</span> </p>
         </div> 
+
+        <div class="card">
+            <p-table 
+              [value]="products" 
+              [rows]="7"
+              [totalRecords]="totalRecords"
+              [paginator]="true"
+              [selection]="selectedProduct"
+              [selectAll]="selectAll"
+              [tableStyle]="{ 'min-width': '50rem' }"
+              [globalFilterFields]="['code', 'name', 'category', 'quantity']">
+              
+              <ng-template pTemplate="header">
+                <tr>
+                  <th style="width: 4rem"></th>
+                  <th style="width:20%" pSortableColumn="code">Code <p-sortIcon field="code" /></th>
+                  <th style="width:20%" pSortableColumn="name">Name <p-sortIcon field="name" /></th>
+                  <th style="width:20%" pSortableColumn="category">Category <p-sortIcon field="category"/></th>
+                  <th style="width:20%" pSortableColumn="quantity">Quantity <p-sortIcon field="quantity"/></th>
+                  <th style="width:20%"></th>
+                </tr>
+                <tr>
+                  <th style="width: 4rem">
+                    <p-tableHeaderCheckbox/>
+                  </th>
+                  <th>
+                    <p-columnFilter type="text" field="code"/>
+                  </th>
+                  <th>
+                    <p-columnFilter type="text" field="name"/>
+                  </th>
+                  <th>
+                    <p-columnFilter type="text" field="category"/>
+                  </th>
+                  <th>
+                    <p-columnFilter type="text" field="quantity"/> 
+                  </th>
+                </tr>
+              </ng-template>
+              
+              <ng-template pTemplate="body" let-product let-ri="rowIndex">
+                <tr [pEditableRow]="product">
+                  <td>
+                    <p-tableCheckbox [value]="product"></p-tableCheckbox>
+                  </td>
+                  <td>
+                    <p-cellEditor>
+                      <ng-template pTemplate="input">
+                        <input 
+                          pInputText 
+                          type="text" 
+                          [(ngModel)]="product.code" />
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                        {{product.code}}
+                      </ng-template> 
+                    </p-cellEditor>
+                  </td>
+                  <td>
+                    <p-cellEditor>
+                      <ng-template pTemplate="input">
+                        <input 
+                          pInputText 
+                          type="text" 
+                          [(ngModel)]="product.name" 
+                          required />
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                        {{product.name}}
+                      </ng-template>
+                    </p-cellEditor>
+                  </td>
+                  <td>
+                    <p-cellEditor>
+                      <ng-template pTemplate="input">
+                        <input 
+                          pInputText 
+                          type="text" 
+                          [(ngModel)]="product.category" 
+                          required />
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                        {{product.category}}
+                      </ng-template>
+                    </p-cellEditor>
+                  </td>
+                  <td>
+                    <p-cellEditor>
+                      <ng-template pTemplate="input">
+                        <input 
+                          pInputText 
+                          type="text" 
+                          [(ngModel)]="product.quantity" 
+                          required />
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                        {{product.quantity}}
+                      </ng-template>
+                    </p-cellEditor>
+                  </td>
+                  <td>
+                    <div class="flex align-items-center justify-content-center gap-2">
+                      <button 
+                        *ngIf="!editing" 
+                        pButton 
+                        type="button" 
+                        pInitEditableRow 
+                        icon="pi pi-pencil" 
+                        (click)="onRowEditInit(product, ri)" 
+                        class="p-button-rounded p-button-text">
+                      </button>
+                      <button 
+                        *ngIf="editing" 
+                        pButton 
+                        type="button" 
+                        pSaveEditableRow 
+                        icon="pi pi-check" 
+                        (click)="onRowEditSave(product)" 
+                        class="p-button-rounded p-button-text p-button-success mr-2">
+                      </button>
+                      <button 
+                        *ngIf="editing" 
+                        type="button" 
+                        pCancelEditableRow 
+                        icon="pi pi-times" 
+                        (click)="onRowEditCancel(product, ri)" 
+                        class="p-button-rounded p-button-text p-button-danger">
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+
+
+
         }@else{<div>Error</div>}
 
         @if(delivry){
