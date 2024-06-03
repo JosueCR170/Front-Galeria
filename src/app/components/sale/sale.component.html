@@ -34,7 +34,7 @@
       <div class="formG">
         <div class="email">
           <label for="email" style="margin-bottom: 7px;">Email</label>
-          <input id="email" class="form-control" name="email" type="email" value="{{user.email}}" required>
+          <input id="email" class="form-control" name="email" type="email" value="{{user.correo}}" required>
         </div>
         <div style="margin-bottom: 30px; font-size: 15px; height:100px;">
           <div class="form-check simpe">
@@ -124,6 +124,10 @@
                       <h6 class="card-title" style="font-size: 18px; color: rgb(0, 0, 0);">Total</h6>
                       <p class="card-text" style="margin-bottom: 15px;"><strong style="font-size: 18px;">{{totalCost}}</strong></p>
                     </div>
+                  </div>
+                  <div class="datosResivo">
+                    <h6 class="card-title" style="font-size: 18px; color: rgb(0, 0, 0);">Artist phone:</h6>
+                    <p class="card-text" style="margin-bottom: 15px;"><strong style="font-size: 18px;">{{artista['telefono']}}</strong></p>
                   </div>
                 </div>
               </div>

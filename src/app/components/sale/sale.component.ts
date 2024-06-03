@@ -30,6 +30,7 @@ export class SaleComponent {
     this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, null);
   }
   user: any;
+  artista:any;
 
   ngOnInit(): void {
     const id = this._routes.snapshot.paramMap.get('id');
@@ -44,6 +45,9 @@ export class SaleComponent {
          data => {
         //console.log('Obra obtenida:', data); // Verificar los datos obtenidos
         this.obra = data['obra'];
+        this.artista=data['obra'].artista;
+        console.log(this.obra);
+        console.log(this.artista);
         this.status = 1;
       },
       error => {
