@@ -129,4 +129,7 @@ export class ShopComponent {
     this.onClick = false;
   }
 
+  loadAdmin(){
+  this._router.navigate(['/admin'])
+  }
 }

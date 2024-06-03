@@ -48,6 +48,9 @@
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li><a class="downItem" [routerLink]="['loginArtist']">Be artist</a></li>
               <li><a class="downItem" (click)="logOut()" style="color: rgb(184, 72, 72);">Log Out</a></li>
+              @if(user.tipoUsuario){
+                <li><a class="downItem" (click)="loadAdmin()">Admin</a></li>
+              }
             </ul>
           </li>
         </div>
