@@ -10,7 +10,6 @@ import { Observable } from "rxjs";
 
 export class ObraService{
     private urlAPI:string;
-    apiUrl: any;
 
     constructor(
         private _http:HttpClient
@@ -75,4 +74,40 @@ export class ObraService{
     }
     
 
+    create(obra:Obra):Observable<any>{
+        console.log(obra);
+        let headers;
+        let obraJson=JSON.stringify(obra);
+        let params='data='+obraJson;
+
+        let bearertoken = sessionStorage.getItem('token');
+        if (bearertoken){
+            headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded').set('bearertoken', bearertoken);
+        } else {
+            headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+        }
+        let options={
+            headers
+        }
+        return this._http.post(this.urlAPI+'obra/store',params,options);
+    }
+
+    upLoadImage(image: File): Observable<any> {
+        const formData: FormData = new FormData(); 
+        formData.append('file', image, image.name);
+        const bearerToken = sessionStorage.getItem('token');
+        let headers = new HttpHeaders();
+        if (bearerToken) {
+        headers = headers.set('bearertoken', `${bearerToken}`);
+        }
+        return this._http.post(this.urlAPI+'obra/uploadimage', formData, { headers });
+    }
+
+    getImage(filename: string): Observable<any> {
+        let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+        let options = {
+            headers
+        };
+        return this._http.get(`${this.urlAPI}obra/getimage/${filename}`, options);
+    }
 }

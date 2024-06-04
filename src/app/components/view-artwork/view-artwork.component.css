@@ -29,7 +29,9 @@
     justify-content: space-between;
     top: 0; /* Posición superior */
     z-index: 1000; /* Asegura que el navbar esté por encima de otros elementos */
+    background-color: #0505058c;
     backdrop-filter: blur(5px); /* Ajusta según el diseño */
+    background-color: #0505058c;
     border-bottom: 1px solid white;
     border-right: 1px solid white;
     border-left: 1px solid white;
@@ -221,7 +223,6 @@ img {
 .info-container {
     flex-direction: column;
     display: flex;
-    align-items: center;
     justify-content: center;
     width: 100%;
 }
