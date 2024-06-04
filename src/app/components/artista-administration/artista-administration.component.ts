@@ -308,9 +308,11 @@ export class ArtistaAdministrationComponent {
               this.obraService.create(this.obra).subscribe({
                 next: (response2: any) => {
                   console.log(response2);
+                   location.reload();
                 },
                 error: (err: any) => {
                   console.error(err);
+                 
                 }
               });
             } else {
@@ -324,104 +326,5 @@ export class ArtistaAdministrationComponent {
       }
     }
   }
-
-  // convertFileToBlob(file: File) {
-  //   const reader = new FileReader();
-
-  //   reader.onload = () => {
-  //     // `result` contiene los datos del archivo en forma de URL de datos
-  //     const dataUrl = reader.result as string;
-
-  //     // Convierte la URL de datos en un Blob
-  //     const blob = this.dataURLToBlob(dataUrl);
-
-  //     // Asigna el Blob resultante a tu objeto
-  //     this.obra.imagen = blob;
-  //     console.log(this.obra.imagen);
-  //   };
-
-  //   // Lee el archivo como una URL de datos
-  //   reader.readAsDataURL(file);
-  // }
-
-  // dataURLToBlob(dataUrl: string): Blob {
-  //   const parts = dataUrl.split(';base64,');
-  //   const contentType = parts[0].split(':')[1];
-  //   const raw = window.atob(parts[1]);
-  //   const rawLength = raw.length;
-  //   const uInt8Array = new Uint8Array(rawLength);
-
-  //   for (let i = 0; i < rawLength; ++i) {
-  //     uInt8Array[i] = raw.charCodeAt(i);
-  //   }
-
-  //   return new Blob([uInt8Array], { type: contentType });
-  // }
-
-  // onImageChange(event: Event): void {
-  //   const input = event.target as HTMLInputElement;
-  //   if (input.files && input.files.length > 0) {
-  //     const file = input.files[0];
-  //     this.convertToBlob(file).then(blob => {
-  //       // Aquí puedes hacer lo que necesites con el Blob
-  //       console.log('Imagen en formato Blob:', blob);
-  //       // Por ejemplo, podrías guardarlo en tu modelo
-  //       this.obra.imagen = blob;
-  //     }).catch(error => {
-  //       console.error('Error al convertir la imagen a Blob:', error);
-  //     });
-  //   }
-  // }
-
-  // private convertToBlob(file: File): Promise<Blob> {
-  //   return new Promise((resolve, reject) => {
-  //     const reader = new FileReader();
-  //     reader.onload = (e: any) => {
-  //       const arrayBuffer = e.target.result;
-  //       const blob = new Blob([arrayBuffer], { type: file.type });
-  //       resolve(blob);
-  //     };
-  //     reader.onerror = (error) => reject(error);
-  //     reader.readAsArrayBuffer(file);
-  //   });
-  // }
-
-  //   onSelectAllChange(event: any) {
-  //     const checked = event.checked;
-
-  //     if (checked) {
-  //         this.obraService.getProducts().then((res) => {
-  //             this.selectedObra = res;
-  //             this.selectAll = true;
-  //         });
-  //     } else {
-  //         this.selectedObra = [];
-  //         this.selectAll = false;
-  //     }
-  // }
-
-
-  // loadProducts() {
-  //   this.obras = this.obraService.index();
-  //   this.totalRecords = this.obras.length;
-  // }
-
-
-  // onRowEditInit(product: Obra, index: number) {
-  //   this.clonedProducts[product.id as string] = { ...product };
-  //   this.editing = true;
-  // }
-
-  // onRowEditSave(product: Obra) {
-  //   delete this.clonedProducts[product.id as string];
-  //   this.editing = false;
-  // }
-
-  // onRowEditCancel(product: Obra, index: number) {
-  //   this.obras[index] = this.clonedProducts[product.id as string];
-  //   delete this.clonedProducts[product.id as string];
-  //   this.editing = false;
-  // }
-
 
 }
