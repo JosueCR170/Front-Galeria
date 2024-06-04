@@ -17,7 +17,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { ToolbarModule } from 'primeng/toolbar';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { trigger, state, style, animate, transition } from '@angular/animations';
+// import { trigger, state, style, animate, transition } from '@angular/animations';
 @Component({
   selector: 'app-artista-administration',
   standalone: true,
