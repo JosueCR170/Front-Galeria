@@ -3,7 +3,7 @@ export class Factura{
         public id:number,
         public idUsuario:number,
         public idObra:number,
-        public fecha:Date,
+        public fecha:string | null,
         public total:number,
         public subTotal:number,
         public descuento:number

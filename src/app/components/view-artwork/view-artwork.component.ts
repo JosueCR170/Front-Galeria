@@ -64,6 +64,10 @@ export class ViewArtworkComponent {
     this.user = JSON.parse(this.user);
   }
 
+  loadAdmin(){
+    this._router.navigate(['/admin'])
+    }
+
   
   logOut(){
     sessionStorage.clear();
