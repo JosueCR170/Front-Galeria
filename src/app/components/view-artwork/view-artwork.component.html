@@ -29,7 +29,6 @@
               </div>
             </div>
           </header>
-        
         <main>
             <div class="main-container">
                 <div class="image-container">
@@ -42,7 +41,7 @@
                             <!--<span{{ obra.nombre }}</span>-->
                             <div class="info-item">
                                 <span class="info-label">Precio:</span>
-                                <span class="info-value"><strong>$ {{ obra.precio}}</strong></span>
+                                <span class="info-value"><strong>${{obra.precio}}</strong></span>
                             </div>
                         </div>
                         <div style="display: flex; flex-direction: column;">
@@ -52,7 +51,6 @@
                                 }@else{
                                     <span class="info-value venta-N"><i class="fa-solid fa-tag"></i>  Not Available</span>
                                 }
-                                
                         </div>
                         <div class="info-item">
                             <span class="info-label">Autor:</span>
@@ -83,6 +81,5 @@
                 </div>
             </div>
         </main>
-        
     </div>
 </div>

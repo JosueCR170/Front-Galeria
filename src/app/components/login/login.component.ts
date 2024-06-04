@@ -26,6 +26,10 @@ export class LoginComponent {
     this.user=new User(1, "", true, "", "", null,"")
   }
 
+  loadArtist(){
+    this._router.navigate(['/admin'])
+    }
+
   onSubmit(form:any){
     console.log(this.user)
     this._userService.login(this.user).subscribe({
@@ -54,6 +58,10 @@ export class LoginComponent {
         this.msgAlert('Error, desde el servidor. Contacte al administrador','error');
       }
     })
+  }
+
+  backLogin(){
+    
   }
 
   msgAlert= (title:any, icon:any) =>{

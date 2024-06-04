@@ -5,8 +5,8 @@
         <p>Error, desde el servidor. Contacte al administrador</p>
     } -->
  
-    <div class="col-md-4 mx-auto login-container" >
-        <a class="back" [routerLink]="['/shop']" ><i class="fa-solid fa-angle-left"></i></a>
+    <div class="col-md-4 mx-auto login-container">
+        <a class="back" (click)="backLogin()"><i class="fa-solid fa-angle-left"></i></a>
 
         <form style="padding: 40px;" #loginArtistForm="ngForm" (ngSubmit)="onSubmitArtist(loginArtistForm)">
             <h3 class="text-center">Log-<span class="colored-text">In </span>ARTIST</h3>

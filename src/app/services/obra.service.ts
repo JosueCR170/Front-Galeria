@@ -61,7 +61,7 @@ export class ObraService{
         
 
         if (imageFile) {
-            formData.append('image', imageFile, imageFile.name);
+            formData.append('file', imageFile);
         }
         if (bearertoken){
             headers = new HttpHeaders().set('Content-Type', 'application/form-data').set('bearertoken', bearertoken);
