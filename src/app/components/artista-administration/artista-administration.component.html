@@ -61,6 +61,7 @@
                 label="Delete"
                 >
               </p-button>
+              
             </ng-template>
           </p-toolbar>
           <p-table
@@ -185,11 +186,13 @@
                   </p-cellEditor>
                 </td>
                 <td>
-                  <div class="flex align-items-center justify-content-center gap-2">
-                    <!-- Botones de acción -->
-                   <!-- <button pButton pRipple icon="pi pi-pencil" (click)="editProduct(obra)"></button>-->
-                  <!--  <button pButton pRipple icon="pi pi-trash" (click)="deleteProduct(obra)"></button>-->
-                  </div>
+                  <button 
+                  data-bs-toggle="modal" 
+                  data-bs-target="#updateModal"
+                  class="fa-solid fa-pencil"   
+                  (click)="editObra(obra)">
+                  </button>
+                  
                 </td>
               </tr>
             </ng-template>
@@ -215,6 +218,82 @@
           </div>
         </div>
 
+        <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">UPDATE</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+
+                <form>
+                  <div class="mb-3">
+                    <label for="recipient-name" class="col-form-label">Nombre:</label>
+                    <input type="text" class="form-control" id="recipient-name" [(ngModel)]="obra.nombre" name="nombre">
+                  </div>
+                  <div class="mb-3">
+                    <label for="recipient-precio" class="col-form-label">Precio:</label>
+                    <input type="text" class="form-control" id="recipient-precio" [(ngModel)]="obra.precio" name="precio">
+                  </div>
+                  <div class="mb-3">
+                    <label for="recipient-categoria" class="col-form-label">Categoria:</label>
+                    <div class="dropdown">
+                      <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{obra.categoria}}
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li *ngFor="let style1 of artStyles" (click)="selectCategoria(style1)">
+                          <a class="dropdown-item cambio-color">{{ style1 }}</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="recipient-tecnica" class="col-form-label">Tecnica:</label>
+                    <div class="dropdown">
+                      <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{obra.tecnica}}
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li *ngFor="let tecnique of tecnicas" (click)="selectTecnica(tecnique)">
+                          <a class="dropdown-item cambio-color">{{ tecnique }}</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="recipient-disponibilidad" class="col-form-label">Disponibilidad:</label>
+                    <input type="text" class="form-control" id="recipient-disponibilidad" [(ngModel)]="obra.disponibilidad" name="disponibilidad">
+                  </div>
+                  <div class="mb-3">
+                    <label for="recipient-tamano" class="col-form-label">Tamaño:</label>
+                    <input type="text" class="form-control" id="recipient-tamano" [(ngModel)]="obra.tamano" name="tamano">
+                  </div>
+                  <div class="mb-3">
+                    <label for="recipient-fecha-creacion" class="col-form-label">Fecha Creacion:</label>
+                    <input type="text" class="form-control" id="recipient-fecha-creacion" [(ngModel)]="obra.fechaCreacion" name="fechaCreacion">
+                  </div>
+                  <div class="mb-3">
+                    <label for="recipient-fecha-registro" class="col-form-label">Fecha Registro:</label>
+                    <input type="text" class="form-control" id="recipient-fecha-registro" [(ngModel)]="obra.fechaRegistro" name="fechaRegistro">
+                  </div>
+                  <div class="mb-3">
+                    <label for="recipient-imagen" class="col-form-label">Imagen:</label>
+                    <input type="file" class="form-control" id="recipient-imagen" (change)="onImageFileChange($event)">
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" style="color: white; background-color: rgb(124, 10, 10);" data-bs-dismiss="modal" (click)="updateObra()">Actualizar</button>
+                  </div>
+                </form>
+                
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        
 
 
           <!--Cierre tabla-->

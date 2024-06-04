@@ -48,5 +48,31 @@ export class ObraService{
         };
         return this._http.delete(`${this.urlAPI}obra/${id}`, options);
     }
+    
+    update(obra: Obra, imageFile?:File): Observable<any> {
+        let obraJson=JSON.stringify(obra);
+        let formData = new FormData();
+        let params='data='+obraJson;
+        let headers;
+        let bearertoken = sessionStorage.getItem('token');
+        
+        formData.append('_method', 'PUT');
+        formData.append('data', JSON.stringify(obra));
+        
+
+        if (imageFile) {
+            formData.append('image', imageFile, imageFile.name);
+        }
+        if (bearertoken){
+            headers = new HttpHeaders().set('Content-Type', 'application/form-data').set('bearertoken', bearertoken);
+        } else {
+            headers = new HttpHeaders().set('Content-Type', 'application/form-data');
+        }
+        let options = {
+            headers
+        };
+        return this._http.put(this.urlAPI+`obra/${obra.id}`,formData,options);
+    }
+    
 
 }

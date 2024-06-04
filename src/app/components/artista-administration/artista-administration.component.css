@@ -269,3 +269,11 @@
   button .p-ripple .p-element .p-button .p-component .p-button-success .btn-rounded{
     border-radius: 10px;
   }
+  .cambio-color{
+    background-color: aliceblue;
+
+  }
+  .cambio-color:hover{
+    background-color: rgb(96, 114, 129);
+    
+  }
