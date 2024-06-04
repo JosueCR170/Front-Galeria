@@ -262,4 +262,10 @@
     font-style: normal;
     font-size: clamp(2em,3vw, 3em);
   }
-  
+  .asd{
+    margin-left: 10px;
+    border-radius: 20px;
+  }
+  button .p-ripple .p-element .p-button .p-component .p-button-success .btn-rounded{
+    border-radius: 10px;
+  }

@@ -58,7 +58,7 @@
   font-family: "Timmana", sans-serif;
   font-weight: 400;
   font-style: normal;  
-  font-size: 18px;
+  font-size: 25px;
   color: antiquewhite;
   text-decoration: none;
   padding: 0 20px;
@@ -180,7 +180,7 @@
   transition: color 0.3s;
 }
 
-@media (max-width: 993px) {
+@media (max-width: 773px) {
   .miniMenu {
       min-height: 70px;
   }
@@ -275,7 +275,7 @@
     border-bottom-right-radius: 15px;
   }
   /*acordion*/
-  .compra {
+   .compra {
     width: 9em;
     height: 3em;
     border-radius: 30em;

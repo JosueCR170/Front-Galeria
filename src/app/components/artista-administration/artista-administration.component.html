@@ -39,220 +39,183 @@
         <!--Inicio tabla-->
 
         <div class="card">
-            <p-table 
-              [value]="obras" 
-              [rows]="7"
-              [totalRecords]="totalRecords"
-              [paginator]="true"
-              [selection]="selectedObra"
-              [selectAll]="selectAll"
-              [tableStyle]="{ 'min-width': '50rem' }"
-              [globalFilterFields]="['code', 'name', 'category']">
-              
-            
+          <p-toast></p-toast>
+          <p-toolbar styleClass="mb-4 gap-2">
+            <ng-template pTemplate="left">
+              <p-button
+                pRipple
+                severity="success"
+                label="New"
+                icon="pi pi-plus"
+                class="mr-2"
+                styleClass="btn-rounded"
+                (click)="openNew()">
+              </p-button>
+              <p-button type="button"
+               class="asd"
+               data-bs-toggle="modal" 
+               data-bs-target="#exampleModal"
+               styleClass="btn-rounded"
+               [disabled]="!selectedObras ||!selectedObras.length"
+               severity="danger"
+                label="Delete"
+                >
+              </p-button>
+            </ng-template>
+          </p-toolbar>
+          <p-table
+            [value]="obras"
+            [rows]="10"
+            [totalRecords]="totalRecords"
+            [paginator]="true"
+            [(selection)]="selectedObras"
+            [selectAll]="selectAll"
+            [tableStyle]="{ 'min-width': '75rem' }"
+            [globalFilterFields]="['id', 'nombre', 'categoria', 'tecnica', 'tamano', 'fechaCreacion', 'fechaRegistro', 'disponibilidad', 'imagen']">
+            <ng-template pTemplate="header">
+              <tr>
+                <th style="width: 4rem">
+                  <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th>
+                <th pSortableColumn="id" style="width:20%">Code <p-sortIcon field="id"></p-sortIcon></th>
+                <th pSortableColumn="nombre" style="width:20%">Name <p-sortIcon field="nombre"></p-sortIcon></th>
+                <th pSortableColumn="categoria" style="width:20%">Category <p-sortIcon field="categoria"></p-sortIcon></th>
+                <th pSortableColumn="tecnica" style="width:20%">tecnica <p-sortIcon field="tecnica"></p-sortIcon></th>
+                <th pSortableColumn="tamano" style="width:20%">tamano <p-sortIcon field="tamano"></p-sortIcon></th>
+                <th pSortableColumn="fechaCreacion" style="width:20%">fechaCreacion <p-sortIcon field="fechaCreacion"></p-sortIcon></th>
+                <th pSortableColumn="fechaRegistro" style="width:20%">fechaRegistro <p-sortIcon field="fechaRegistro"></p-sortIcon></th>
+                <th pSortableColumn="disponibilidad" style="width:20%">disponibilidad <p-sortIcon field="disponibilidad"></p-sortIcon></th>
+                <th pSortableColumn="imagen" style="width:20%">imagen <p-sortIcon field="imagen"></p-sortIcon></th>
+                <th style="width:20%"></th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-obra let-ri="rowIndex">
+              <tr [pEditableRow]="obra">
+                <td>
+                  <p-tableCheckbox [value]="obra"></p-tableCheckbox>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input pInputText type="text" [(ngModel)]="obra.id" />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{ obra.id }}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input pInputText type="text" [(ngModel)]="obra.nombre" required />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{ obra.nombre }}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input pInputText type="text" [(ngModel)]="obra.categoria" required />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{ obra.categoria }}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input pInputText type="text" [(ngModel)]="obra.tecnica" required />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{ obra.tecnica }}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input pInputText type="text" [(ngModel)]="obra.tamano" required />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{ obra.tamano }}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input pInputText type="text" [(ngModel)]="obra.fechaCreacion" required />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{ obra.fechaCreacion }}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input pInputText type="text" [(ngModel)]="obra.fechaRegistro" required />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{ obra.fechaRegistro }}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input pInputText type="text" [(ngModel)]="obra.disponibilidad" required />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{ obra.disponibilidad ? 'En venta' : 'Vendido' }}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input pInputText type="image" [(ngModel)]="obra.imagen" required />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      <img [src]="getImage(obra)" alt="hola" style="width: 100px;" />
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <div class="flex align-items-center justify-content-center gap-2">
+                    <!-- Botones de acción -->
+                   <!-- <button pButton pRipple icon="pi pi-pencil" (click)="editProduct(obra)"></button>-->
+                  <!--  <button pButton pRipple icon="pi pi-trash" (click)="deleteProduct(obra)"></button>-->
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
 
-              <ng-template pTemplate="header">
-                <tr>
-                  <th style="width: 4rem"></th>
-                  <th style="width:20%" pSortableColumn="code">Code <p-sortIcon field="code" /></th>
-                  <th style="width:20%" pSortableColumn="name">Name <p-sortIcon field="name" /></th>
-                  <th style="width:20%" pSortableColumn="category">Category <p-sortIcon field="category"/></th>
-                  <th style="width:20%" pSortableColumn="quantity">tecnica <p-sortIcon field="tecnica"/></th>
-                  <th style="width:20%" pSortableColumn="quantity">tamano <p-sortIcon field="tamano"/></th>
-                  <th style="width:20%" pSortableColumn="quantity">fechaCreacion <p-sortIcon field="fechaCreacion"/></th>
-                  <th style="width:20%" pSortableColumn="quantity">fechaRegistro <p-sortIcon field="fechaRegistro"/></th>
-                  <th style="width:20%" pSortableColumn="quantity">disponibilidad <p-sortIcon field="disponibilidad"/></th>
-                  <th style="width:20%" pSortableColumn="quantity">imagen <p-sortIcon field="imagen"/></th>
-
-                  <th style="width:20%"></th>
-                </tr>
-                <!-- <tr>
-                  <th style="width: 4rem">
-                    <p-tableHeaderCheckbox/>
-                  </th>
-                  <th>
-                    <p-columnFilter type="text" field="code"/>
-                  </th>
-                  <th>
-                    <p-columnFilter type="text" field="name"/>
-                  </th>
-                  <th>
-                    <p-columnFilter type="text" field="category"/>
-                  </th>
-                  <th>
-                    <p-columnFilter type="text" field="price"/> 
-                  </th>
-                </tr> -->
-              </ng-template>
-              
-              <ng-template pTemplate="body" let-obra let-ri="rowIndex">
-                <tr [pEditableRow]="obra">
-                  <td>
-                    <p-tableCheckbox [value]="obra"></p-tableCheckbox>
-                  </td>
-                  <td>
-                    <p-cellEditor>
-                      <ng-template pTemplate="input">
-                        <input 
-                          pInputText 
-                          type="text" 
-                          [(ngModel)]="obra.id" />
-                      </ng-template>
-                      <ng-template pTemplate="output">
-                        {{obra.id}}
-                      </ng-template> 
-                    </p-cellEditor>
-                  </td>
-                  <td>
-                    <p-cellEditor>
-                      <ng-template pTemplate="input">
-                        <input 
-                          pInputText 
-                          type="text" 
-                          [(ngModel)]="obra.nombre" 
-                          required />
-                      </ng-template>
-                      <ng-template pTemplate="output">
-                        {{obra.nombre}}
-                      </ng-template>
-                    </p-cellEditor>
-                  </td>
-                  <td>
-                    <p-cellEditor>
-                      <ng-template pTemplate="input">
-                        <input 
-                          pInputText 
-                          type="text" 
-                          [(ngModel)]="obra.categoria" 
-                          required />
-                      </ng-template>
-                      <ng-template pTemplate="output">
-                        {{obra.categoria}}
-                      </ng-template>
-                    </p-cellEditor>
-                  </td>
-                  <td>
-                    <p-cellEditor>
-                      <ng-template pTemplate="input">
-                        <input 
-                          pInputText 
-                          type="text" 
-                          [(ngModel)]="obra.tecnica" 
-                          required />
-                      </ng-template>
-                      <ng-template pTemplate="output">
-                        {{obra.tecnica}}
-                      </ng-template>
-                    </p-cellEditor>
-                  </td>
-                  <td>
-                    <p-cellEditor>
-                      <ng-template pTemplate="input">
-                        <input 
-                          pInputText 
-                          type="text" 
-                          [(ngModel)]="obra.tamano" 
-                          required />
-                      </ng-template>
-                      <ng-template pTemplate="output">
-                        {{obra.tamano}}
-                      </ng-template>
-                    </p-cellEditor>
-                  </td>
-                  <td>
-                    <p-cellEditor>
-                      <ng-template pTemplate="input">
-                        <input 
-                          pInputText 
-                          type="text" 
-                          [(ngModel)]="obra.fechaCreacion" 
-                          required />
-                      </ng-template>
-                      <ng-template pTemplate="output">
-                        {{obra.fechaCreacion}}
-                      </ng-template>
-                    </p-cellEditor>
-                  </td>
-                  <td>
-                    <p-cellEditor>
-                      <ng-template pTemplate="input">
-                        <input 
-                          pInputText 
-                          type="text" 
-                          [(ngModel)]="obra.fechaRegistro" 
-                          required />
-                      </ng-template>
-                      <ng-template pTemplate="output">
-                        {{obra.fechaRegistro}}
-                      </ng-template>
-                    </p-cellEditor>
-                  </td>
-                  <td>
-                    <p-cellEditor>
-                      <ng-template pTemplate="input">
-                        <input 
-                          pInputText 
-                          type="text" 
-                          [(ngModel)]="obra.disponibilidad" 
-                          required />
-                      </ng-template>
-                      <ng-template pTemplate="output">
-                        @if(obra.disponibilidad){
-                            En venta
-                        } @else {
-                            Vendido
-                        }
-                      </ng-template>
-                    </p-cellEditor>
-                  </td>
-                  <td>
-                    <p-cellEditor>
-                      <ng-template pTemplate="input">
-                        <input 
-                          pInputText 
-                          type="image" 
-                          [(ngModel)]="obra.imagen" 
-                          required />
-                      </ng-template>
-                      <ng-template pTemplate="output">
-                        <img [src]="getImage(obra)" alt="hola" style="width: 100px;"/>
-                      </ng-template>
-                    </p-cellEditor>
-                  </td>
-                  <td>
-                    <div class="flex align-items-center justify-content-center gap-2">
-                      <!-- <button 
-                        *ngIf="!editing" 
-                        pButton 
-                        type="button" 
-                        pInitEditableRow 
-                        icon="pi pi-pencil" 
-                        (click)="onRowEditInit(product, ri)" 
-                        class="p-button-rounded p-button-text">
-                      </button>
-                      <button 
-                        *ngIf="editing" 
-                        pButton 
-                        type="button" 
-                        pSaveEditableRow 
-                        icon="pi pi-check" 
-                        (click)="onRowEditSave(product)" 
-                        class="p-button-rounded p-button-text p-button-success mr-2">
-                      </button>
-                      <button 
-                        *ngIf="editing" 
-                        type="button" 
-                        pCancelEditableRow 
-                        icon="pi pi-times" 
-                        (click)="onRowEditCancel(product, ri)" 
-                        class="p-button-rounded p-button-text p-button-danger">
-                      </button> -->
-                    </div>
-                  </td>
-                </tr>
-              </ng-template>
-            </p-table>
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" header="Confirm Delete">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">DELETE
+                </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p>Seguro que desea eliminar la obra?</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" icon="pi pi-check">Close</button>
+                <button type="button" style="color: rgb(255, 255, 255); background-color: rgb(124, 10, 10); border: none;" data-bs-dismiss="modal" class="btn btn-primary" icon="pi pi-times" (click)="deleteSelectedObras()">Delete</button>
+              </div>
+            </div>
           </div>
+        </div>
+
+
 
           <!--Cierre tabla-->
 
@@ -264,10 +227,6 @@
          <p class="work">YOUR <span class="workGradient">SHIPMENTS</span> </p>
          </div> 
           <!--TABLA DELIVERY--->
-
-
-
-
 
          }
 

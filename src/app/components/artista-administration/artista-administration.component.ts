@@ -1,8 +1,8 @@
 import { Component, OnInit} from '@angular/core';
 import { ObraService } from '../../services/obra.service';
-import { ActivatedRoute, Router } from '@angular/router';
+
 import { Obra } from '../../models/Obra';
-import { MessageService, PrimeNGConfig } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ProductService } from '../../services/productservice';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
@@ -12,27 +12,28 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
-import { Token } from '@angular/compiler';
-
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { ToolbarModule } from 'primeng/toolbar';
+import { DialogModule } from 'primeng/dialog';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 @Component({
   selector: 'app-artista-administration',
   standalone: true,
-  imports: [TableModule, ToastModule,FormsModule, CommonModule, TagModule, DropdownModule, ButtonModule, InputTextModule],
+  imports: [TableModule, ConfirmDialogModule ,ToastModule,ToolbarModule, CommonModule,DialogModule  ,FormsModule, IconFieldModule, InputIconModule , TagModule, DropdownModule, ButtonModule, InputTextModule],
   templateUrl: './artista-administration.component.html',
   styleUrl: './artista-administration.component.css',
-  providers: [ProductService, MessageService,ObraService]
+  providers: [ProductService,MessageService,ObraService, ConfirmationService],
+
 })
 export class ArtistaAdministrationComponent {
-  productDialog: boolean = false;
 
-    selectedObras!: Obra[] | null;
-
+    productDialog: boolean = false;
+    selectedObras!: Obra[];
     submitted: boolean = false;
-
     statuses!: any[];
-
     selectAll: boolean = false;
-
     selectedObra!: Obra[];
     totalRecords!: number;
 
@@ -40,6 +41,7 @@ export class ArtistaAdministrationComponent {
   
     editing: boolean = false;
   /*-------*/
+  displayConfirmationDialog: boolean = false;
 
   flag: boolean = true;
   delivry: boolean = false;
@@ -49,10 +51,10 @@ export class ArtistaAdministrationComponent {
   public status: number;
   public obra: Obra;
   artist: any;
+
   constructor(
-    private productService: ProductService,
     private obraService: ObraService,
-    private messageService: MessageService
+    private messageService: MessageService,
     
   ) {
     this.status = -1;
@@ -108,6 +110,13 @@ export class ArtistaAdministrationComponent {
   }
 
   /************************* */
+  openNew() {
+    this.obra = new Obra(1, this.artist.iss, "", "", "", 1, true, "", null, null, null);
+    this.submitted = false;
+    this.productDialog = true;
+}
+
+
   onSelectionChange(value = []) {
     this.selectAll = value.length === this.totalRecords;
     this.selectedObra = value;
@@ -120,6 +129,44 @@ export class ArtistaAdministrationComponent {
     } else {
       return null;
     }
+  }
+
+  showConfirmationDialog() {
+    this.displayConfirmationDialog = true;
+  }
+
+  deleteSelectedObras() {
+    this.selectedObras.forEach(obra => {
+      this.obraService.deleted(obra.id).subscribe({
+        next: () => {
+          this.obras = this.obras.filter(o => o.id !== obra.id);
+          this.totalRecords--;
+        },
+        error: (err: Error) => {
+          console.error('Error al eliminar la obra', err);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: `Failed to delete obra: ${obra.nombre}`,
+            life: 3000
+          });
+        }
+      });
+    });
+
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Successful',
+      detail: 'Obras Deleted',
+      life: 3000
+    });
+
+    this.selectedObras = [];
+    this.displayConfirmationDialog = false;
+  }
+
+  hideConfirmationDialog() {
+    this.displayConfirmationDialog = false;
   }
   
 //   onSelectAllChange(event: any) {
