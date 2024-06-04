@@ -1,13 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ButtonModule } from 'primeng/button';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ObraService } from '../../services/obra.service';
 import { Obra } from '../../models/Obra';
 import { UserService } from '../../services/user.service';
-import { User } from '../../models/user';
 
 @Component({
   selector: 'app-shop',
@@ -57,6 +54,7 @@ export class ShopComponent {
     this._obraService.index().subscribe({
       next: (response: any) => {
         this.obras = response['data'];
+        this.auxObras = [...this.obras];
         this.loadCategorysExists();
       },
       error: (err: Error) => {
@@ -106,7 +104,6 @@ export class ShopComponent {
   getNumeroDeObras(categoria: { nombre: string, obras: any[] }): number {
     return categoria.obras.length;
   }
-  cant = this.getNumeroDeObras;
 
   // Método para manejar la selección de una categoría
   selectCategory(category: string) {
@@ -135,6 +132,16 @@ export class ShopComponent {
     
   redirectToLoginArtist() {
     this._router.navigate(['/loginArtist']);
+  }
+
+  searchObras(event: any) {
+    const inputValue = (event.target as HTMLInputElement)?.value;
+    if (inputValue !== undefined && inputValue !== null) {
+      this.auxObras = this.obras.filter(obra => obra.nombre.toLowerCase().includes(inputValue.toLowerCase()));
+      
+    } else {
+      this.auxObras = [...this.obras];
+    }
   }
   
 
