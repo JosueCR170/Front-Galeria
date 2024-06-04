@@ -5,7 +5,8 @@
         <p>Error, desde el servidor. Contacte al administrador</p>
     } -->
  
-    <div class="col-md-4 mx-auto login-container" >
+    <div class="col-md-4 mx-auto login-container"  >
+      
         <form style="padding: 40px;" #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
             <h3 class="text-center">Log-<span class="colored-text">In</span></h3>
             <div class="form-group">
@@ -20,9 +21,15 @@
                 <div>
                     <input type="submit" class="btn mt-3" value="Log-In">
                 </div>
+            <div style="display: flex;">
+                 <div style="margin-right: 20px;">
+                    <a class="sign-in-btn" [routerLink]="['/loginArtist']">Be Artist</a>
+                </div>
                 <div>
                     <a class="sign-in-btn" [routerLink]="['signup']" >Sign-In</a>
-                </div>
+                </div>    
+            </div>
+               
             </div>
         </form>
     </div>

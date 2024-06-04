@@ -1,36 +1,28 @@
 <div class="view-body">
     <div class="view-container">
         <header class="miniMenu">
-            <div class="menu"  >
-                <input type="checkbox" id="checkbox">
-                <label for="checkbox" class="toggle">
-              <div class="bars" id="bar1"></div>
-              <div class="bars" id="bar2"></div>
-              <div class="bars" id="bar3"></div>
-             </label>
+            <div class="menu">
+              
               <nav class="nav">
                 <ul style="margin-bottom: 0; padding: 0 0">
-                    <li> <a href="Index.html">See all</a></li>
-                    <li> <a href="skills.html">Skills</a></li>
-                    <li><a href="experience.html">Experience</a></li>
-                    <li> <a href="contact.html">Contact</a></li>
-                    <li class="logout"><a href="#">Log out</a></li>
-                 </ul>
-                </nav>
-            <div class="busqueda" style="display: flex; width: 35%;">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
+                  <li><a href="/shop">Home</a></li>
+                </ul>
+              </nav>
+              <div class="nav-left">
+                <li class="nav-item dropdown" style="list-style: none;">
+                  <a class="nav-link dropdown-toggle user-name" href="#" id="DropdownUser" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">{{user.nombreUsuario}}</a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="downItem" [routerLink]="['/loginArtist']">Be artist</a></li> 
+                    <li><a class="downItem" (click)="logOut()" style="color: rgb(184, 72, 72);">Log Out</a></li>
+                    @if(user.tipoUsuario){
+                      <li><a class="downItem" (click)="loadAdmin()">Admin</a></li>
+                    }
+                  </ul>
+                </li>
+              </div>
             </div>
-            <div class="nav-left">
-                <a class="nav-link dropdown-toggle user-name" href="#" id="DropdownUser" role="button"
-                data-bs-toggle="dropdown" aria-expanded="false">{{user.nombreUsuario}}</a>
-                <p class="loOUt"  (click)="logOut()"  style="color: rgb(215, 124, 124); width: 35%; border-left: solid 2px  rgb(215, 124, 124);
-                margin:10px 0 10px 0; display: flex;     align-items: flex-end; font-size: 18px;
-                 justify-content: flex-end;">Log out</p>
-            </div>
-        </div>
-        </header>
-        
+          </header>
         <main>
             <div class="main-container">
                 <div class="image-container">
@@ -43,13 +35,20 @@
                             <!--<span{{ obra.nombre }}</span>-->
                             <div class="info-item">
                                 <span class="info-label">Precio:</span>
-                                <span class="info-value"><strong>$ {{ obra.precio}}</strong></span>
+                                <span class="info-value"><strong>${{obra.precio}}</strong></span>
                             </div>
                         </div>
                         <div style="display: flex; flex-direction: column;">
                         <div class="info-item">
+                                @if(obra.disponibilidad){
+                                    <span class="info-value venta-S"><i class="fa-solid fa-tag"></i>  On Sale</span>
+                                }@else{
+                                    <span class="info-value venta-N"><i class="fa-solid fa-tag"></i>  Not Available</span>
+                                }
+                        </div>
+                        <div class="info-item">
                             <span class="info-label">Autor:</span>
-                            <span class="info-value">{{-artistName}}</span>
+                            <span class="info-value">{{artistName}}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Tamaño:</span>
@@ -67,11 +66,14 @@
                     </div>
                     <div class="btn-container">
                         <a class="back-btn" [routerLink]="['/shop']">BACK</a>
-                        <button class="cart-btn"  [routerLink]="['/shop/viewArtwork', obra.id, 'sale', obra.id]">Buy</button>
+                        @if(obra.disponibilidad){
+                            <button class="cart-btn"  [routerLink]="['/shop/viewArtwork', obra.id, 'sale', obra.id]">Buy</button>
+                        }@else{
+                          }
+                        
                     </div>
                 </div>
             </div>
         </main>
-        
     </div>
 </div>

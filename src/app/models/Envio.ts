@@ -3,7 +3,11 @@ export class Envio{
         public id:number,
         public idFactura:number,
         public estado:string,
-        public fechaEnviado:Date | null,
-        public fechaRecibido:Date | null,
+        public direccion:string,
+        public provincia:string,
+        public ciudad:string,
+        public codigoPostal:string,
+        public fechaEnviado:string,
+        public fechaRecibido:string,
     ){}
 }

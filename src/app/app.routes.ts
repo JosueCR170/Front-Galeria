@@ -16,6 +16,7 @@ export const routes: Routes = [
     {path:'',component: HomeComponent},
     {path:'login',component: LoginComponent},
     {path:'login/signup', component: SignupComponent},
+    {path:'login/signup', component: SignupComponent},
     {path:'shop/viewArtwork/:id', component: ViewArtworkComponent},
     {path:'shop',component:ShopComponent},
     {path: 'sale',component:SaleComponent},

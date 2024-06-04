@@ -55,6 +55,45 @@ export class ArtistaAdministrationComponent {
   selectedFile: File | null = null;
   urlAPI: string = "http://127.0.0.1:8000/api/v1/obra/getimage/";
 
+  artStyles: string[] = [
+    'Cubism',
+    'Impressionism',
+    'Expressionism',
+    'Realism',
+    'Surrealism',
+    'Abstract',
+    'Renaissance',
+    'Baroque',
+    'Rococo',
+    'Romanticism',
+    'Neoclassicism',
+    'Modernism',
+    'Pop Art',
+    'Naïve Art'
+  ]
+
+  tecnicas: string[]=[
+    'Oil on canvas',
+    'Watercolor',
+    'Watercolor on paper',
+    'Tempera',
+    'Pastel painting',
+    'Fresco painting',
+    'Digital painting',
+    'Wood carving',
+    'Marble sculpture',
+    'Engraving',
+    'Serigraphy',
+    'Art photography',
+    'Digital art',
+    'Collage',
+    'Pyrography',
+    'Bronze sculpture'
+  ]
+
+  
+  
+
   constructor(
     private obraService: ObraService,
     private messageService: MessageService,
@@ -129,6 +168,66 @@ export class ArtistaAdministrationComponent {
     this.displayConfirmationDialog = true;
   }
 
+
+  /**Parte del UPDATE Obra */
+  selectedImageFile: File | null = null;
+
+  selectCategoria(categoria: string) {
+    this.obra.categoria = categoria;
+  }
+
+  selectTecnica(tecnica: string) {
+    this.obra.tecnica = tecnica;
+  }
+
+  editObra(obra: Obra) {
+    this.obra = { ...obra };
+    this.productDialog = true;
+  }
+
+  onImageFileChange(event: any): void {
+    this.selectedImageFile = event.target.files[0];
+  }
+
+  updateObra(): void {
+    if (this.selectedImageFile) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.obra.imagen = e.target.result.split(',')[1]; // Extraer la imagen en base64
+        this.saveUpdatedObra();
+      };
+      reader.readAsDataURL(this.selectedImageFile);
+    } else {
+      this.saveUpdatedObra();
+    }
+  }
+
+  saveUpdatedObra(): void {
+    this.obraService.update(this.obra).subscribe({
+      next: (response: any) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: 'Obra Updated',
+          life: 3000
+        });
+        this.index(); // Recargar las obras después de la actualización
+      },
+      error: (err: Error) => {
+        console.error('Error al actualizar la obra', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to update obra',
+          life: 3000
+        });
+      }
+    });
+    this.productDialog = false;
+  }
+  
+  
+  /**Parte del DELETE Obra */
   deleteSelectedObras() {
     this.selectedObras.forEach(obra => {
       this.obraService.deleted(obra.id).subscribe({
@@ -162,6 +261,7 @@ export class ArtistaAdministrationComponent {
   hideConfirmationDialog() {
     this.displayConfirmationDialog = false;
   }
+
 
   onSubmitNewObra(form: any) {
     this.obraService.create(this.obra).subscribe({
@@ -322,5 +422,6 @@ export class ArtistaAdministrationComponent {
   //   delete this.clonedProducts[product.id as string];
   //   this.editing = false;
   // }
+
 
 }

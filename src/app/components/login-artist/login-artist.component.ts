@@ -54,6 +54,14 @@ export class LoginArtistComponent {
       }
     })
   }
+  
+  backLogin(){
+    if(sessionStorage.getItem('identity')){
+      this._router.navigate(['/shop'])
+    }else{
+      this._router.navigate(['/login'])
+    }
+  }
 
 
   msgAlert= (title:any, icon:any) =>{
