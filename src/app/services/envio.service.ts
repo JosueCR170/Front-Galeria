@@ -18,12 +18,19 @@ export class EnvioService{
 
 
     create(envio:Envio):Observable<any>{
+        let headers;
+        let bearertoken = sessionStorage.getItem('token');
         let envioJson=JSON.stringify(envio);
         let params='data='+envioJson;
-        let headers=new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
-        let options={
-            headers
+
+        if (bearertoken){
+            headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded').set('bearertoken', bearertoken);
+        } else {
+            headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
         }
+        let options = {
+            headers
+        };
         return this._http.post(this.urlAPI+'envio/store',params,options);
     }
 

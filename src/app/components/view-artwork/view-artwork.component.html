@@ -47,8 +47,16 @@
                         </div>
                         <div style="display: flex; flex-direction: column;">
                         <div class="info-item">
+                                @if(obra.disponibilidad){
+                                    <span class="info-value venta-S"><i class="fa-solid fa-tag"></i>  On Sale</span>
+                                }@else{
+                                    <span class="info-value venta-N"><i class="fa-solid fa-tag"></i>  Not Available</span>
+                                }
+                                
+                        </div>
+                        <div class="info-item">
                             <span class="info-label">Autor:</span>
-                            <span class="info-value">{{-artistName}}</span>
+                            <span class="info-value">{{artistName}}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Tamaño:</span>
@@ -66,7 +74,11 @@
                     </div>
                     <div class="btn-container">
                         <a class="back-btn" [routerLink]="['/shop']">BACK</a>
-                        <button class="cart-btn"  [routerLink]="['/shop/viewArtwork', obra.id, 'sale', obra.id]">Buy</button>
+                        @if(obra.disponibilidad){
+                            <button class="cart-btn"  [routerLink]="['/shop/viewArtwork', obra.id, 'sale', obra.id]">Buy</button>
+                        }@else{
+                          }
+                        
                     </div>
                 </div>
             </div>

@@ -28,7 +28,10 @@ export class SaleComponent {
   public envio:Envio;
   public factura:Factura;
   public errors:string[]=[];
- 
+  public currentDate = new Date();
+
+//Formateamos la fecha en formato YYYY-MM-DD
+public formattedDate = this.formatDate(this.currentDate);
 
   constructor(
     private _obraService: ObraService,
@@ -41,21 +44,39 @@ export class SaleComponent {
   ) {
     this.status = -1;
     this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, null);
-    this.envio=new Envio(1,1,"","","","","",null,null);
-    this.factura=new Factura(1,1,1,new Date(),0,0,0);
+    this.envio=new Envio(1,0,"Espera","","","","","","");
+    this.factura=new Factura(1,1,1,this.formattedDate,0,0,0);
   }
   user: any;
   artista:any;
-  
+  selectedOption: string = 'Select the method of receiving the product';
+
+  isOptionSelected(): boolean {
+    return this.selectedOption !== 'Select the method of receiving the product';
+  }
+
+  private formatDate(date: Date): string {
+    console.log(date);
+    
+    const year = date.getFullYear();
+    const month = date.getMonth(); // Agrega un cero al mes si es necesario
+    const day = date.getDate(); // Agrega un cero al día si es necesario
+    return `${year}-${month}-${day}`;
+  }
 
   ngOnInit(): void {
+  
+    // var fechaprueba = new Date()
+    // var fechaFormateada = fechaprueba.getFullYear() + '-' + fechaprueba.getMonth() + '-' + fechaprueba.getDate();
+    // console.log(fechaFormateada);
+    this.factura.fecha=this.formattedDate;
+    console.log(this.factura);
     const id = this._routes.snapshot.paramMap.get('id');
     console.log('ID obtenido de la ruta:', id); // Verificar que el ID se está obteniendo correctamente
     if (id) {
       this.getObra(id);
     }
     this.loadLoggedUser();
-   
   }
 
   getObra(id: string): void {
@@ -110,10 +131,12 @@ export class SaleComponent {
     const selectElement = event.target as HTMLSelectElement;
     const selectedValue = selectElement.value;
     if (selectedValue === 'Home delivery') {
+     
       this.shippingCost = '3.000';
       this.factura.total=this.obra.precio+3000;
       this.totalCost = (this.obra.precio + 3000).toString();
     } else if (selectedValue === 'Product recall') {
+    
       this.shippingCost = 'Free';
       this.factura.total=this.obra.precio;
       this.totalCost = this.obra.precio .toString();
@@ -126,17 +149,24 @@ export class SaleComponent {
   onSubmit(form:any){
     this.factura.idUsuario=this.user['iss'];
     this.factura.subTotal=this.factura.total;
-    //console.log(this.factura);
+    
+    console.log(this.factura);
 
     this._facturaService.create(this.factura).subscribe({
       next:(facturaResponse)=>{
-        console.log(facturaResponse);
+        console.log('facturaResponse',facturaResponse);
 
         if(facturaResponse.status==201){
-          this.envio.idFactura = facturaResponse.factura.id;
+          this.envio.idFactura = facturaResponse.Factura.id;
+          
+          try{
+            this.envioCreate();
+          }catch(err){
+            console.log(err);
+          }
 
-          form.reset();        
-          this.msgAlert('Factura registrada con éxito','', 'success');
+         // form.reset();        
+          //this.msgAlert('Factura registrada con éxito','', 'success');
         }else{
           //this.changeStatus(1);
         }
@@ -153,11 +183,45 @@ export class SaleComponent {
           }
           console.error(this.errors);
         } else {
-          console.error('Otro tipo de error:', error.statusText);
+          console.error('Otro tipo de error:', error);
           this.msgAlert('Error, desde el servidor. Contacte al administrador','','error');
         }
        // this.changeStatus(2);
       }
+    })
+  }
+
+  envioCreate(){
+    this._envioService.create(this.envio).subscribe({
+      next:(envioResponse)=>{
+        console.log('envioResponse',envioResponse);
+        if(envioResponse.status==201){
+
+        var mensaje = `Take screenshot<br>
+            <p>Contact the author of <strong>${this.obra.nombre}</strong> to make the payment</p>
+            <p>Artist phone: <strong>${this.artista['telefono']}</strong> </p>
+            <p>Artist email: <strong>${this.artista['correo']}</strong></p>`
+
+          this.msgAlertHTML('Envio registrado con éxito',mensaje, 'success');
+        }else{
+          //this.changeStatus(1);
+        }
+      },
+      error:(error:HttpErrorResponse)=>{
+        if(error.status===406 && error.error && error.error.errors){
+          this.errors=[];
+          const errorObj = error.error.errors;
+          for (const key in errorObj) {
+            if (errorObj.hasOwnProperty(key)) {
+              this.errors.push(...errorObj[key]);
+            }
+          }
+          console.error(this.errors);
+        } else {
+          console.error('Otro tipo de error:', error);
+          this.msgAlert('Error, desde el servidor. Contacte al administrador','','error');
+        }
+        }
     })
   }
 
@@ -166,6 +230,16 @@ export class SaleComponent {
       title,
       text,
       icon,
+    });
+  }
+
+  msgAlertHTML(title: any, html: any, icon: any)
+  {
+    Swal.fire({
+      title,
+      html,
+      icon,
+      confirmButtonText: 'OK'
     });
   }
 

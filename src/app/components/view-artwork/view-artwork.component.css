@@ -343,3 +343,13 @@ img {
     }
     
 }
+
+.venta-S{
+    color:rgb(87, 196, 28);
+    font-size: 25px;
+}
+
+.venta-N{
+    color:rgb(196, 28, 28);
+    font-size: 25px;
+}

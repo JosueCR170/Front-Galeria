@@ -34,7 +34,7 @@
       <div class="formG">
         <div class="email">
           <label for="email" style="margin-bottom: 7px;">Email</label>
-          <input id="email" class="form-control" name="email" type="email" value="{{user.correo}}" required disabled>
+          <input id="email" class="form-control" name="email" type="email" value="{{user['email']}}" required disabled>
         </div>
         <div style="margin-bottom: 30px; font-size: 15px; height:100px;">
           <div class="form-check simpe">
@@ -88,13 +88,13 @@
               <input type="number" name="postalCode" class="form-control" id="inputZip" [(ngModel)]="envio.codigoPostal" required> 
             </div>
           </div>
-          <select class="form-select form-select-lg mb-5" required aria-label="Large select example" (change)="updateShippingMethod($event)">
-            <option selected disabled hidden value="Select the method of receiving the product">Select the method of receiving the product</option>
+          <select class="form-select form-select-lg mb-5" aria-label="Large select example" (change)="updateShippingMethod($event)" name="methodReceiving" [(ngModel)]="selectedOption" required>
+            <option selected disabled hidden value="{{selectedOption}}">Select the method of receiving the product</option>
             <option value="Home delivery">Home delivery</option>
             <option value="Product recall">Product recall</option>
           </select>
           <div style="width: 100%; display: flex; justify-content: center;">
-            <input type="submit"  [disabled]="saleForm.invalid" style="background-color: rgb(120, 37, 37);" 
+            <input type="submit"  [disabled]="!isOptionSelected() || saleForm.invalid" style="background-color: rgb(120, 37, 37);" 
             class="btn btn-primary compra"  value=" Pick up!">
             <!-- data-bs-toggle="modal" data-bs-target="#exampleModal" -->
             <!-- Modal -->

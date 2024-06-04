@@ -7,7 +7,7 @@ export class Envio{
         public provincia:string,
         public ciudad:string,
         public codigoPostal:string,
-        public fechaEnviado:Date | null,
-        public fechaRecibido:Date | null,
+        public fechaEnviado:string,
+        public fechaRecibido:string,
     ){}
 }
