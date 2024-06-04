@@ -136,5 +136,6 @@ export class ShopComponent {
   redirectToLoginArtist() {
     this._router.navigate(['/loginArtist']);
   }
+  
 
 }

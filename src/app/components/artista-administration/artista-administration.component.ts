@@ -267,6 +267,11 @@ export class ArtistaAdministrationComponent {
   hideConfirmationDialog() {
     this.displayConfirmationDialog = false;
   }
+
+ /* onInput(event: any): void {
+    const inputValue = (event.target as HTMLInputElement).value;
+    this.dt.filterGlobal(inputValue, 'contains');
+  }*/
   
 
 }
