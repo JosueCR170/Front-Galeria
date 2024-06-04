@@ -30,6 +30,7 @@ export class ViewArtworkComponent {
   }
   user: any;
   artistName:string='Anonimo';
+  urlAPI: string = "http://127.0.0.1:8000/api/v1/obra/getimage/";
 
 
   ngOnInit(): void {
@@ -70,15 +71,6 @@ export class ViewArtworkComponent {
     this._router.navigate([''])
   }
 
-  getImage(obra: Obra): string | null {
-  if (obra.imagen) {
-    // Decodificar la imagen base64 y devolverla como una URL base64
-    return 'data:image/jpeg;base64,' + obra.imagen;
-
-  } else {
-    return null;
-  }
-}
 redirectToSale() {
   this._router.navigate(['sale', this.obra.id]);
 }

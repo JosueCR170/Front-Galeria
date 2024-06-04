@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ObraService } from '../../services/obra.service';
 
 import { Obra } from '../../models/Obra';
@@ -18,28 +18,29 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-artista-administration',
   standalone: true,
-  imports: [TableModule, ConfirmDialogModule ,ToastModule,ToolbarModule, CommonModule,DialogModule  ,FormsModule, IconFieldModule, InputIconModule , TagModule, DropdownModule, ButtonModule, InputTextModule],
+  imports: [TableModule, ConfirmDialogModule, ToastModule, ToolbarModule, CommonModule, DialogModule, FormsModule, IconFieldModule, InputIconModule, TagModule, DropdownModule, ButtonModule, InputTextModule],
   templateUrl: './artista-administration.component.html',
   styleUrl: './artista-administration.component.css',
-  providers: [ProductService,MessageService,ObraService, ConfirmationService],
+  providers: [ProductService, MessageService, ObraService, ConfirmationService],
 
 })
 export class ArtistaAdministrationComponent {
 
-    productDialog: boolean = false;
-    selectedObras!: Obra[];
-    submitted: boolean = false;
-    statuses!: any[];
-    selectAll: boolean = false;
-    selectedObra!: Obra[];
-    totalRecords!: number;
+  productDialog: boolean = false;
+  selectedObras!: Obra[];
+  submitted: boolean = false;
+  statuses!: any[];
+  selectAll: boolean = false;
+  selectedObra!: Obra[];
+  totalRecords!: number;
 
-    clonedProducts: { [s: string]: Obra } = {};
-  
-    editing: boolean = false;
+  clonedProducts: { [s: string]: Obra } = {};
+
+  editing: boolean = false;
   /*-------*/
   displayConfirmationDialog: boolean = false;
 
@@ -51,11 +52,13 @@ export class ArtistaAdministrationComponent {
   public status: number;
   public obra: Obra;
   artist: any;
+  selectedFile: File | null = null;
+  urlAPI: string = "http://127.0.0.1:8000/api/v1/obra/getimage/";
 
   constructor(
     private obraService: ObraService,
     private messageService: MessageService,
-    
+
   ) {
     this.status = -1;
     this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, null);
@@ -66,8 +69,8 @@ export class ArtistaAdministrationComponent {
     this.loadLoggedArtist();
     this.index();
   }
-  
-  loadLoggedArtist(){
+
+  loadLoggedArtist() {
     this.artist = sessionStorage.getItem('identity');
     this.artist = JSON.parse(this.artist);
   }
@@ -78,7 +81,7 @@ export class ArtistaAdministrationComponent {
         this.obras = response['data'];
         this.filterObrasByArtista(this.artist.iss);
         console.log(this.obrasPorArtista);
-        this.obras=this.obrasPorArtista;
+        this.obras = this.obrasPorArtista;
       },
       error: (err: Error) => {
         console.error('Error al cargar las obras', err);
@@ -86,8 +89,8 @@ export class ArtistaAdministrationComponent {
     });
   }
 
-  
-  
+
+
 
   filterObrasByArtista(idArtista: number) {
     this.obrasPorArtista = this.obras.filter(obra => obra.idArtista === idArtista);
@@ -111,24 +114,15 @@ export class ArtistaAdministrationComponent {
 
   /************************* */
   openNew() {
-    this.obra = new Obra(1, this.artist.iss, "", "", "", 1, true, "", null, null, null);
+    this.obra = new Obra(1, this.artist.iss, "", "", "", 1, true, "", "", null, null);
     this.submitted = false;
     this.productDialog = true;
-}
+  }
 
 
   onSelectionChange(value = []) {
     this.selectAll = value.length === this.totalRecords;
     this.selectedObra = value;
-  }
-
-  getImage(obra: Obra): string | null {
-    if (obra.imagen) {
-      // Decodificar la imagen base64 y devolverla como una URL base64
-      return 'data:image/jpeg;base64,' + obra.imagen;
-    } else {
-      return null;
-    }
   }
 
   showConfirmationDialog() {
@@ -168,42 +162,165 @@ export class ArtistaAdministrationComponent {
   hideConfirmationDialog() {
     this.displayConfirmationDialog = false;
   }
-  
-//   onSelectAllChange(event: any) {
-//     const checked = event.checked;
 
-//     if (checked) {
-//         this.obraService.getProducts().then((res) => {
-//             this.selectedObra = res;
-//             this.selectAll = true;
-//         });
-//     } else {
-//         this.selectedObra = [];
-//         this.selectAll = false;
-//     }
-// }
+  onSubmitNewObra(form: any) {
+    this.obraService.create(this.obra).subscribe({
+      next: (response: any) => {
+        if (response.status == 201) {
+          console.log(response);
+          form.reset();
+          this.msgAlert('Obra registrada con éxito', '', 'success');
+        } else {
+          this.status = 0;
+          this.msgAlert('Usuario y/o contraseña incorrecta', 'error', "");
+          form.reset();
+        }
+      },
+      error: (err: Error) => {
+        this.msgAlert('Error, desde el servidor. Contacte al administrador', err.message, "");
+      }
+    })
+  }
+
+  msgAlert = (title: any, text: any, icon: any) => {
+    Swal.fire({
+      title,
+      text,
+      icon,
+    })
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    this.selectedFile = file;
+  }
+
+  storeImage(form: any): void {
+    if (form.valid) {
+      console.log('Obra:', this.obra);
+      if (this.selectedFile) {
+        console.log('Imagen:', this.selectedFile);
+        this.obraService.upLoadImage(this.selectedFile).subscribe({
+          next: (response: any) => {
+            console.log(response);
+            if (response.filename) {
+              this.obra.imagen = response.filename;
+              this.obraService.create(this.obra).subscribe({
+                next: (response2: any) => {
+                  console.log(response2);
+                },
+                error: (err: any) => {
+                  console.error(err);
+                }
+              });
+            } else {
+              console.error('No se recibió el nombre del archivo.');
+            }
+          },
+          error: (err: any) => {
+            console.error(err);
+          }
+        });
+      }
+    }
+  }
+
+  // convertFileToBlob(file: File) {
+  //   const reader = new FileReader();
+
+  //   reader.onload = () => {
+  //     // `result` contiene los datos del archivo en forma de URL de datos
+  //     const dataUrl = reader.result as string;
+
+  //     // Convierte la URL de datos en un Blob
+  //     const blob = this.dataURLToBlob(dataUrl);
+
+  //     // Asigna el Blob resultante a tu objeto
+  //     this.obra.imagen = blob;
+  //     console.log(this.obra.imagen);
+  //   };
+
+  //   // Lee el archivo como una URL de datos
+  //   reader.readAsDataURL(file);
+  // }
+
+  // dataURLToBlob(dataUrl: string): Blob {
+  //   const parts = dataUrl.split(';base64,');
+  //   const contentType = parts[0].split(':')[1];
+  //   const raw = window.atob(parts[1]);
+  //   const rawLength = raw.length;
+  //   const uInt8Array = new Uint8Array(rawLength);
+
+  //   for (let i = 0; i < rawLength; ++i) {
+  //     uInt8Array[i] = raw.charCodeAt(i);
+  //   }
+
+  //   return new Blob([uInt8Array], { type: contentType });
+  // }
+
+  // onImageChange(event: Event): void {
+  //   const input = event.target as HTMLInputElement;
+  //   if (input.files && input.files.length > 0) {
+  //     const file = input.files[0];
+  //     this.convertToBlob(file).then(blob => {
+  //       // Aquí puedes hacer lo que necesites con el Blob
+  //       console.log('Imagen en formato Blob:', blob);
+  //       // Por ejemplo, podrías guardarlo en tu modelo
+  //       this.obra.imagen = blob;
+  //     }).catch(error => {
+  //       console.error('Error al convertir la imagen a Blob:', error);
+  //     });
+  //   }
+  // }
+
+  // private convertToBlob(file: File): Promise<Blob> {
+  //   return new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.onload = (e: any) => {
+  //       const arrayBuffer = e.target.result;
+  //       const blob = new Blob([arrayBuffer], { type: file.type });
+  //       resolve(blob);
+  //     };
+  //     reader.onerror = (error) => reject(error);
+  //     reader.readAsArrayBuffer(file);
+  //   });
+  // }
+
+  //   onSelectAllChange(event: any) {
+  //     const checked = event.checked;
+
+  //     if (checked) {
+  //         this.obraService.getProducts().then((res) => {
+  //             this.selectedObra = res;
+  //             this.selectAll = true;
+  //         });
+  //     } else {
+  //         this.selectedObra = [];
+  //         this.selectAll = false;
+  //     }
+  // }
 
 
-// loadProducts() {
-//   this.obras = this.obraService.index();
-//   this.totalRecords = this.obras.length;
-// }
+  // loadProducts() {
+  //   this.obras = this.obraService.index();
+  //   this.totalRecords = this.obras.length;
+  // }
 
 
-// onRowEditInit(product: Obra, index: number) {
-//   this.clonedProducts[product.id as string] = { ...product };
-//   this.editing = true;
-// }
+  // onRowEditInit(product: Obra, index: number) {
+  //   this.clonedProducts[product.id as string] = { ...product };
+  //   this.editing = true;
+  // }
 
-// onRowEditSave(product: Obra) {
-//   delete this.clonedProducts[product.id as string];
-//   this.editing = false;
-// }
+  // onRowEditSave(product: Obra) {
+  //   delete this.clonedProducts[product.id as string];
+  //   this.editing = false;
+  // }
 
-// onRowEditCancel(product: Obra, index: number) {
-//   this.obras[index] = this.clonedProducts[product.id as string];
-//   delete this.clonedProducts[product.id as string];
-//   this.editing = false;
-// }
+  // onRowEditCancel(product: Obra, index: number) {
+  //   this.obras[index] = this.clonedProducts[product.id as string];
+  //   delete this.clonedProducts[product.id as string];
+  //   this.editing = false;
+  // }
 
 }

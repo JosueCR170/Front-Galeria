@@ -41,6 +41,7 @@ export class ShopComponent {
   onClick: boolean = false;
   all: boolean = false;
   user: any;
+  urlAPI: string = "http://127.0.0.1:8000/api/v1/obra/getimage/";
 
   ngOnInit():void {
     // Aquí puedes llamar al método que desees que se ejecute al cargar el componente
@@ -63,15 +64,6 @@ export class ShopComponent {
 
       }
     })
-  }
-
-  getImage(obra: Obra): string | null {
-    if (obra.imagen) {
-      // Decodificar la imagen base64 y devolverla como una URL base64
-      return 'data:image/jpeg;base64,' + obra.imagen;
-    } else {
-      return null;
-    }
   }
 
   loadCategorysExists() {
