@@ -354,3 +354,11 @@
 .modal-backdrop.show {
   opacity: 0.5;
 }
+
+.cont{
+  display: flex;
+  flex-direction: column;
+}
+.imgBuy{
+  width: 100%;
+}
