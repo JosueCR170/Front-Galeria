@@ -10,7 +10,7 @@ export class Obra{
         public precio:number,
         public disponibilidad:boolean, 
         public categoria:string,
-        public imagen:Blob | null,
+        public imagen:string | null,
         public fechaCreacion:Date | null,
         public fechaRegistro:Date | null
     ){}
