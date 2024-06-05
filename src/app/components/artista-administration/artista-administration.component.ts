@@ -44,7 +44,6 @@ export class ArtistaAdministrationComponent {
   /*-------*/
   displayConfirmationDialog: boolean = false;
 
-
   delivry: boolean = false;
   administration: boolean = true;
   obras: Obra[] = [];
@@ -55,46 +54,17 @@ export class ArtistaAdministrationComponent {
   artist: any;
   selectedFile: File | null = null;
   urlAPI: string;
-  //urlAPI: string = "http://127.0.0.1:8000/api/v1/obra/getimage/";
 
   artStyles: string[] = [
-    'Cubism',
-    'Impressionism',
-    'Expressionism',
-    'Realism',
-    'Surrealism',
-    'Abstract',
-    'Renaissance',
-    'Baroque',
-    'Rococo',
-    'Romanticism',
-    'Neoclassicism',
-    'Modernism',
-    'Pop Art',
-    'Naïve Art'
+    'Cubism','Impressionism','Expressionism','Realism','Surrealism','Abstract','Renaissance',
+    'Baroque','Rococo','Romanticism','Neoclassicism','Modernism','Pop Art','Naïve Art'
   ]
 
-  tecnicas: string[] = [
-    'Oil on canvas',
-    'Watercolor',
-    'Watercolor on paper',
-    'Tempera',
-    'Pastel painting',
-    'Fresco painting',
-    'Digital painting',
-    'Wood carving',
-    'Marble sculpture',
-    'Engraving',
-    'Serigraphy',
-    'Art photography',
-    'Digital art',
-    'Collage',
-    'Pyrography',
-    'Bronze sculpture'
+  tecnicas: string[]=[
+    'Oil on canvas','Watercolor','Watercolor on paper','Tempera','Pastel painting','Fresco painting',
+    'Digital painting','Wood carving','Marble sculpture','Engraving','Serigraphy','Art photography',
+    'Digital art','Collage','Pyrography','Bronze sculpture'
   ]
-
-
-
 
   constructor(
     private obraService: ObraService,
@@ -106,7 +76,6 @@ export class ArtistaAdministrationComponent {
     this.urlAPI = server.url + 'obra/getimage/';
     this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, null);
   }
-
 
   ngOnInit(): void {
     this.loadLoggedArtist();
@@ -145,9 +114,6 @@ export class ArtistaAdministrationComponent {
     });
   }
 
-
-
-
   filterObrasByArtista(idArtista: number) {
     this.obrasPorArtista = this.obras.filter(obra => obra.idArtista === idArtista);
   }
@@ -166,6 +132,7 @@ export class ArtistaAdministrationComponent {
   }
 
   /************************* */
+  
   openNew() {
     this.obra = new Obra(1, this.artist.iss, "", "", "", 1, true, "", "", null, null);
     this.submitted = false;
@@ -181,7 +148,6 @@ export class ArtistaAdministrationComponent {
   showConfirmationDialog() {
     this.displayConfirmationDialog = true;
   }
-
 
   /**Parte del UPDATE Obra */
   selectedImageFile: File | null = null;
@@ -217,37 +183,14 @@ export class ArtistaAdministrationComponent {
     this.obraService.update(this.obra).subscribe({
       next:(response:any)=>{
         console.log(response);
+        location.reload();
       },
       error:(err:Error)=>{
         console.log(err);
       }
     });
+    
   }
-
-  saveUpdatedObra(): void {
-    this.obraService.update(this.obra).subscribe({
-      next: (response: any) => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'Obra Updated',
-          life: 3000
-        });
-        this.index(); // Recargar las obras después de la actualización
-      },
-      error: (err: Error) => {
-        console.error('Error al actualizar la obra', err);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to update obra',
-          life: 3000
-        });
-      }
-    });
-    this.productDialog = false;
-  }
-
 
   /**Parte del DELETE Obra */
   deleteSelectedObras() {
@@ -282,26 +225,6 @@ export class ArtistaAdministrationComponent {
 
   hideConfirmationDialog() {
     this.displayConfirmationDialog = false;
-  }
-
-
-  onSubmitNewObra(form: any) {
-    this.obraService.create(this.obra).subscribe({
-      next: (response: any) => {
-        if (response.status == 201) {
-          console.log(response);
-          form.reset();
-          this.msgAlert('Obra registrada con éxito', '', 'success');
-        } else {
-          this.status = 0;
-          this.msgAlert('Usuario y/o contraseña incorrecta', 'error', "");
-          form.reset();
-        }
-      },
-      error: (err: Error) => {
-        this.msgAlert('Error, desde el servidor. Contacte al administrador', err.message, "");
-      }
-    })
   }
 
   msgAlert = (title: any, text: any, icon: any) => {

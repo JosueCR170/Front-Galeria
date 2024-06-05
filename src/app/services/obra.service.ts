@@ -90,6 +90,7 @@ export class ObraService{
             headers
         };
         return this._http.put(`${this.urlAPI}obra/disp/${id}`, params, options);
+
     }
     
 
