@@ -20,6 +20,8 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { User } from '../../models/user';
 import { Artista } from '../../models/Artista';
 import { ArtistService } from '../../services/artist.service';
+import { server } from '../../services/global';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-admin',
@@ -56,17 +58,18 @@ export class AdminComponent {
     private messageService: MessageService
   ) {
     this.status = -1;
+    this.urlAPI = server.url + 'obra/getimage/';
     this.obra = new Obra(1, 1,"","","",1,true,"",null,null,null);
     this._user = new User(1,"",false,"","",null,"");
     this._artista = new Artista(1,"","","","","");
   }
-  
+
   totalRecords!: number;
   selectedObras!: Obra[];
+  selectedObra!: Obra[];
   statuses!: any[];
   auxObras: Obra[] = [];
   categoryExists: string[] = [];
-  selectedObra!: Obra[];
   obras: Obra[] = [];
   clonedProducts: { [s: string]: Obra } = {};
   selectedCategory: string = '';
@@ -85,6 +88,8 @@ export class AdminComponent {
   workClick: boolean = false;
   user: any;
   artist: any;
+  urlAPI: string;
+  selectedFile: File | null = null;
 
   showHome(show: boolean) {
     this.flag = show;
@@ -239,8 +244,6 @@ export class AdminComponent {
   }
 
   /********************************* UPDATE *********************************/
-  selectedImageFile: File | null = null;
-
   selectCategoria(categoria: string) {
     this.obra.categoria = categoria;
   }
@@ -255,20 +258,28 @@ export class AdminComponent {
   }
 
   onImageFileChange(event: any): void {
-    this.selectedImageFile = event.target.files[0];
+    this.selectedFile = event.target.files[0];
   }
 
-  updateObra(): void {
-    if (this.selectedImageFile) {
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.obra.imagen = e.target.result.split(',')[1]; // Extraer la imagen en base64
-        this.saveUpdatedObra();
-      };
-      reader.readAsDataURL(this.selectedImageFile);
-    } else {
-      this.saveUpdatedObra();
+  updateObra(filename: any) {
+    if (this.selectedFile) {
+      this._obraService.updateImage(this.selectedFile, filename).subscribe({
+        next: (response: any) => {
+          console.log(response);
+        },
+        error: (err: Error) => {
+          console.log(err.message);
+        }
+      });
     }
+    this._obraService.update(this.obra).subscribe({
+      next:(response:any)=>{
+        console.log(response);
+      },
+      error:(err:Error)=>{
+        console.log(err);
+      }
+    });
   }
 
   saveUpdatedObra(): void {
@@ -293,6 +304,38 @@ export class AdminComponent {
       }
     });
     this.productDialog = false;
+  }
+
+  storeImage(form: any): void {
+    if (form.valid) {
+      console.log('Obra:', this.obra);
+      if (this.selectedFile) {
+        console.log('Imagen:', this.selectedFile);
+        this._obraService.upLoadImage(this.selectedFile).subscribe({
+          next: (response: any) => {
+            console.log(response);
+            if (response.filename) {
+              this.obra.imagen = response.filename;
+              this._obraService.create(this.obra).subscribe({
+                next: (response2: any) => {
+                  console.log(response2);
+                  location.reload();
+                },
+                error: (err: any) => {
+                  console.error(err);
+
+                }
+              });
+            } else {
+              console.error('No se recibió el nombre del archivo.');
+            }
+          },
+          error: (err: any) => {
+            console.error(err);
+          }
+        });
+      }
+    }
   }
   
   /********************************* DELETE *********************************/
@@ -332,5 +375,4 @@ export class AdminComponent {
 
   /************************************************************************ */
   
-
 }
