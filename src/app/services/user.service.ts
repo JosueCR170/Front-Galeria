@@ -54,4 +54,12 @@ export class UserService{
         return this._http.post(this.urlAPI+'user/store',params,options);
     }
 
+    index():Observable<any>{
+        let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+        let options = {
+            headers
+        };
+        return this._http.get(this.urlAPI+'user', options);
+    }
+
 }
