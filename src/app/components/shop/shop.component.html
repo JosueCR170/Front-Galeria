@@ -11,7 +11,7 @@
         <nav class="nav">
           <ul style="margin-bottom: 0; padding: 0 0">
             <li><a style="cursor: pointer;" (click)="showAll(true)">See all</a></li> <!--Cambie acá-->
-            <li><a href="skills.html">Artists</a></li>
+            <li><button class="btnArtist" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">Artist</button></li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
                 aria-expanded="false">Category</a>
@@ -37,9 +37,8 @@
           </ul>
         </nav>
         <div class="busqueda" style="display: flex; width: 35%;">
-          <input class="form-control me-2" style="padding-top: 10px;" type="search" placeholder="Search"
-            aria-label="Search">
-          <button class="btn btn-outline-success" style="padding-top: 10px;" type="submit">Search</button>
+          <input class="form-control me-2" style="padding-top: 10px;" type="search" placeholder="Search" 
+          aria-label="Search" (input)="search($event)">
         </div>
         <div class="nav-left">
           <li class="nav-item dropdown" style="list-style: none;">
@@ -59,20 +58,30 @@
     <!--Abajo del nav-->
 
     <!--Cambie acá-->
-
     @if (loadObrasLength(selectedCategory) >= 1) {
     <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
       <p class="work"><span class="workGradient">WORK</span> ART</p>
-    </div>
+     </div>
     <div style="border-bottom: solid 2px gray;">
       <div class="categoria">{{ selectedCategory }}</div>
       <div class="colums">
         <div class="cardColm-a" *ngFor="let obra of auxObras">
           <div class="card" style="height: 100%;">
-            <img [src]="getImage(obra)" class="card-img-top" alt="...">
+            <div class="image-container">
+            <img src="{{urlAPI}}{{obra.imagen}}" class="card-img-top" alt="...">
+            <div class="overlay-text">
+              @if(obra.disponibilidad){
+                <span class="info-value venta-S"><i class="fa-solid fa-tag"></i> <strong> On Sale</strong> </span>
+             }@else{
+                <span class="info-value venta-N" style="color: rgb(208, 29, 29);"><i class="fa-solid fa-tag"></i><strong> Not Available</strong> </span>
+            }
+            </div>
+            </div>
             <div class="card-body">
-              <h5 class="card-title">{{ obra.nombre }}</h5>
-              <p class="card-text"><strong>$ {{ obra.precio}}</strong></p>
+             
+                <h5 class="card-title">{{ obra.nombre }}</h5>
+                <p class="card-text"><strong>$ {{ obra.precio }}</strong></p>
+              
               <div style="display: flex; justify-content: space-between; align-items: center;">
                 <a href="#" class="btn btn-primary"
                   style="width: 100%; background: linear-gradient(90deg,rgba(219, 133, 133, 1),rgba(54, 0, 207, 1)); border: none;"
@@ -95,6 +104,7 @@
     <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
       <p class="work"><span class="workGradient">WORK</span> ART</p>
     </div>
+
     <div *ngFor="let categoria of categoryExists">
       
       @if(categoryExistsLength(categoria) >= 1){
@@ -105,10 +115,21 @@
           <div class="cardColm-a" *ngFor="let obra of auxObras.slice(0, 6)">
             <!-- Card -->
             <div class="card" style="height: 100%;">
-              <img [src]="getImage(obra)" class="card-img-top" alt="...">
+              <div class="image-container">
+              <img src="{{urlAPI}}{{obra.imagen}}" class="card-img-top" alt="...">
+              <div class="overlay-text">
+                @if(obra.disponibilidad){
+                  <span class="info-value venta-S"><i class="fa-solid fa-tag"></i> <strong> On Sale</strong> </span>
+               }@else{
+                  <span class="info-value venta-N" style="color: rgb(208, 29, 29);"><i class="fa-solid fa-tag"></i><strong> Not Available</strong> </span>
+              }
+              </div>
+              </div>
               <div class="card-body">
-                <h5 class="card-title">{{ obra.nombre }}</h5>
-                <p class="card-text"><strong>$ {{ obra.precio}}</strong></p>
+               
+                  <h5 class="card-title">{{ obra.nombre }}</h5>
+                  <p class="card-text"><strong>$ {{ obra.precio }}</strong></p>
+                
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                   <a href="#" class="btn btn-primary"
                     style="width: 100%; background: linear-gradient(90deg,rgba(219, 133, 133, 1),rgba(54, 0, 207, 1)); border: none;"
@@ -131,13 +152,24 @@
       <div class="colums">
         <div class="cardColm-a" style="margin-top: 20px;" *ngFor="let obra of obras">
           <div class="card" style="height: 100%;">
-            <img [src]="getImage(obra)" class="card-img-top" alt="...">
+            <div class="image-container">
+            <img src="{{urlAPI}}{{obra.imagen}}" class="card-img-top" alt="...">
+            <div class="overlay-text">
+              @if(obra.disponibilidad){
+                <span class="info-value venta-S"><i class="fa-solid fa-tag"></i> <strong> On Sale</strong> </span>
+             }@else{
+                <span class="info-value venta-N" style="color: rgb(208, 29, 29);"><i class="fa-solid fa-tag"></i><strong> Not Available</strong> </span>
+            }
+            </div>
+            </div>
             <div class="card-body">
-              <h5 class="card-title">{{ obra.nombre }}</h5>
-              <p class="card-text"><strong>$ {{ obra.precio }}</strong></p>
+             
+                <h5 class="card-title">{{ obra.nombre }}</h5>
+                <p class="card-text"><strong>$ {{ obra.precio }}</strong></p>
+          
               <div style="display: flex; justify-content: space-between; align-items: center;">
                 <a href="#" class="btn btn-primary"
-                  style="width: 100%; background: linear-gradient(90deg, rgba(219, 133, 133, 1), rgba(54, 0, 207, 1)); border: none;" 
+                  style="width: 100%; background: linear-gradient(90deg,rgba(219, 133, 133, 1),rgba(54, 0, 207, 1)); border: none;"
                   [routerLink]="['viewArtwork', obra.id]">View</a>
               </div>
             </div>
@@ -145,5 +177,31 @@
         </div>
       </div>
     }
+  
+<div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Backdrop with scrolling</h5>
+    <button  class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <p>Try scrolling the rest of the page to see this option in action.</p>
+  </div>
+</div>
+
+
+
+    <div class="social-footer  text-center" style="margin-top: 90px; ">
+      <div style="border-top: solid 2px rgb(0, 255, 55);padding-top: 20px;">
+       <a href="#" ><i class="fab fa-twitter"></i> twitter</a>
+       <a href="#"><i class="fab fa-facebook"></i> facebook</a>
+       <a href="#"><i class="fab fa-instagram"></i> instagram</a>
+      </div>
+       
+       <div style="border-top: solid 2px rgb(4, 255, 0);padding-top: 20px;">
+           <p class="designers">Designers: Alejandro Chaves, Daniel Gonzalez</p>
+           <p style=" color: white;">&copy; 2024</p>
+       </div>
+       
+   </div>
   </div>
 </div>

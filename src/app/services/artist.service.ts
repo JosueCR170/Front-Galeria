@@ -18,6 +18,14 @@ export class ArtistService{
         this.urlAPI = server.url;
     }
 
+    index():Observable<any>{
+        let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+        let options = {
+            headers
+        };
+        return this._http.get(this.urlAPI+'artista', options);
+    }
+
     loginArtist(artist:Artista):Observable<any>{
         let artistJSON = JSON.stringify(artist);
         let params = 'data='+artistJSON;
@@ -59,12 +67,5 @@ export class ArtistService{
         return this._http.get(`artista/${artistId}`, options);
       }
 
-    index():Observable<any>{
-        let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-        let options = {
-            headers
-        };
-        return this._http.get(this.urlAPI+'artista', options);
-    }
 
 }

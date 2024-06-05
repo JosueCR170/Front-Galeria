@@ -29,6 +29,7 @@
   top: 0; /* Posición superior */
   width: 90%; /* Ocupa todo el ancho */
   z-index: 1000; /* Asegura que el navbar esté por encima de otros elementos */
+  background-color: #0505058c;
   backdrop-filter: blur(5px); /* Ajusta según el diseño */
   border-bottom: 1px solid white;
   border-right: 1px solid white;
@@ -190,6 +191,7 @@
   .menu {
       height: 60px;
       padding-left: 20px;
+      background-color: #0505058c;
   }
   .menu .toggle {
       display: inline-flex;
@@ -318,7 +320,9 @@
    .datosResivo{
     display: flex; justify-content: space-between; size: 18px; 
    }
-  
+  .card-body{
+    width: 100%;
+  }
   @media (max-width: 700px) {
     .conteiner{
       width: 100%;

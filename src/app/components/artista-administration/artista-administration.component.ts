@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ObraService } from '../../services/obra.service';
 
 import { Obra } from '../../models/Obra';
@@ -17,40 +17,42 @@ import { InputIconModule } from 'primeng/inputicon';
 import { ToolbarModule } from 'primeng/toolbar';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { trigger, state, style, animate, transition } from '@angular/animations';
+import Swal from 'sweetalert2';
+import { server } from '../../services/global';
 @Component({
   selector: 'app-artista-administration',
   standalone: true,
-  imports: [TableModule, ConfirmDialogModule ,ToastModule,ToolbarModule, CommonModule,DialogModule  ,FormsModule, IconFieldModule, InputIconModule , TagModule, DropdownModule, ButtonModule, InputTextModule],
+  imports: [TableModule, ConfirmDialogModule, ToastModule, ToolbarModule, CommonModule, DialogModule, FormsModule, IconFieldModule, InputIconModule, TagModule, DropdownModule, ButtonModule, InputTextModule],
   templateUrl: './artista-administration.component.html',
   styleUrl: './artista-administration.component.css',
-  providers: [ProductService,MessageService,ObraService, ConfirmationService],
+  providers: [ProductService, MessageService, ObraService, ConfirmationService],
 
 })
 export class ArtistaAdministrationComponent {
 
-    productDialog: boolean = false;
-    selectedObras!: Obra[];
-    submitted: boolean = false;
-    statuses!: any[];
-    selectAll: boolean = false;
-    selectedObra!: Obra[];
-    totalRecords!: number;
-
-    clonedProducts: { [s: string]: Obra } = {};
-  
-    editing: boolean = false;
+  productDialog: boolean = false;
+  selectedObras!: Obra[];
+  submitted: boolean = false;
+  statuses!: any[];
+  selectAll: boolean = false;
+  selectedObra!: Obra[];
+  totalRecords!: number;
+  clonedProducts: { [s: string]: Obra } = {};
+  editing: boolean = false;
   /*-------*/
   displayConfirmationDialog: boolean = false;
 
-  flag: boolean = true;
+
   delivry: boolean = false;
-  administration: boolean = false;
+  administration: boolean = true;
   obras: Obra[] = [];
   obrasPorArtista: Obra[] = [];
   public status: number;
   public obra: Obra;
   artist: any;
+  selectedFile: File | null = null;
+  urlAPI: string;
+  //urlAPI: string = "http://127.0.0.1:8000/api/v1/obra/getimage/";
 
   artStyles: string[] = [
     'Cubism',
@@ -69,7 +71,7 @@ export class ArtistaAdministrationComponent {
     'Naïve Art'
   ]
 
-  tecnicas: string[]=[
+  tecnicas: string[] = [
     'Oil on canvas',
     'Watercolor',
     'Watercolor on paper',
@@ -88,15 +90,16 @@ export class ArtistaAdministrationComponent {
     'Bronze sculpture'
   ]
 
-  
-  
+
+
 
   constructor(
     private obraService: ObraService,
     private messageService: MessageService,
-    
+
   ) {
     this.status = -1;
+    this.urlAPI = server.url + 'obra/getimage/';
     this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, null);
   }
 
@@ -105,8 +108,8 @@ export class ArtistaAdministrationComponent {
     this.loadLoggedArtist();
     this.index();
   }
-  
-  loadLoggedArtist(){
+
+  loadLoggedArtist() {
     this.artist = sessionStorage.getItem('identity');
     this.artist = JSON.parse(this.artist);
   }
@@ -117,7 +120,7 @@ export class ArtistaAdministrationComponent {
         this.obras = response['data'];
         this.filterObrasByArtista(this.artist.iss);
         console.log(this.obrasPorArtista);
-        this.obras=this.obrasPorArtista;
+        this.obras = this.obrasPorArtista;
       },
       error: (err: Error) => {
         console.error('Error al cargar las obras', err);
@@ -125,25 +128,22 @@ export class ArtistaAdministrationComponent {
     });
   }
 
-  
-  
+
+
 
   filterObrasByArtista(idArtista: number) {
     this.obrasPorArtista = this.obras.filter(obra => obra.idArtista === idArtista);
   }
 
   showHome(show: boolean) {
-    this.flag = show;
     this.delivry = false;
     this.administration = false;
   }
   showDelivery(show: boolean) {
-    this.flag = false;
     this.delivry = show;
     this.administration = false;
   }
   adminObras(show: boolean) {
-    this.flag = false;
     this.delivry = false;
     this.administration = show;
   }
@@ -151,24 +151,15 @@ export class ArtistaAdministrationComponent {
   /************************* */
   
   openNew() {
-    this.obra = new Obra(1, this.artist.iss, "", "", "", 1, true, "", null, null, null);
+    this.obra = new Obra(1, this.artist.iss, "", "", "", 1, true, "", "", null, null);
     this.submitted = false;
     this.productDialog = true;
-}
+  }
 
 
   onSelectionChange(value = []) {
     this.selectAll = value.length === this.totalRecords;
     this.selectedObra = value;
-  }
-
-  getImage(obra: Obra): string | null {
-    if (obra.imagen) {
-      // Decodificar la imagen base64 y devolverla como una URL base64
-      return 'data:image/jpeg;base64,' + obra.imagen;
-    } else {
-      return null;
-    }
   }
 
   showConfirmationDialog() {
@@ -193,20 +184,28 @@ export class ArtistaAdministrationComponent {
   }
 
   onImageFileChange(event: any): void {
-    this.selectedImageFile = event.target.files[0];
+    this.selectedFile = event.target.files[0];
   }
 
-  updateObra(): void {
-    if (this.selectedImageFile) {
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.obra.imagen = e.target.result.split(',')[1]; // Extraer la imagen en base64
-        this.saveUpdatedObra();
-      };
-      reader.readAsDataURL(this.selectedImageFile);
-    } else {
-      this.saveUpdatedObra();
+  updateObra(filename: any) {
+    if (this.selectedFile) {
+      this.obraService.updateImage(this.selectedFile, filename).subscribe({
+        next: (response: any) => {
+          console.log(response);
+        },
+        error: (err: Error) => {
+          console.log(err.message);
+        }
+      });
     }
+    this.obraService.update(this.obra).subscribe({
+      next:(response:any)=>{
+        console.log(response);
+      },
+      error:(err:Error)=>{
+        console.log(err);
+      }
+    });
   }
 
   saveUpdatedObra(): void {
@@ -232,8 +231,8 @@ export class ArtistaAdministrationComponent {
     });
     this.productDialog = false;
   }
-  
-  
+
+
   /**Parte del DELETE Obra */
   deleteSelectedObras() {
     this.selectedObras.forEach(obra => {
@@ -269,10 +268,64 @@ export class ArtistaAdministrationComponent {
     this.displayConfirmationDialog = false;
   }
 
- /* onInput(event: any): void {
-    const inputValue = (event.target as HTMLInputElement).value;
-    this.dt.filterGlobal(inputValue, 'contains');
-  }*/
-  
+
+  onSubmitNewObra(form: any) {
+    this.obraService.create(this.obra).subscribe({
+      next: (response: any) => {
+        if (response.status == 201) {
+          console.log(response);
+          form.reset();
+          this.msgAlert('Obra registrada con éxito', '', 'success');
+        } else {
+          this.status = 0;
+          this.msgAlert('Usuario y/o contraseña incorrecta', 'error', "");
+          form.reset();
+        }
+      },
+      error: (err: Error) => {
+        this.msgAlert('Error, desde el servidor. Contacte al administrador', err.message, "");
+      }
+    })
+  }
+
+  msgAlert = (title: any, text: any, icon: any) => {
+    Swal.fire({
+      title,
+      text,
+      icon,
+    })
+  }
+
+  storeImage(form: any): void {
+    if (form.valid) {
+      console.log('Obra:', this.obra);
+      if (this.selectedFile) {
+        console.log('Imagen:', this.selectedFile);
+        this.obraService.upLoadImage(this.selectedFile).subscribe({
+          next: (response: any) => {
+            console.log(response);
+            if (response.filename) {
+              this.obra.imagen = response.filename;
+              this.obraService.create(this.obra).subscribe({
+                next: (response2: any) => {
+                  console.log(response2);
+                  location.reload();
+                },
+                error: (err: any) => {
+                  console.error(err);
+
+                }
+              });
+            } else {
+              console.error('No se recibió el nombre del archivo.');
+            }
+          },
+          error: (err: any) => {
+            console.error(err);
+          }
+        });
+      }
+    }
+  }
 
 }

@@ -1,38 +1,40 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ButtonModule } from 'primeng/button';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ObraService } from '../../services/obra.service';
 import { Obra } from '../../models/Obra';
 import { UserService } from '../../services/user.service';
-import { User } from '../../models/user';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { ArtistService } from '../../services/artist.service';
+import { Artista } from '../../models/Artista';
 
 @Component({
   selector: 'app-shop',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, AutoCompleteModule],
   templateUrl: './shop.component.html',
   styleUrl: './shop.component.css',
   providers: [ObraService]
 })
 export class ShopComponent {
+  artistName: string = '';
+
   public status: number;
   public obra: Obra;
-
-
   constructor(
     private _obraService: ObraService,
     private _router: Router,
-    private _routes: ActivatedRoute,
-    private _userService: UserService
+    private _artistas: ArtistService
   ) {
     this.status = -1;
     this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, null);
   }
-
-
+ 
+  items: any[] | undefined;
+  selectedItem: any;
+  suggestions: any[]=[];
+  artistas: Artista[]=[];
   obras: Obra[] = [];
   auxObras: Obra[] = [];
   categoryExists: string[] = [];
@@ -40,12 +42,15 @@ export class ShopComponent {
   flag: boolean = true;
   onClick: boolean = false;
   all: boolean = false;
+  artistaMenu: boolean = false;
   user: any;
+  urlAPI: string = "http://127.0.0.1:8000/api/v1/obra/getimage/";
 
   ngOnInit():void {
     // Aquí puedes llamar al método que desees que se ejecute al cargar el componente
     this.index();
     this.loadLoggedUser();
+    this.indexArtista();
   }
 
   logOut(){
@@ -65,14 +70,22 @@ export class ShopComponent {
     })
   }
 
-  getImage(obra: Obra): string | null {
-    if (obra.imagen) {
-      // Decodificar la imagen base64 y devolverla como una URL base64
-      return 'data:image/jpeg;base64,' + obra.imagen;
-    } else {
-      return null;
-    }
+
+indexArtista(){
+this._artistas.index().subscribe({
+  next: (response: any) => {
+
+    this.artistas = response['data'];
+    console.log(this.artistas)
+    
+  },
+  error: (err: Error) => {
+
   }
+})
+  }
+
+
 
   loadCategorysExists() {
     if (this.obras.length >= 1) {
@@ -82,6 +95,10 @@ export class ShopComponent {
         }
       });
     }
+  }
+
+  getArtista(){
+    
   }
 
   loadAuxObras(category:string){
@@ -106,7 +123,6 @@ export class ShopComponent {
   getNumeroDeObras(categoria: { nombre: string, obras: any[] }): number {
     return categoria.obras.length;
   }
-  cant = this.getNumeroDeObras;
 
   // Método para manejar la selección de una categoría
   selectCategory(category: string) {
@@ -114,12 +130,14 @@ export class ShopComponent {
     this.onClick = true;
     this.flag = false;
     this.all = false;
+    this.artistaMenu = false
   }
 
   showHome(show: boolean) {
     this.flag = show;
     this.onClick = false;
     this.all = false;
+    this.artistaMenu = false
   }
 
   showAll(all: boolean) {
@@ -127,6 +145,13 @@ export class ShopComponent {
     this.all = all;
     this.flag = false;
     this.onClick = false;
+    this.artistaMenu = false
+  }
+  showArtist(artistTrue:boolean){
+    this.all = false;
+    this.flag = false;
+    this.onClick = false;
+    this.artistaMenu = artistTrue
   }
 
   loadAdmin(){
@@ -136,6 +161,29 @@ export class ShopComponent {
   redirectToLoginArtist() {
     this._router.navigate(['/loginArtist']);
   }
-  
 
+  search(event: any) {
+    const query = event.target.value || '';
+    const lowercaseQuery = query.toLowerCase();
+    
+    // Si el input está vacío, muestra todas las obras
+    console.log(lowercaseQuery)
+    if (lowercaseQuery === '') { 
+      this.index();   
+      this.auxObras = [...this.obras];
+      this.obras = this.auxObras
+ 
+    } else {
+      // Filtra las obras de arte que coinciden con el texto de búsqueda en el nombre de la obra
+      this.auxObras = this.obras.filter(obra => obra.nombre.toLowerCase().includes(lowercaseQuery));
+      this.obras = this.auxObras
+      this.selectedCategory = '';
+      this.all = true;
+      this.flag = false;
+      this.onClick = false;
+      this.artistaMenu = false;
+      console.log("EL aux obras"+this.auxObras)
+      console.log(this.obras)
+    }
+  }
 }

@@ -26,12 +26,12 @@
         <main>
             <div class="main-container">
                 <div class="image-container">
-                    <img [src]="getImage(obra)" alt="idk" >
+                    <img src="{{urlAPI}}{{obra.imagen}}" alt="idk" >
                 </div>
                 <div class="info-container">
                     <div class="info">
                         <div class="info-name">
-                            <h5  class="card-title">{{ obra.nombre }}</h5>
+                            <h1  class="card-title">{{ obra.nombre }}</h1>
                             <!--<span{{ obra.nombre }}</span>-->
                             <div class="info-item">
                                 <span class="info-label">Precio:</span>
