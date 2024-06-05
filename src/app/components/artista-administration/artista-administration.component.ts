@@ -51,7 +51,7 @@ export class ArtistaAdministrationComponent {
   public obra: Obra;
   artist: any;
   selectedFile: File | null = null;
-  urlAPI:string;
+  urlAPI: string;
   //urlAPI: string = "http://127.0.0.1:8000/api/v1/obra/getimage/";
 
   artStyles: string[] = [
@@ -71,7 +71,7 @@ export class ArtistaAdministrationComponent {
     'Naïve Art'
   ]
 
-  tecnicas: string[]=[
+  tecnicas: string[] = [
     'Oil on canvas',
     'Watercolor',
     'Watercolor on paper',
@@ -90,8 +90,8 @@ export class ArtistaAdministrationComponent {
     'Bronze sculpture'
   ]
 
-  
-  
+
+
 
   constructor(
     private obraService: ObraService,
@@ -99,7 +99,7 @@ export class ArtistaAdministrationComponent {
 
   ) {
     this.status = -1;
-    this.urlAPI = server.url+'/obra/getimage/';
+    this.urlAPI = server.url + 'obra/getimage/';
     this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, null);
   }
 
@@ -183,20 +183,28 @@ export class ArtistaAdministrationComponent {
   }
 
   onImageFileChange(event: any): void {
-    this.selectedImageFile = event.target.files[0];
+    this.selectedFile = event.target.files[0];
   }
 
-  updateObra(): void {
-    if (this.selectedImageFile) {
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.obra.imagen = e.target.result.split(',')[1]; // Extraer la imagen en base64
-        this.saveUpdatedObra();
-      };
-      reader.readAsDataURL(this.selectedImageFile);
-    } else {
-      this.saveUpdatedObra();
+  updateObra(filename: any) {
+    if (this.selectedFile) {
+      this.obraService.updateImage(this.selectedFile, filename).subscribe({
+        next: (response: any) => {
+          console.log(response);
+        },
+        error: (err: Error) => {
+          console.log(err.message);
+        }
+      });
     }
+    this.obraService.update(this.obra).subscribe({
+      next:(response:any)=>{
+        console.log(response);
+      },
+      error:(err:Error)=>{
+        console.log(err);
+      }
+    });
   }
 
   saveUpdatedObra(): void {
@@ -222,8 +230,8 @@ export class ArtistaAdministrationComponent {
     });
     this.productDialog = false;
   }
-  
-  
+
+
   /**Parte del DELETE Obra */
   deleteSelectedObras() {
     this.selectedObras.forEach(obra => {
@@ -287,11 +295,6 @@ export class ArtistaAdministrationComponent {
     })
   }
 
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
-    this.selectedFile = file;
-  }
-
   storeImage(form: any): void {
     if (form.valid) {
       console.log('Obra:', this.obra);
@@ -305,11 +308,11 @@ export class ArtistaAdministrationComponent {
               this.obraService.create(this.obra).subscribe({
                 next: (response2: any) => {
                   console.log(response2);
-                   location.reload();
+                  location.reload();
                 },
                 error: (err: any) => {
                   console.error(err);
-                 
+
                 }
               });
             } else {
