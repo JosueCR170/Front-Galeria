@@ -266,5 +266,4 @@ export class ArtistaAdministrationComponent {
       }
     }
   }
-
 }

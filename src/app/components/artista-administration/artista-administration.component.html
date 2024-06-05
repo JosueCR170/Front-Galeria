@@ -425,7 +425,7 @@
       </p-toolbar>
       <p-table #dt [value]="obras" [rows]="10" [totalRecords]="totalRecords" [paginator]="true"
         [(selection)]="selectedObras" [selectAll]="selectAll" [tableStyle]="{ 'min-width': '75rem' }"
-        [globalFilterFields]="['id', 'nombre', 'categoria', 'tecnica', 'tamano', 'fechaCreacion', 'fechaRegistro', 'disponibilidad']">
+        [globalFilterFields]="['id', 'nombre', 'categoria', 'tecnica', 'tamano', 'precio', 'fechaCreacion', 'fechaRegistro', 'disponibilidad']">
 
         <ng-template pTemplate="caption">
           <div class="flex align-items-center justify-content-between">
@@ -439,22 +439,21 @@
         <ng-template pTemplate="header">
           <tr>
             <th style="width: 4rem">
-              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+              <p-tableHeaderCheckbox disabled="true"></p-tableHeaderCheckbox>
             </th>
-            <th pSortableColumn="id" style="width:20%">Code <p-sortIcon field="id"></p-sortIcon></th>
-            <th pSortableColumn="nombre" style="width:20%">Name <p-sortIcon field="nombre"></p-sortIcon></th>
-            <th pSortableColumn="categoria" style="width:20%">Category <p-sortIcon field="categoria"></p-sortIcon></th>
-            <th pSortableColumn="tecnica" style="width:20%">Tecnica <p-sortIcon field="tecnica"></p-sortIcon></th>
-            <th pSortableColumn="tamano" style="width:20%">Tamano <p-sortIcon field="tamano"></p-sortIcon></th>
-            <th pSortableColumn="tamano" style="width:20%">Precio <p-sortIcon field="tamano"></p-sortIcon></th>
-            <th pSortableColumn="fechaCreacion" style="width:20%">Fecha de Creacion <p-sortIcon
+            <th pSortableColumn="id" style="width:9%">Code <p-sortIcon field="id"></p-sortIcon></th>
+            <th pSortableColumn="nombre" style="width:7%">Name <p-sortIcon field="nombre"></p-sortIcon></th>
+            <th pSortableColumn="categoria" style="width:6%">Category <p-sortIcon field="categoria"></p-sortIcon></th>
+            <th pSortableColumn="tecnica" style="width:10%">Tecnica <p-sortIcon field="tecnica"></p-sortIcon></th>
+            <th pSortableColumn="tamano" style="width:9%">Tamano <p-sortIcon field="tamano"></p-sortIcon></th>
+            <th pSortableColumn="precio" style="width:8%">Precio <p-sortIcon field="precio"></p-sortIcon></th>
+            <th pSortableColumn="fechaCreacion" style="width:14%">Fecha de Creacion <p-sortIcon
                 field="fechaCreacion"></p-sortIcon></th>
-            <th pSortableColumn="fechaRegistro" style="width:20%">Fecha de Registro <p-sortIcon
+            <th pSortableColumn="fechaRegistro" style="width:14%">Fecha de Registro <p-sortIcon
                 field="fechaRegistro"></p-sortIcon></th>
-            <th pSortableColumn="disponibilidad" style="width:20%">Disponibilidad <p-sortIcon
+            <th pSortableColumn="disponibilidad" style="width:11%">Disponibilidad <p-sortIcon
                 field="disponibilidad"></p-sortIcon></th>
-            <th pSortableColumn="imagen" style="width:20%">Imagen <p-sortIcon field="imagen"></p-sortIcon></th>
-            <th style="width:20%"></th>
+            <th style="width:20%">Imagen</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-obra let-ri="rowIndex">
@@ -558,7 +557,7 @@
                   <input pInputText type="image" [(ngModel)]="obra.imagen" required />
                 </ng-template>
                 <ng-template pTemplate="output">
-                  <img src="{{urlAPI}}{{obra.imagen}}" alt="" style="width: 100px;" />
+                  <img src="{{urlAPI}}{{obra.imagen}}" alt="" style="width: 150px;" />
                 </ng-template>
               </p-cellEditor>
             </td>
@@ -568,12 +567,6 @@
                 <!-- <button pButton pRipple icon="pi pi-pencil" (click)="editProduct(obra)"></button>-->
                 <!--  <button pButton pRipple icon="pi pi-trash" (click)="deleteProduct(obra)"></button>-->
               </div>
-            </td>
-            <td>
-              <button data-bs-toggle="modal" data-bs-target="#updateModal" class="fa-solid fa-pencil"
-                (click)="editObra(obra)">
-              </button>
-
             </td>
           </tr>
         </ng-template>
