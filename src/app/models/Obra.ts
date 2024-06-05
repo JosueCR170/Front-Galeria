@@ -11,7 +11,7 @@ export class Obra{
         public disponibilidad:boolean, 
         public categoria:string,
         public imagen:string | null,
-        public fechaCreacion:Date | null,
-        public fechaRegistro:Date | null
+        public fechaCreacion:string | null,
+        public fechaRegistro:string | null
     ){}
 }

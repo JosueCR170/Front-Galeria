@@ -20,6 +20,7 @@ export class AdminComponent {
   administration: boolean = false;
   public status: number;
   public obra: Obra;
+
   constructor(
     private _obraService: ObraService,
     private _router: Router,
@@ -126,5 +127,6 @@ export class AdminComponent {
     sessionStorage.clear();
     this._router.navigate([''])
   }
+ 
 
 }
