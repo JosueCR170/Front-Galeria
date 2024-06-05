@@ -55,6 +55,10 @@
             styleClass="btn-rounded" [disabled]="!selectedObras ||!selectedObras.length" severity="danger"
             label="Delete">
           </p-button>
+          <p-button type="button" class="asd" data-bs-toggle="modal" data-bs-target="#updateModal" (onClick)="editObra(selectedObras[0])"
+            styleClass="btn-rounded" [disabled]="!selectedObras || selectedObras.length !== 1" severity="warning"
+            label="Update">
+          </p-button>
         </ng-template>
       </p-toolbar>
       <p-table #dt [value]="obras" [rows]="10" [totalRecords]="totalRecords" [paginator]="true"
