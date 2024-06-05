@@ -19,6 +19,8 @@ import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import Swal from 'sweetalert2';
 import { server } from '../../services/global';
+import { FacturaService } from '../../services/factura.service';
+import { Factura } from '../../models/Factura';
 @Component({
   selector: 'app-artista-administration',
   standalone: true,
@@ -46,6 +48,7 @@ export class ArtistaAdministrationComponent {
   delivry: boolean = false;
   administration: boolean = true;
   obras: Obra[] = [];
+  facturas:Factura[]=[];
   obrasPorArtista: Obra[] = [];
   public status: number;
   public obra: Obra;
@@ -96,6 +99,7 @@ export class ArtistaAdministrationComponent {
   constructor(
     private obraService: ObraService,
     private messageService: MessageService,
+    private facturaService:FacturaService,
 
   ) {
     this.status = -1;
@@ -107,6 +111,7 @@ export class ArtistaAdministrationComponent {
   ngOnInit(): void {
     this.loadLoggedArtist();
     this.index();
+    this.getFacturasByArtist();
   }
 
   loadLoggedArtist() {
@@ -114,12 +119,24 @@ export class ArtistaAdministrationComponent {
     this.artist = JSON.parse(this.artist);
   }
 
+  getFacturasByArtist() {
+    this.facturaService.indexByArtistId(this.artist['iss']).subscribe({
+      next: (response: any) => {
+        this.facturas = response['data'];
+        console.log(this.facturas);
+      },
+      error: (err: Error) => {
+        console.error('Error al cargar las facturas', err);
+      }
+    });
+  }
+
   index() {
     this.obraService.index().subscribe({
       next: (response: any) => {
         this.obras = response['data'];
         this.filterObrasByArtista(this.artist.iss);
-        console.log(this.obrasPorArtista);
+        //console.log(this.obrasPorArtista);
         this.obras = this.obrasPorArtista;
       },
       error: (err: Error) => {

@@ -47,4 +47,11 @@ export class FacturaService{
         };
         return this._http.get(this.urlAPI+'obra', options);
     }
+
+    indexByArtistId(artistId: number): Observable<any> {
+        let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+        let options = { headers };
+    
+        return this._http.get(this.urlAPI+`factura/artist/${artistId}`, options);
+      }
 }

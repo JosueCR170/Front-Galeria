@@ -164,6 +164,8 @@ public formattedDate = this.formatDate(this.currentDate);
           
           try{
             this.envioCreate();
+            //actualizar disponibilidad de obra
+            this.updateDisponibilidadObra(false);
           }catch(err){
             console.log(err);
           }
@@ -206,6 +208,36 @@ public formattedDate = this.formatDate(this.currentDate);
             <p>Artist email: <strong>${this.artista['correo']}</strong></p>`
 
           this.msgAlertHTML('Envio registrado con éxito',mensaje, 'success');
+        }else{
+          //this.changeStatus(1);
+        }
+      },
+      error:(error:HttpErrorResponse)=>{
+        if(error.status===406 && error.error && error.error.errors){
+          this.errors=[];
+          const errorObj = error.error.errors;
+          for (const key in errorObj) {
+            if (errorObj.hasOwnProperty(key)) {
+              this.errors.push(...errorObj[key]);
+            }
+          }
+          console.error(this.errors);
+        } else {
+          console.error('Otro tipo de error:', error);
+          this.msgAlert('Error, desde el servidor. Contacte al administrador','','error');
+        }
+        }
+    })
+  }
+
+  updateDisponibilidadObra(disponibilidad:boolean){
+    this.obra.disponibilidad=disponibilidad;
+
+    this._obraService.updateDisponibilidad(this.obra).subscribe({
+      next:(response)=>{
+        console.log('obraResponse',response);
+        if(response.status==201){
+          this.msgAlert('Disponibilidad actualizada con éxito','', 'success');
         }else{
           //this.changeStatus(1);
         }

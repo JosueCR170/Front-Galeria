@@ -67,7 +67,29 @@ export class ObraService{
         let options = {
             headers
         };
-        return this._http.post(`${this.urlAPI}obra/${id}`, params, options);
+        return this._http.put(`${this.urlAPI}obra/${id}`, params, options);
+    }
+
+    updateDisponibilidad(obra:Obra): Observable<any> {
+        console.log(obra);
+        let obraJson=JSON.stringify(obra);
+        let id = obra.id;
+        //let formData = new FormData();
+        let params='data='+obraJson;
+        let headers;
+        let bearertoken = sessionStorage.getItem('token');
+        
+        //formData.append('_method', 'PUT');
+        //formData.append('data', JSON.stringify(obra));
+        if (bearertoken){
+            headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded').set('bearertoken', bearertoken);
+        } else {
+            headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+        }
+        let options = {
+            headers
+        };
+        return this._http.put(`${this.urlAPI}obra/disp/${id}`, params, options);
     }
     
 
