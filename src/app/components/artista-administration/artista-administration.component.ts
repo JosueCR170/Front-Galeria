@@ -149,6 +149,7 @@ export class ArtistaAdministrationComponent {
   }
 
   /************************* */
+  
   openNew() {
     this.obra = new Obra(1, this.artist.iss, "", "", "", 1, true, "", null, null, null);
     this.submitted = false;

@@ -59,4 +59,12 @@ export class ArtistService{
         return this._http.get(`artista/${artistId}`, options);
       }
 
+    index():Observable<any>{
+        let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+        let options = {
+            headers
+        };
+        return this._http.get(this.urlAPI+'artista', options);
+    }
+
 }
