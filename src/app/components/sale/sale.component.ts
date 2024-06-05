@@ -10,6 +10,7 @@ import { FacturaService } from '../../services/factura.service';
 import { EnvioService } from '../../services/envio.service';
 import Swal from 'sweetalert2';
 import { HttpErrorResponse } from '@angular/common/http';
+import { server } from '../../services/global';
 
 @Component({
   selector: 'app-sale',
@@ -29,7 +30,7 @@ export class SaleComponent {
   public factura:Factura;
   public errors:string[]=[];
   public currentDate = new Date();
-
+  urlAPI:string;
 //Formateamos la fecha en formato YYYY-MM-DD
 public formattedDate = this.formatDate(this.currentDate);
 
@@ -40,9 +41,11 @@ public formattedDate = this.formatDate(this.currentDate);
     private _userService: UserService,
     private _facturaService: FacturaService,
     private _envioService: EnvioService
+    
 
   ) {
     this.status = -1;
+    this.urlAPI = server.url+'obra/getimage/';
     this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, null);
     this.envio=new Envio(1,0,"Espera","","","","","","");
     this.factura=new Factura(1,1,1,this.formattedDate,0,0,0);

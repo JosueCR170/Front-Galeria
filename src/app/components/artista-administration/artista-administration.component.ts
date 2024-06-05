@@ -99,7 +99,7 @@ export class ArtistaAdministrationComponent {
 
   ) {
     this.status = -1;
-    this.urlAPI = server.url+'/obra/getimage/';
+    this.urlAPI = server.url+'obra/getimage/';
     this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, null);
   }
 

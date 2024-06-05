@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ObraService } from '../../services/obra.service';
 import { Obra } from '../../models/Obra';
 import { UserService } from '../../services/user.service';
+import { server } from '../../services/global';
 
 @Component({
   selector: 'app-shop',
@@ -17,7 +18,7 @@ import { UserService } from '../../services/user.service';
 export class ShopComponent {
   public status: number;
   public obra: Obra;
-
+urlAPI: string;
 
   constructor(
     private _obraService: ObraService,
@@ -26,6 +27,7 @@ export class ShopComponent {
     private _userService: UserService
   ) {
     this.status = -1;
+    this.urlAPI = server.url+'obra/getimage/';
     this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, null);
   }
 
@@ -38,7 +40,7 @@ export class ShopComponent {
   onClick: boolean = false;
   all: boolean = false;
   user: any;
-  urlAPI: string = "http://127.0.0.1:8000/api/v1/obra/getimage/";
+  
 
   ngOnInit():void {
     // Aquí puedes llamar al método que desees que se ejecute al cargar el componente
