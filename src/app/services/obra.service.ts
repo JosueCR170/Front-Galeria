@@ -48,29 +48,26 @@ export class ObraService{
         return this._http.delete(`${this.urlAPI}obra/${id}`, options);
     }
     
-    update(obra: Obra, imageFile?:File): Observable<any> {
+    update(obra:Obra): Observable<any> {
+        console.log(obra);
         let obraJson=JSON.stringify(obra);
-        let formData = new FormData();
+        let id = obra.id;
+        //let formData = new FormData();
         let params='data='+obraJson;
         let headers;
         let bearertoken = sessionStorage.getItem('token');
         
-        formData.append('_method', 'PUT');
-        formData.append('data', JSON.stringify(obra));
-        
-
-        if (imageFile) {
-            formData.append('file', imageFile);
-        }
+        //formData.append('_method', 'PUT');
+        //formData.append('data', JSON.stringify(obra));
         if (bearertoken){
-            headers = new HttpHeaders().set('Content-Type', 'application/form-data').set('bearertoken', bearertoken);
+            headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded').set('bearertoken', bearertoken);
         } else {
-            headers = new HttpHeaders().set('Content-Type', 'application/form-data');
+            headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
         }
         let options = {
             headers
         };
-        return this._http.put(this.urlAPI+`obra/${obra.id}`,formData,options);
+        return this._http.post(`${this.urlAPI}obra/${id}`, params, options);
     }
     
 
@@ -101,6 +98,17 @@ export class ObraService{
         headers = headers.set('bearertoken', `${bearerToken}`);
         }
         return this._http.post(this.urlAPI+'obra/uploadimage', formData, { headers });
+    }
+
+    updateImage(image: File, filename: string){
+        const formData: FormData = new FormData(); 
+        formData.append('file', image, image.name);
+        const bearerToken = sessionStorage.getItem('token');
+        let headers = new HttpHeaders();
+        if (bearerToken) {
+        headers = headers.set('bearertoken', `${bearerToken}`);
+        }
+        return this._http.post(this.urlAPI+'obra/updateimage/'+filename, formData, { headers });
     }
 
     getImage(filename: string): Observable<any> {

@@ -10,17 +10,11 @@
         </label>
         <nav class="nav">
           <ul style="margin-bottom: 0; padding: 0 0">
-            <li><a style="cursor: pointer;" (click)="showHome(true)">Your Art</a></li>
             <li><a style="cursor: pointer;" (click)="adminObras(true)">Manage works</a></li>
             <li><a style="cursor: pointer;" (click)="showDelivery(true)">Manage shipments</a></li>
             <li class="logout"><a href="#">Log out</a></li>
           </ul>
         </nav>
-        <div class="busqueda" style="display: flex; width: 35%;">
-          <input class="form-control me-2" style="padding-top: 10px;" type="search" placeholder="Search"
-            aria-label="Search">
-          <button class="btn btn-outline-success" style="padding-top: 10px;" type="submit">Search</button>
-        </div>
         <div class="nav-left">
           <li class="nav-item dropdown" style="list-style: none;">
             <a class="nav-link dropdown-toggle user-name" href="#" id="DropdownUser" role="button"
@@ -33,11 +27,21 @@
       </div>
     </header>
     <!--Abajo del nav-->
-    @if(flag){
-    <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
-      <p class="work">YOU <span class="workGradient">WORK</span> </p>
-    </div>
 
+    @if(delivry){
+    <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
+      <p class="work">YOUR <span class="workGradient">SHIPMENTS</span> </p>
+    </div>
+    <!--TABLA DELIVERY--->
+
+    }
+
+
+
+    @if(administration){
+    <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
+      <p class="work">YOUR <span class="workGradient">WORKS</span> </p>
+    </div>
     <!--Inicio tabla-->
 
     <div class="card">
@@ -53,9 +57,19 @@
           </p-button>
         </ng-template>
       </p-toolbar>
-      <p-table [value]="obras" [rows]="10" [totalRecords]="totalRecords" [paginator]="true"
+      <p-table #dt [value]="obras" [rows]="10" [totalRecords]="totalRecords" [paginator]="true"
         [(selection)]="selectedObras" [selectAll]="selectAll" [tableStyle]="{ 'min-width': '75rem' }"
-        [globalFilterFields]="['id', 'nombre', 'categoria', 'tecnica', 'tamano', 'fechaCreacion', 'fechaRegistro', 'disponibilidad', 'imagen']">
+        [globalFilterFields]="['id', 'nombre', 'categoria', 'tecnica', 'tamano', 'fechaCreacion', 'fechaRegistro', 'disponibilidad']">
+
+        <ng-template pTemplate="caption">
+          <div class="flex align-items-center justify-content-between">
+            <h5 class="mb-4">Manage work</h5>
+            <span class="p-input-icon-left">
+              <input pInputText type="text" #input (input)="dt.filterGlobal(input.value, 'contains')"
+                placeholder="Search..." />
+            </span>
+          </div>
+        </ng-template>
         <ng-template pTemplate="header">
           <tr>
             <th style="width: 4rem">
@@ -179,11 +193,8 @@
               </div>
             </td>
             <td>
-              <button
-              data-bs-toggle="modal" 
-              data-bs-target="#updateModal"
-              class="fa-solid fa-pencil"
-              (click)="editObra(obra)">
+              <button data-bs-toggle="modal" data-bs-target="#updateModal" class="fa-solid fa-pencil"
+                (click)="editObra(obra)">
               </button>
 
             </td>
@@ -212,23 +223,23 @@
               </div>
               <div class="form-group">
                 <label for="Tecnic">Tecnic</label>
-                  <select id="Tecnic" name="tecnic" #tecnic="ngModel" [(ngModel)]="obra.tecnica" required>
-                    <option value="Oil on canvas">Oil on canvas</option>
-                    <option value="Watercolor">Watercolor</option>
-                    <option value="Watercolor on paper">Watercolor on paper</option>
-                    <option value="Tempera">Tempera</option>
-                    <option value="Pastel painting">Pastel painting</option>
-                    <option value="Fresco painting">Fresco painting</option>
-                    <option value="Digital painting">Digital painting</option>
-                    <option value="Wood carving">Wood carving</option>
-                    <option value="Marble sculpture">Marble sculpture</option>
-                    <option value="Engraving">Engraving</option>
-                    <option value="Serigraphy">Serigraphy</option>
-                    <option value="Art photography">Art photography</option>
-                    <option value="Digital art">Digital art</option>
-                    <option value="Collage">Collage</option>
-                    <option value="Pyrography">Pyrography</option>
-                    <option value="Bronze sculpture">Bronze sculpture</option>
+                <select id="Tecnic" name="tecnic" #tecnic="ngModel" [(ngModel)]="obra.tecnica" required>
+                  <option value="Oil on canvas">Oil on canvas</option>
+                  <option value="Watercolor">Watercolor</option>
+                  <option value="Watercolor on paper">Watercolor on paper</option>
+                  <option value="Tempera">Tempera</option>
+                  <option value="Pastel painting">Pastel painting</option>
+                  <option value="Fresco painting">Fresco painting</option>
+                  <option value="Digital painting">Digital painting</option>
+                  <option value="Wood carving">Wood carving</option>
+                  <option value="Marble sculpture">Marble sculpture</option>
+                  <option value="Engraving">Engraving</option>
+                  <option value="Serigraphy">Serigraphy</option>
+                  <option value="Art photography">Art photography</option>
+                  <option value="Digital art">Digital art</option>
+                  <option value="Collage">Collage</option>
+                  <option value="Pyrography">Pyrography</option>
+                  <option value="Bronze sculpture">Bronze sculpture</option>
                 </select>
               </div>
               <div class="form-group">
@@ -238,48 +249,49 @@
               </div>
               <div class="form-group">
                 <label for="Price">Price</label>
-                <input id="Price" class="form-control" name="price" type="text" #price="ngModel" [(ngModel)]="obra.precio"
-                  required>
+                <input id="Price" class="form-control" name="price" type="text" #price="ngModel"
+                  [(ngModel)]="obra.precio" required>
               </div>
               <div class="form-group">
                 <label for="Category">Category</label>
-                  <select id="Category" name="category" #category="ngModel" [(ngModel)]="obra.categoria" required>
-                    <option value="Cubism">Cubism</option>
-                    <option value="Impressionism">Impressionism</option>
-                    <option value="Expressionism">Expressionism</option>
-                    <option value="Realism">Realism</option>
-                    <option value="Surrealism">Surrealism</option>
-                    <option value="Abstract">Abstract</option>
-                    <option value="Renaissance">Renaissance</option>
-                    <option value="Baroque">Baroque</option>
-                    <option value="Rococo">Rococo</option>
-                    <option value="Romanticism">Romanticism</option>
-                    <option value="Neoclassicism">Neoclassicism</option>
-                    <option value="Modernism">Modernism</option>
-                    <option value="Pop art">Pop Art</option>
-                    <option value="Naive art">Naïve Art</option>
+                <select id="Category" name="category" #category="ngModel" [(ngModel)]="obra.categoria" required>
+                  <option value="Cubism">Cubism</option>
+                  <option value="Impressionism">Impressionism</option>
+                  <option value="Expressionism">Expressionism</option>
+                  <option value="Realism">Realism</option>
+                  <option value="Surrealism">Surrealism</option>
+                  <option value="Abstract">Abstract</option>
+                  <option value="Renaissance">Renaissance</option>
+                  <option value="Baroque">Baroque</option>
+                  <option value="Rococo">Rococo</option>
+                  <option value="Romanticism">Romanticism</option>
+                  <option value="Neoclassicism">Neoclassicism</option>
+                  <option value="Modernism">Modernism</option>
+                  <option value="Pop art">Pop Art</option>
+                  <option value="Naive art">Naïve Art</option>
                 </select>
               </div>
               <div class="form-group">
                 <label for="CreateDate">Create Date</label>
-                <input id="CreateDate" class="form-control" name="createDate" type="text" #createDate="ngModel" [(ngModel)]="obra.fechaCreacion"
-                  required>
+                <input id="CreateDate" class="form-control" name="createDate" type="text" #createDate="ngModel"
+                  [(ngModel)]="obra.fechaCreacion" required>
               </div>
               <div class="form-group">
                 <label for="RegisterDate">Register Date</label>
-                <input id="RegisterDate" class="form-control" name="registerDate" type="text" #registerDate="ngModel" [(ngModel)]="obra.fechaRegistro"
-                  required>
+                <input id="RegisterDate" class="form-control" name="registerDate" type="text" #registerDate="ngModel"
+                  [(ngModel)]="obra.fechaRegistro" required>
               </div>
               <div class="form-group">
                 <label for="Image">Image</label>
-                <input id="Image" class="form-control" name="image" type="file" (change)="onFileSelected($event)"
+                <input id="Image" class="form-control" name="image" type="file" (change)="onImageFileChange($event)"
                   required>
               </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" icon="pi pi-check">Close</button>
               <input type="submit" class="btn btn-primary"
-                style="color: rgb(255, 255, 255); background-color: rgb(124, 10, 10); border: none;" value="Add"  data-bs-dismiss="modal" >
+                style="color: rgb(255, 255, 255); background-color: rgb(124, 10, 10); border: none;" value="Add"
+                data-bs-dismiss="modal">
             </div>
           </form>
         </div>
@@ -321,8 +333,8 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-
-            <form>
+<!-- #updateObraForm="ngForm" (ngSubmit)="storeImage(updateObraForm)" -->
+            <form >
               <div class="mb-3">
                 <label for="recipient-name" class="col-form-label">Nombre:</label>
                 <input type="text" class="form-control" id="recipient-name" [(ngModel)]="obra.nombre" name="nombre">
@@ -334,7 +346,8 @@
               <div class="mb-3">
                 <label for="recipient-categoria" class="col-form-label">Categoria:</label>
                 <div class="dropdown">
-                  <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
                     {{obra.categoria}}
                   </button>
                   <ul class="dropdown-menu">
@@ -347,7 +360,8 @@
               <div class="mb-3">
                 <label for="recipient-tecnica" class="col-form-label">Tecnica:</label>
                 <div class="dropdown">
-                  <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
                     {{obra.tecnica}}
                   </button>
                   <ul class="dropdown-menu">
@@ -357,21 +371,24 @@
                   </ul>
                 </div>
               </div>
-              <div class="mb-3">
+              <!-- <div class="mb-3">
                 <label for="recipient-disponibilidad" class="col-form-label">Disponibilidad:</label>
-                <input type="text" class="form-control" id="recipient-disponibilidad" [(ngModel)]="obra.disponibilidad" name="disponibilidad">
-              </div>
+                <input type="text" class="form-control" id="recipient-disponibilidad" [(ngModel)]="obra.disponibilidad"
+                  name="disponibilidad">
+              </div> -->
               <div class="mb-3">
-                <label for="recipient-tamano" class="col-form-label">TamaÃ±o:</label>
+                <label for="recipient-tamano" class="col-form-label">Tamaño:</label>
                 <input type="text" class="form-control" id="recipient-tamano" [(ngModel)]="obra.tamano" name="tamano">
               </div>
               <div class="mb-3">
                 <label for="recipient-fecha-creacion" class="col-form-label">Fecha Creacion:</label>
-                <input type="text" class="form-control" id="recipient-fecha-creacion" [(ngModel)]="obra.fechaCreacion" name="fechaCreacion">
+                <input type="text" class="form-control" id="recipient-fecha-creacion" [(ngModel)]="obra.fechaCreacion"
+                  name="fechaCreacion">
               </div>
               <div class="mb-3">
                 <label for="recipient-fecha-registro" class="col-form-label">Fecha Registro:</label>
-                <input type="text" class="form-control" id="recipient-fecha-registro" [(ngModel)]="obra.fechaRegistro" name="fechaRegistro">
+                <input type="text" class="form-control" id="recipient-fecha-registro" [(ngModel)]="obra.fechaRegistro"
+                  name="fechaRegistro">
               </div>
               <div class="mb-3">
                 <label for="recipient-imagen" class="col-form-label">Imagen:</label>
@@ -379,12 +396,13 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" style="color: white; background-color: rgb(124, 10, 10);" data-bs-dismiss="modal" (click)="updateObra()">Actualizar</button>
+                <button type="button" class="btn btn-primary" style="color: white; background-color: rgb(124, 10, 10);"
+                  data-bs-dismiss="modal" (click)="updateObra(obra.imagen)">Actualizar</button>
               </div>
             </form>
-            
+
           </div>
-          
+
         </div>
       </div>
     </div>
@@ -393,20 +411,5 @@
 
     }@else{<div>Error</div>}
 
-    @if(delivry){
-    <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
-      <p class="work">YOUR <span class="workGradient">SHIPMENTS</span> </p>
-    </div>
-    <!--TABLA DELIVERY--->
-
-    }
-
-
-    @if(administration){
-    <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
-      <p class="work">YOU <span class="workGradient">WORK</span> </p>
-
-    </div>
-    }
   </div>
 </div>
