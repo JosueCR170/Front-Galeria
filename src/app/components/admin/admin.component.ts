@@ -45,7 +45,7 @@ export class AdminComponent {
   ]
 
   public status: number;
-  public obra: Obra;
+  public _obra: Obra;
   public _user: User;
   public _artista: Artista;
 
@@ -59,37 +59,48 @@ export class AdminComponent {
   ) {
     this.status = -1;
     this.urlAPI = server.url + 'obra/getimage/';
-    this.obra = new Obra(1, 1,"","","",1,true,"",null,null,null);
+    this._obra = new Obra(1, 1,"","","",1,true,"",null,null,null);
     this._user = new User(1,"",false,"","",null,"");
     this._artista = new Artista(1,"","","","","");
   }
 
-  totalRecords!: number;
-  selectedObras!: Obra[];
-  selectedObra!: Obra[];
-  statuses!: any[];
-  auxObras: Obra[] = [];
-  categoryExists: string[] = [];
-  obras: Obra[] = [];
-  clonedProducts: { [s: string]: Obra } = {};
-  selectedCategory: string = '';
-  selectAll: boolean = false;
-  submitted: boolean = false;
-  editing: boolean = false;
-  displayConfirmationDialog: boolean = false;
-  delivry: boolean = false;
-  administration: boolean = false;
-  productDialog: boolean = false;
-  flag: boolean = true;
   userClick: boolean = false;
   artistClick: boolean = false;
   invoiceClick: boolean = false;
   shippingClick: boolean = false;
   workClick: boolean = false;
+  delivry: boolean = false;
+
+  selectAll: boolean = false;
+  submitted: boolean = false;
+  editing: boolean = false;
+  displayConfirmationDialog: boolean = false;
+  administration: boolean = false;
+  productDialog: boolean = false;
+  totalRecords!: number;
+  statuses!: any[];
+
+
+  auxObras: Obra[] = [];
+  categoryExists: string[] = [];
+  clonedProducts: { [s: string]: Obra } = {};
+  selectedCategory: string = '';
+  
+  flag: boolean = true;
+  
   user: any;
   artist: any;
   urlAPI: string;
   selectedFile: File | null = null;
+
+  obras: Obra[] = [];
+  selectedObras!: Obra[];
+  selectedObra!: Obra[];
+
+  /** Variables y Elementos para la tabla de Users **/
+  users: User[] = [];
+  selectedUsers: User[] = [];
+  
 
   showHome(show: boolean) {
     this.flag = show;
@@ -152,7 +163,7 @@ export class AdminComponent {
   ngOnInit():void {
     this.loadLoggedUser();
     this.index();
-    this.indexUsers();
+    //this.indexUsers();
   }
 
   loadLoggedUser(){
@@ -192,7 +203,7 @@ export class AdminComponent {
 
   /********************************* OPEN  *********************************/
   openNew() {
-    this.obra = new Obra(1, this.artist.iss, "", "", "", 1, true, "", null, null, null);
+    this._obra = new Obra(1, this.artist.iss, "", "", "", 1, true, "", null, null, null);
     this.submitted = false;
     this.productDialog = true;
   }
@@ -243,19 +254,28 @@ export class AdminComponent {
     });
   }
 
+  /******************************** EDIT ********************************/
+    editObra(obra: Obra) {
+      this._obra = { ...obra };
+      this.productDialog = true;
+    }
+    
+    editUser(user: User) {
+      this._user = { ...user };
+      this.productDialog = true;
+    }
+
   /********************************* UPDATE *********************************/
-  selectCategoria(categoria: string) {
-    this.obra.categoria = categoria;
-  }
+    selectCategoria(categoria: string) {
+      this._obra.categoria = categoria;
+    }
 
-  selectTecnica(tecnica: string) {
-    this.obra.tecnica = tecnica;
-  }
+    selectTecnica(tecnica: string) {
+      this._obra.tecnica = tecnica;
+    }
 
-  editObra(obra: Obra) {
-    this.obra = { ...obra };
-    this.productDialog = true;
-  }
+  
+
 
   onImageFileChange(event: any): void {
     this.selectedFile = event.target.files[0];
@@ -272,7 +292,7 @@ export class AdminComponent {
         }
       });
     }
-    this._obraService.update(this.obra).subscribe({
+    this._obraService.update(this._obra).subscribe({
       next:(response:any)=>{
         console.log(response);
       },
@@ -282,41 +302,17 @@ export class AdminComponent {
     });
   }
 
-  saveUpdatedObra(): void {
-    this._obraService.update(this.obra).subscribe({
-      next: (response: any) => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'Obra Updated',
-          life: 3000
-        });
-        this.index(); // Recargar las obras después de la actualización
-      },
-      error: (err: Error) => {
-        console.error('Error al actualizar la obra', err);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to update obra',
-          life: 3000
-        });
-      }
-    });
-    this.productDialog = false;
-  }
-
   storeImage(form: any): void {
     if (form.valid) {
-      console.log('Obra:', this.obra);
+      console.log('Obra:', this._obra);
       if (this.selectedFile) {
         console.log('Imagen:', this.selectedFile);
         this._obraService.upLoadImage(this.selectedFile).subscribe({
           next: (response: any) => {
             console.log(response);
             if (response.filename) {
-              this.obra.imagen = response.filename;
-              this._obraService.create(this.obra).subscribe({
+              this._obra.imagen = response.filename;
+              this._obraService.create(this._obra).subscribe({
                 next: (response2: any) => {
                   console.log(response2);
                   location.reload();
@@ -368,6 +364,38 @@ export class AdminComponent {
     this.selectedObras = [];
     this.displayConfirmationDialog = false;
   }
+
+  deleteSelectedUsers() {
+    this.selectedObras.forEach(_user => {
+      this._userService.deleted(_user.id).subscribe({
+        next: () => {
+          this.users = this.users.filter(o => o.id !== _user.id);
+          this.totalRecords--;
+        },
+        error: (err: Error) => {
+          console.error('Error al eliminar el usuario', err);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: `Failed to delete user: ${_user.nombre}`,
+            life: 3000
+          });
+        }
+      });
+    });
+
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Successful',
+      detail: 'Users Deleted',
+      life: 3000
+    });
+
+    this.selectedUsers = [];
+    this.displayConfirmationDialog = false;
+  }
+
+
 
   hideConfirmationDialog() {
     this.displayConfirmationDialog = false;
