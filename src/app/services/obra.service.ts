@@ -67,7 +67,7 @@ export class ObraService{
         let options = {
             headers
         };
-        return this._http.post(`${this.urlAPI}obra/${id}`, params, options);
+        return this._http.put(`${this.urlAPI}obra/${id}`, params, options);
     }
     
 

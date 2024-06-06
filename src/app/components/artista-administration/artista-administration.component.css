@@ -279,3 +279,60 @@
     background-color: rgb(96, 114, 129);
     
   }
+.form-group{
+    margin-top: 15px;
+}
+.selector{
+ 
+  border-radius: 10px;
+  height: 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.modal-body{
+  color: aliceblue;
+  background-image: radial-gradient(circle 8px at 92% 63%, rgb(255,250,85) 0%,transparent 22%),radial-gradient(circle 2px at 73% 80%, rgb(201,242,255) 0%,transparent 60%),radial-gradient(circle 2px at 88% 58%, rgb(201,242,255) 0%,transparent 5%),radial-gradient(circle 2px at 39% 24%, rgb(201,242,255) 0%,transparent 17%),radial-gradient(circle 2px at 31% 10%, rgb(201,242,255) 0%,transparent 83%),radial-gradient(circle 2px at 25% 64%, rgb(201,242,255) 0%,transparent 65%),radial-gradient(circle 2px at 46% 18%, rgb(201,242,255) 0%,transparent 86%),radial-gradient(circle 2px at 27% 89%, rgb(201,242,255) 0%,transparent 61%),radial-gradient(circle 2px at 72% 43%, rgb(201,242,255) 0%,transparent 46%),radial-gradient(circle 2px at 73% 2%, rgb(201,242,255) 0%,transparent 87%),radial-gradient(circle 5px at 94% 33%, rgb(253,250,147) 0%,transparent 93%),radial-gradient(circle 5px at 35% 87%, rgb(253,250,147) 0%,transparent 42%),radial-gradient(circle 4px at 78% 1%, rgb(255,249,27) 0%,transparent 76%),radial-gradient(circle 4px at 71% 51%, rgb(255,249,27) 0%,transparent 69%),radial-gradient(circle 4px at 26% 45%, rgb(255,249,27) 0%,transparent 83%),linear-gradient(90deg, rgb(35,35,35) 0%, rgb(35,35,35) 50%,rgb(35,35,35) 50%, rgb(35,35,35) 100%); background-size: 278px 278px;
+}
+.modal-header{
+  border: none;
+  color: aliceblue;
+  background-image: radial-gradient(circle 8px at 92% 63%, rgb(255,250,85) 0%,transparent 22%),radial-gradient(circle 2px at 73% 80%, rgb(201,242,255) 0%,transparent 60%),radial-gradient(circle 2px at 88% 58%, rgb(201,242,255) 0%,transparent 5%),radial-gradient(circle 2px at 39% 24%, rgb(201,242,255) 0%,transparent 17%),radial-gradient(circle 2px at 31% 10%, rgb(201,242,255) 0%,transparent 83%),radial-gradient(circle 2px at 25% 64%, rgb(201,242,255) 0%,transparent 65%),radial-gradient(circle 2px at 46% 18%, rgb(201,242,255) 0%,transparent 86%),radial-gradient(circle 2px at 27% 89%, rgb(201,242,255) 0%,transparent 61%),radial-gradient(circle 2px at 72% 43%, rgb(201,242,255) 0%,transparent 46%),radial-gradient(circle 2px at 73% 2%, rgb(201,242,255) 0%,transparent 87%),radial-gradient(circle 5px at 94% 33%, rgb(253,250,147) 0%,transparent 93%),radial-gradient(circle 5px at 35% 87%, rgb(253,250,147) 0%,transparent 42%),radial-gradient(circle 4px at 78% 1%, rgb(255,249,27) 0%,transparent 76%),radial-gradient(circle 4px at 71% 51%, rgb(255,249,27) 0%,transparent 69%),radial-gradient(circle 4px at 26% 45%, rgb(255,249,27) 0%,transparent 83%),linear-gradient(90deg, rgb(35,35,35) 0%, rgb(35,35,35) 50%,rgb(35,35,35) 50%, rgb(35,35,35) 100%); background-size: 278px 278px;
+}
+.modal-footer{
+  border: none;
+  background-image: radial-gradient(circle 8px at 92% 63%, rgb(255,250,85) 0%,transparent 22%),radial-gradient(circle 2px at 73% 80%, rgb(201,242,255) 0%,transparent 60%),radial-gradient(circle 2px at 88% 58%, rgb(201,242,255) 0%,transparent 5%),radial-gradient(circle 2px at 39% 24%, rgb(201,242,255) 0%,transparent 17%),radial-gradient(circle 2px at 31% 10%, rgb(201,242,255) 0%,transparent 83%),radial-gradient(circle 2px at 25% 64%, rgb(201,242,255) 0%,transparent 65%),radial-gradient(circle 2px at 46% 18%, rgb(201,242,255) 0%,transparent 86%),radial-gradient(circle 2px at 27% 89%, rgb(201,242,255) 0%,transparent 61%),radial-gradient(circle 2px at 72% 43%, rgb(201,242,255) 0%,transparent 46%),radial-gradient(circle 2px at 73% 2%, rgb(201,242,255) 0%,transparent 87%),radial-gradient(circle 5px at 94% 33%, rgb(253,250,147) 0%,transparent 93%),radial-gradient(circle 5px at 35% 87%, rgb(253,250,147) 0%,transparent 42%),radial-gradient(circle 4px at 78% 1%, rgb(255,249,27) 0%,transparent 76%),radial-gradient(circle 4px at 71% 51%, rgb(255,249,27) 0%,transparent 69%),radial-gradient(circle 4px at 26% 45%, rgb(255,249,27) 0%,transparent 83%),linear-gradient(90deg, rgb(35,35,35) 0%, rgb(35,35,35) 50%,rgb(35,35,35) 50%, rgb(35,35,35) 100%); background-size: 278px 278px;
+}
+
+.input-wrapper {
+  position: relative;
+
+}
+
+.input-box {
+  font-size: 16px;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  color: #08AEEA;
+  width: 100%;
+  background-color: transparent;
+  transition: border-color 0.3s ease-in-out;
+}
+
+.underline {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background-color: #08AEEA;
+  transform: scaleX(0);
+  transition: transform 0.3s ease-in-out;
+}
+
+.input-box:focus {
+  border-color: #08AEEA;
+  outline: none;
+}
+
+.input-box:focus + .underline {
+  transform: scaleX(1);
+}
+

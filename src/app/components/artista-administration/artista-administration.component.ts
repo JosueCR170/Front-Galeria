@@ -42,6 +42,7 @@ export class ArtistaAdministrationComponent {
   /*-------*/
   displayConfirmationDialog: boolean = false;
 
+  public currentDate = new Date();
   delivry: boolean = false;
   administration: boolean = true;
   obras: Obra[] = [];
@@ -63,6 +64,9 @@ export class ArtistaAdministrationComponent {
     'Digital art','Collage','Pyrography','Bronze sculpture'
   ]
 
+
+
+  public formattedDate = this.formatDate(this.currentDate);
   constructor(
     private obraService: ObraService,
     private messageService: MessageService,
@@ -70,7 +74,8 @@ export class ArtistaAdministrationComponent {
   ) {
     this.status = -1;
     this.urlAPI = server.url + 'obra/getimage/';
-    this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, null);
+    this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, this.formattedDate);
+    
   }
 
   ngOnInit(): void {
@@ -228,9 +233,12 @@ export class ArtistaAdministrationComponent {
             console.log(response);
             if (response.filename) {
               this.obra.imagen = response.filename;
+              this.obra.fechaCreacion = this.fechaSeleccionada;
+              this.obra.fechaRegistro = this.formattedDate;
+              console.log(this.obra)
               this.obraService.create(this.obra).subscribe({
                 next: (response2: any) => {
-                  console.log(response2);
+                  console.log(response2); console.log(this.obra)
                   location.reload();
                 },
                 error: (err: any) => {
@@ -248,6 +256,29 @@ export class ArtistaAdministrationComponent {
         });
       }
     }
+  }
+
+  fechaSeleccionada: string ='';
+  ano: number | null = null;
+  mes: string | null = null;
+  dia: string | null = null;
+
+  onFechaChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const fecha = new Date(input.value);
+    this.ano = fecha.getFullYear();
+    this.mes = ('0' + (fecha.getMonth() + 1)).slice(-2); // Mes se cuenta desde 0
+    this.dia = ('0' + fecha.getDate()).slice(-2);
+    this.fechaSeleccionada = `${this.ano}-${this.mes}-${this.dia}`;
+  }
+
+  private formatDate(date: Date): string {
+    console.log(date);
+    
+    const year = date.getFullYear();
+    const month = date.getMonth(); // Agrega un cero al mes si es necesario
+    const day = date.getDate(); // Agrega un cero al día si es necesario
+    return `${year}-${month}-${day}`;
   }
 
 }
