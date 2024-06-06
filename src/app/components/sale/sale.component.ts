@@ -191,12 +191,12 @@ if(this.obra.disponibilidad){
           console.error(this.errors);
         } else {
           console.error('Otro tipo de error:', error);
-          this.msgAlert('Error, desde el servidor. Contacte al administrador','','error');
+          this.msgAlert('Error, from the server. Contact administrator','','error');
         }
        // this.changeStatus(2);
       }
     })
-  }else {this.msgAlert('Obra no disponible','','error'); }
+  }else {this.msgAlert('Work not available','','error'); }
 
   }
 
@@ -211,7 +211,7 @@ if(this.obra.disponibilidad){
             <p>Artist phone: <strong>${this.artista['telefono']}</strong> </p>
             <p>Artist email: <strong>${this.artista['correo']}</strong></p>`
 
-          this.msgAlertHTML('Envio registrado con éxito',mensaje, 'success');
+          this.msgAlertHTML('Shipment registered successfully',mensaje, 'success');
         }else{
           //this.changeStatus(1);
         }
@@ -228,7 +228,7 @@ if(this.obra.disponibilidad){
           console.error(this.errors);
         } else {
           console.error('Otro tipo de error:', error);
-          this.msgAlert('Error, desde el servidor. Contacte al administrador','','error');
+          this.msgAlert('Error, from the server. Contact administrator','','error');
         }
         }
     })
@@ -241,7 +241,7 @@ if(this.obra.disponibilidad){
       next:(response)=>{
         console.log('obraResponse',response);
         if(response.status==201){
-          this.msgAlert('Disponibilidad actualizada con éxito','', 'success');
+          this.msgAlert('Successfully updated availability','', 'success');
         }else{
           //this.changeStatus(1);
         }
@@ -258,7 +258,7 @@ if(this.obra.disponibilidad){
           console.error(this.errors);
         } else {
           console.error('Otro tipo de error:', error);
-          this.msgAlert('Error, desde el servidor. Contacte al administrador','','error');
+          this.msgAlert('Error, from the server. Contact administrator','','error');
         }
         }
     })
