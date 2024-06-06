@@ -36,6 +36,7 @@ import { EnvioService } from '../../services/envio.service';
 })
 export class ArtistaAdministrationComponent {
   public currentDate = new Date();
+  
   productDialog: boolean = false;
   selectedObras!: Obra[];
   submitted: boolean = false;
@@ -54,7 +55,7 @@ export class ArtistaAdministrationComponent {
   facturasArtist:Factura[]=[];
   enviosArtist:Envio[]=[];
   selectedPedidos:Pedido[]=[];
-
+  
   pedidosArtist:Pedido[]=[];
   
   fechaSeleccionada: string ='';
@@ -139,6 +140,8 @@ export class ArtistaAdministrationComponent {
       }
     });
   }
+
+ 
 
   filterObrasByArtista(idArtista: number) {
     this.obrasPorArtista = this.obras.filter(obra => obra.idArtista === idArtista);
@@ -367,17 +370,18 @@ export class ArtistaAdministrationComponent {
   }
 
   fillPedidos() {
-   // this.pedidosArtist = [];
+    this.pedidosArtist = [];
     for (let envio of this.enviosArtist) {
-     
-      let factura = this.facturasArtist.find(f => f.id === envio.idFactura);
-      if (factura) {
-        let pedido = new Pedido(envio, factura);
-        this.pedidosArtist.push(pedido);
-      }
+        let factura = this.facturasArtist.find(f => f.id === envio.idFactura);
+        if (factura) {
+            let direccionCompleta = `${envio.direccion}, ${envio.provincia}, ${envio.ciudad}, Postal code: ${envio.codigoPostal}`;
+            envio.direccion = direccionCompleta; // Agregar el atributo direcciónCompleta al envío
+            let pedido = new Pedido(envio, factura);
+            this.pedidosArtist.push(pedido);
+        }
     }
-    console.log("Pedidos: ",this.pedidosArtist);
-  }
+    console.log("Pedidos: ", this.pedidosArtist);
+}
 
  
 
