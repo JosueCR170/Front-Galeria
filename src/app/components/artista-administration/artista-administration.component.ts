@@ -94,7 +94,7 @@ export class ArtistaAdministrationComponent {
     this.urlAPI = server.url + 'obra/getimage/';
 
     this.pedido=new Pedido(new Envio(1,0,"Espera","","","","","",""), 
-    new Factura(1,1,1,this.formattedDate,0,0,0));
+    new Factura(0,null,null,null,null,null,null));
 
     this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, this.formattedDate);
   }
@@ -215,7 +215,48 @@ export class ArtistaAdministrationComponent {
         console.log(err);
       }
     });
-    
+  }
+
+  storePedido(form: any): void {
+    if (form.valid) {
+      if (this.selectedFile) {
+        console.log('Imagen:', this.selectedFile);
+        this.facturaService.create(this.pedido.factura).subscribe({
+          next: (response: any) => {
+            console.log(response);
+            if (response.idFactura) {
+              this.pedido.envio.idFactura = response.idFactura;
+              this.envioService.create(this.pedido.envio).subscribe({
+                next: (response2: any) => {
+                  console.log(response2); 
+                  location.reload();
+                },
+                error: (err: any) => {
+                  console.error(err);
+                }
+              });
+            } else {
+              console.error('No se recibió el id de la factura');
+            }
+          },
+          error: (err: any) => {
+            console.error(err);
+          }
+        });
+      }
+    }
+  }
+
+  updatePedido(){
+    this.envioService.update(this.pedido.envio).subscribe({
+      next: (response: any) => {
+        console.log(response);
+        location.reload();
+      },
+      error: (err: Error) => {
+        console.log(err.message);
+      }
+    });
   }
 
   /**Parte del DELETE Obra */

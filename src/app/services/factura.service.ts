@@ -16,7 +16,6 @@ export class FacturaService{
         this.urlAPI = server.url;
     }
 
-    
     create(factura:Factura):Observable<any>{
         let headers;
         let bearertoken = sessionStorage.getItem('token');
