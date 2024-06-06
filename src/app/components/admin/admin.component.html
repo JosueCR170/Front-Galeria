@@ -1,438 +1,903 @@
 <div class="admin-body">
-    <div class="conteiner">
-        <header class="miniMenu">
-            <div class="menu">
-              <input type="checkbox" id="checkbox">
-              <label for="checkbox" class="toggle">
-                <div class="bars" id="bar1"></div>
-                <div class="bars" id="bar2"></div>
-                <div class="bars" id="bar3"></div>
-              </label>
-              <nav class="nav">
-                <ul style="margin-bottom: 0; padding: 0 0">
-                  <li><a style="cursor: pointer;" (click)="showHome(true)">Home</a></li> <!--Cambie acá-->
-                  <li><a style="cursor: pointer;" (click)="showUser(true)">Users</a></li> <!--Cambie acá-->
-                  <li><a style="cursor: pointer;" (click)="showArtist(true)">Artist</a></li> <!--Cambie acá-->
-                  <li><a style="cursor: pointer;" (click)="showWork(true)">Art Work</a></li> <!--Cambie acá-->
-                  <li><a style="cursor: pointer;" (click)="showInvoice(true)">Invoices</a></li> <!--Cambie acá-->
-                  <li><a style="cursor: pointer;" (click)="showShipping(true)">Shipping</a></li> <!--Cambie acá-->
-                  <li class="logout"><a (click)="logOut()">Log out</a></li>
+  <div class="conteiner">
+      <header class="miniMenu">
+          <div class="menu">
+            <input type="checkbox" id="checkbox">
+            <label for="checkbox" class="toggle">
+              <div class="bars" id="bar1"></div>
+              <div class="bars" id="bar2"></div>
+              <div class="bars" id="bar3"></div>
+            </label>
+            <nav class="nav">
+              <ul style="margin-bottom: 0; padding: 0 0">
+                <li><a style="cursor: pointer;" (click)="showHome(true)">Home</a></li> <!--Cambie acá-->
+                <li><a style="cursor: pointer;" (click)="showUser(true)">Users</a></li> <!--Cambie acá-->
+                <li><a style="cursor: pointer;" (click)="showArtist(true)">Artist</a></li> <!--Cambie acá-->
+                <li><a style="cursor: pointer;" (click)="showWork(true)">Art Work</a></li> <!--Cambie acá-->
+                <li><a style="cursor: pointer;" (click)="showInvoice(true)">Invoices</a></li> <!--Cambie acá-->
+                <li><a style="cursor: pointer;" (click)="showShipping(true)">Shipping</a></li> <!--Cambie acá-->
+                <li class="logout"><a (click)="logOut()">Log out</a></li>
+              </ul>
+            </nav>
+            
+            <div class="nav-left">
+              <li class="nav-item dropdown" style="list-style: none;">
+                <a class="nav-link dropdown-toggle user-name" href="#" id="DropdownUser" role="button"
+                  data-bs-toggle="dropdown" aria-expanded="false">{{user.nombreUsuario}}</a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a class="downItem" [routerLink]="['/loginArtist']">Be artist</a></li> 
+                  <li><a class="downItem" (click)="logOut()" style="color: rgb(184, 72, 72);">Log Out</a></li>
+                  @if(user.tipoUsuario){
+                    <li><a class="downItem" (click)="loadAdmin()">User</a></li>
+                  }
                 </ul>
-              </nav>
-              
-              <div class="nav-left">
-                <li class="nav-item dropdown" style="list-style: none;">
-                  <a class="nav-link dropdown-toggle user-name" href="#" id="DropdownUser" role="button"
-                    data-bs-toggle="dropdown" aria-expanded="false">{{user.nombreUsuario}}</a>
-                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><a class="downItem" [routerLink]="['/loginArtist']">Be artist</a></li> 
-                    <li><a class="downItem" (click)="logOut()" style="color: rgb(184, 72, 72);">Log Out</a></li>
-                    @if(user.tipoUsuario){
-                      <li><a class="downItem" (click)="loadAdmin()">User</a></li>
-                    }
-                  </ul>
-                </li>
-              </div>
+              </li>
             </div>
-          </header>
-        <!--Abajo del nav-->
-        @if(flag){
-           <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
-        <p class="work"><span class="workGradient">Select </span>some model</p>
-        </div>
+          </div>
+        </header>
+      <!--Abajo del nav-->
+      @if(flag){
+         <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
+      <p class="work"><span class="workGradient">Select </span>some model</p>
+      </div>
 
-        }
-        @if(userClick){
-            <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
-         <p class="work"><span class="workGradient">Users</span> </p>
-         </div> 
-        }
-
-         @if(artistClick){
-            <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
-         <p class="work"><span class="workGradient">Artist</span> </p>
-         </div>
-        }
-        @if(invoiceClick){
-            <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
-         <p class="work"><span class="workGradient">Invoices</span> </p>
-         </div>
-        }
-        @if(shippingClick){
-            <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
-         <p class="work"><span class="workGradient">Shipping</span> </p>
-         </div>
-        }
-        @if(workClick){
-            <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
-         <p class="work">Art <span class="workGradient">WORK</span> </p>
-         </div>
-
-         <div class="card">
-          <p-toast></p-toast>
-          <p-toolbar styleClass="mb-4 gap-2">
+      }
+      @if(userClick){
+          <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
+          <p class="work"><span class="workGradient">Users</span> </p>
+          </div> 
+       
+       <div class="card">
+        <p-toast></p-toast>
+        <p-toolbar styleClass="mb-4 gap-2">
             <ng-template pTemplate="left">
-              <p-button pRipple severity="success" label="New" icon="pi pi-plus" class="mr-2" data-bs-toggle="modal"
-                data-bs-target="#newObraModal" styleClass="btn-rounded" (click)="openNew()">
-              </p-button>
-              <p-button type="button" class="asd" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                styleClass="btn-rounded" [disabled]="!selectedObras ||!selectedObras.length" severity="danger"
-                label="Delete">
-              </p-button>
+                <p-button pRipple severity="success" label="New" icon="pi pi-plus" class="mr-2" data-bs-toggle="modal"
+                    data-bs-target="#newUserModal" styleClass="btn-rounded" (click)="openNewUser()">
+                </p-button>
+                <p-button type="button" class="asd" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                    styleClass="btn-rounded" [disabled]="!selectedUsers || !selectedUsers.length" severity="danger"
+                    label="Delete">
+                </p-button>
+                <p-button type="button" class="asd" data-bs-toggle="modal" data-bs-target="#updateModalUser" (onClick)="editUser(selectedUsers[0])"
+            styleClass="btn-rounded" [disabled]="!selectedUsers || selectedUsers.length !== 1" severity="warning"
+            label="Update">
+          </p-button>
             </ng-template>
-          </p-toolbar>
-          <p-table #dt [value]="obras" [rows]="10" [totalRecords]="totalRecords" [paginator]="true"
-            [(selection)]="selectedObras" [selectAll]="selectAll" [tableStyle]="{ 'min-width': '75rem' }"
-            [globalFilterFields]="['id', 'nombre', 'categoria', 'tecnica', 'tamano', 'fechaCreacion', 'fechaRegistro', 'disponibilidad']">
-    
+        </p-toolbar>
+        <p-table #dt [value]="users" [rows]="10" [totalRecords]="totalRecords" [paginator]="true"
+            [(selection)]="selectedUsers" [selectAll]="selectAll" [tableStyle]="{ 'min-width': '75rem' }"
+            [globalFilterFields]="['id', 'nombre', 'tipoUsuario', 'email', 'telefono', 'nombreUsuario']">
             <ng-template pTemplate="caption">
-              <div class="flex align-items-center justify-content-between">
-                <h5 class="mb-4">Manage work</h5>
-                <span class="p-input-icon-left">
-                  <input pInputText type="text" #input (input)="dt.filterGlobal(input.value, 'contains')"
-                    placeholder="Search..." />
-                </span>
-              </div>
+                <div class="flex align-items-center justify-content-between">
+                    <h5 class="mb-4">Manage Users</h5>
+                    <span class="p-input-icon-left">
+                        <input pInputText type="text" #input (input)="dt.filterGlobal(input.value, 'contains')"
+                            placeholder="Search..." />
+                    </span>
+                </div>
             </ng-template>
             <ng-template pTemplate="header">
-              <tr>
-                <th style="width: 4rem">
-                  <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                </th>
-                <th pSortableColumn="id" style="width:20%">Code <p-sortIcon field="id"></p-sortIcon></th>
-                <th pSortableColumn="nombre" style="width:20%">Name <p-sortIcon field="nombre"></p-sortIcon></th>
-                <th pSortableColumn="categoria" style="width:20%">Category <p-sortIcon field="categoria"></p-sortIcon></th>
-                <th pSortableColumn="tecnica" style="width:20%">tecnica <p-sortIcon field="tecnica"></p-sortIcon></th>
-                <th pSortableColumn="tamano" style="width:20%">tamano <p-sortIcon field="tamano"></p-sortIcon></th>
-                <th pSortableColumn="fechaCreacion" style="width:20%">fechaCreacion <p-sortIcon
-                    field="fechaCreacion"></p-sortIcon></th>
-                <th pSortableColumn="fechaRegistro" style="width:20%">fechaRegistro <p-sortIcon
-                    field="fechaRegistro"></p-sortIcon></th>
-                <th pSortableColumn="disponibilidad" style="width:20%">disponibilidad <p-sortIcon
-                    field="disponibilidad"></p-sortIcon></th>
-                <th pSortableColumn="imagen" style="width:20%">imagen <p-sortIcon field="imagen"></p-sortIcon></th>
-                <th style="width:20%"></th>
-              </tr>
+                <tr>
+                    <th style="width: 4rem">
+                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                    </th>
+                    <th pSortableColumn="id" style="width:15%">ID <p-sortIcon field="id"></p-sortIcon></th>
+                    <th pSortableColumn="nombre" style="width:20%">Name <p-sortIcon field="nombre"></p-sortIcon></th>
+                    <th pSortableColumn="tipoUsuario" style="width:15%">User Type <p-sortIcon field="tipoUsuario"></p-sortIcon></th>
+                    <th pSortableColumn="email" style="width:20%">Email <p-sortIcon field="email"></p-sortIcon></th>
+                    <th pSortableColumn="telefono" style="width:15%">Phone <p-sortIcon field="telefono"></p-sortIcon></th>
+                    <th pSortableColumn="nombreUsuario" style="width:15%">Username <p-sortIcon field="nombreUsuario"></p-sortIcon></th>
+                    <th style="width:20%"></th>
+                </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-obra let-ri="rowIndex">
-              <tr [pEditableRow]="obra">
-                <td>
-                  <p-tableCheckbox [value]="obra"></p-tableCheckbox>
-                </td>
-                <td>
-                  <p-cellEditor>
-                    <ng-template pTemplate="input">
-                      <input pInputText type="text" [(ngModel)]="obra.id" />
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                      {{ obra.id }}
-                    </ng-template>
-                  </p-cellEditor>
-                </td>
-                <td>
-                  <p-cellEditor>
-                    <ng-template pTemplate="input">
-                      <input pInputText type="text" [(ngModel)]="obra.nombre" required />
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                      {{ obra.nombre }}
-                    </ng-template>
-                  </p-cellEditor>
-                </td>
-                <td>
-                  <p-cellEditor>
-                    <ng-template pTemplate="input">
-                      <input pInputText type="text" [(ngModel)]="obra.categoria" required />
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                      {{ obra.categoria }}
-                    </ng-template>
-                  </p-cellEditor>
-                </td>
-                <td>
-                  <p-cellEditor>
-                    <ng-template pTemplate="input">
-                      <input pInputText type="text" [(ngModel)]="obra.tecnica" required />
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                      {{ obra.tecnica }}
-                    </ng-template>
-                  </p-cellEditor>
-                </td>
-                <td>
-                  <p-cellEditor>
-                    <ng-template pTemplate="input">
-                      <input pInputText type="text" [(ngModel)]="obra.tamano" required />
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                      {{ obra.tamano }}
-                    </ng-template>
-                  </p-cellEditor>
-                </td>
-                <td>
-                  <p-cellEditor>
-                    <ng-template pTemplate="input">
-                      <input pInputText type="text" [(ngModel)]="obra.fechaCreacion" required />
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                      {{ obra.fechaCreacion }}
-                    </ng-template>
-                  </p-cellEditor>
-                </td>
-                <td>
-                  <p-cellEditor>
-                    <ng-template pTemplate="input">
-                      <input pInputText type="text" [(ngModel)]="obra.fechaRegistro" required />
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                      {{ obra.fechaRegistro }}
-                    </ng-template>
-                  </p-cellEditor>
-                </td>
-                <td>
-                  <p-cellEditor>
-                    <ng-template pTemplate="input">
-                      <input pInputText type="text" [(ngModel)]="obra.disponibilidad" required />
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                      {{ obra.disponibilidad ? 'En venta' : 'Vendido' }}
-                    </ng-template>
-                  </p-cellEditor>
-                </td>
-                <td>
-                  <p-cellEditor>
-                    <ng-template pTemplate="input">
-                      <input pInputText type="image" [(ngModel)]="obra.imagen" required />
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                      <img src="{{urlAPI}}{{obra.imagen}}" alt="" style="width: 100px;" />
-                    </ng-template>
-                  </p-cellEditor>
-                </td>
-                <td>
-                  <div class="flex align-items-center justify-content-center gap-2">
-                    <!-- Botones de acción -->
-                    <!-- <button pButton pRipple icon="pi pi-pencil" (click)="editProduct(obra)"></button>-->
-                    <!--  <button pButton pRipple icon="pi pi-trash" (click)="deleteProduct(obra)"></button>-->
-                  </div>
-                </td>
-                <td>
-                  <button data-bs-toggle="modal" data-bs-target="#updateModal" class="fa-solid fa-pencil"
-                    (click)="editObra(obra)">
-                  </button>
-    
-                </td>
-              </tr>
+            <ng-template pTemplate="body" let-user let-ri="rowIndex">
+                <tr [pEditableRow]="user">
+                    <td>
+                        <p-tableCheckbox [value]="user"></p-tableCheckbox>
+                    </td>
+                    <td>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input pInputText type="text" [(ngModel)]="user.id" />
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{ user.id }}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input pInputText type="text" [(ngModel)]="user.nombre" required />
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{ user.nombre }}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input pInputText type="text" [(ngModel)]="user.tipoUsuario" required />
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{ user.tipoUsuario ? 'Admin' : 'User' }}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input pInputText type="text" [(ngModel)]="user.email" required />
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{ user.email }}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input pInputText type="text" [(ngModel)]="user.telefono" />
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{ user.telefono }}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input pInputText type="text" [(ngModel)]="user.nombreUsuario" required />
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{ user.nombreUsuario }}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                </tr>
             </ng-template>
-          </p-table>
-        </div>
+        </p-table>
+    </div>
     
-        <!--Inicio dialogo New-->
     
-        <div class="modal fade" id="newObraModal" tabindex="-1" aria-labelledby="newObraModalLabel" aria-hidden="true"
-          header="Confirm Delete">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5" id="newObraModalLabel">New Obra
-                </h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  
+      <!--Inicio dialogo New-->
+  
+      <div class="modal fade" id="newUserModal" tabindex="-1" aria-labelledby="newUserModalLabel" aria-hidden="true"
+        header="Confirm Delete">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="newUserModalLabel">New User
+              </h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form enctype="multipart/form-data" #newUserForm="ngForm" (ngSubmit)="storeUser(newUserForm)">
+              <div class="modal-body">
+              
+                <div class="form-group">            
+                  <label for="name">Name</label>
+                  <input id="name" type="text"  #name="ngModel" class="form-control" name="name" 
+                      pattern="^(?=.*[a-z])(?=.*[A-Z]).{4,}$" [(ngModel)]="userAux.nombre" required/>
+                      @if(!name.valid && name.touched){
+                          <small class="invalid-feedback d-block">Formato invalido</small>
+                      }  
+                  </div> 
+      
+                  <div class="form-group">  
+                  <label for="email">Email</label>
+                  <input id="email" type="email" #email="ngModel" class="form-control" name="email" 
+                      pattern="\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b" [(ngModel)]="userAux.email" required/>
+                      @if(!email.valid && email.touched){
+                          <small class="invalid-feedback d-block">Formato invalido</small>
+                      }
+                  </div> 
+      
+                  <div class="form-group"> 
+                  <label for="password">Password</label>
+                  <input id="password" type="password" #password="ngModel" class="form-control" name="password"
+                  [(ngModel)]="userAux.password" required/>
+                  </div> 
+      
+                  <div class="form-group"> 
+                  <label for="typeUser">TypeUser</label>
+                  <select class="selector" id="typeUser" name="typeUser" #typeUser="ngModel" [(ngModel)]="userAux.tipoUsuario" required>
+                    <option value="Admin">Admin</option>
+                    <option value="User">User</option>
+                  </select>
+                  </div> 
+
+                  <div class="form-group"> 
+                  <label for="userName">UserName</label>
+                  <input id="userName" type="text" #userName="ngModel" class="form-control" name="userName" 
+                       pattern="^(?=.*[a-zA-Z0-9_-])[a-zA-Z0-9_-]{4,}$" [(ngModel)]="userAux.nombreUsuario" required/>
+                      @if(!userName.valid && userName.touched){
+                          <small class="invalid-feedback d-block">Formato invalido</small> 
+                      }   
+                  </div> 
+
+                  <div class="form-group"> 
+                  <label for="phone">Phone</label>
+                  <input id="phone" type="number" #phone="ngModel" class="form-control" name="phone"
+                  [(ngModel)]="userAux.telefono"/>
+                      @if(phone == null){
+                          
+                      }
+                  </div>  
               </div>
-              <form enctype="multipart/form-data" #newObraForm="ngForm" (ngSubmit)="storeImage(newObraForm)">
-                <div class="modal-body">
-                  <div class="form-group">
-                    <label for="Name">Name</label>
-                    <input id="Name" class="form-control" name="name" type="text" #name="ngModel" [(ngModel)]="obra.nombre"
-                      required>
-                  </div>
-                  <div class="form-group">
-                    <label for="Tecnic">Tecnic</label>
-                    <select id="Tecnic" name="tecnic" #tecnic="ngModel" [(ngModel)]="obra.tecnica" required>
-                      <option value="Oil on canvas">Oil on canvas</option>
-                      <option value="Watercolor">Watercolor</option>
-                      <option value="Watercolor on paper">Watercolor on paper</option>
-                      <option value="Tempera">Tempera</option>
-                      <option value="Pastel painting">Pastel painting</option>
-                      <option value="Fresco painting">Fresco painting</option>
-                      <option value="Digital painting">Digital painting</option>
-                      <option value="Wood carving">Wood carving</option>
-                      <option value="Marble sculpture">Marble sculpture</option>
-                      <option value="Engraving">Engraving</option>
-                      <option value="Serigraphy">Serigraphy</option>
-                      <option value="Art photography">Art photography</option>
-                      <option value="Digital art">Digital art</option>
-                      <option value="Collage">Collage</option>
-                      <option value="Pyrography">Pyrography</option>
-                      <option value="Bronze sculpture">Bronze sculpture</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label for="Size">Size</label>
-                    <input id="Size" class="form-control" name="size" type="text" #size="ngModel" [(ngModel)]="obra.tamano"
-                      required>
-                  </div>
-                  <div class="form-group">
-                    <label for="Price">Price</label>
-                    <input id="Price" class="form-control" name="price" type="text" #price="ngModel"
-                      [(ngModel)]="obra.precio" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="Category">Category</label>
-                    <select id="Category" name="category" #category="ngModel" [(ngModel)]="obra.categoria" required>
-                      <option value="Cubism">Cubism</option>
-                      <option value="Impressionism">Impressionism</option>
-                      <option value="Expressionism">Expressionism</option>
-                      <option value="Realism">Realism</option>
-                      <option value="Surrealism">Surrealism</option>
-                      <option value="Abstract">Abstract</option>
-                      <option value="Renaissance">Renaissance</option>
-                      <option value="Baroque">Baroque</option>
-                      <option value="Rococo">Rococo</option>
-                      <option value="Romanticism">Romanticism</option>
-                      <option value="Neoclassicism">Neoclassicism</option>
-                      <option value="Modernism">Modernism</option>
-                      <option value="Pop art">Pop Art</option>
-                      <option value="Naive art">Naïve Art</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label for="CreateDate">Create Date</label>
-                    <input id="CreateDate" class="form-control" name="createDate" type="text" #createDate="ngModel"
-                      [(ngModel)]="obra.fechaCreacion" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="RegisterDate">Register Date</label>
-                    <input id="RegisterDate" class="form-control" name="registerDate" type="text" #registerDate="ngModel"
-                      [(ngModel)]="obra.fechaRegistro" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="Image">Image</label>
-                    <input id="Image" class="form-control" name="image" type="file" (change)="onImageFileChange($event)"
-                      required>
-                  </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" icon="pi pi-check">Close</button>
+                <input type="submit" class="btn btn-primary"
+                  style="color: rgb(255, 255, 255); background-color: rgb(124, 10, 10); border: none;" value="Add"
+                  data-bs-dismiss="modal">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+  
+      <!--Final dialogo New-->
+  
+      <!--Inicio dialogo Delete-->
+  
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+        header="Confirm Delete">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">DELETE
+              </h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>Seguro que desea eliminar el user?</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" icon="pi pi-check">Close</button>
+              <button type="button" style="color: rgb(255, 255, 255); background-color: rgb(124, 10, 10); border: none;"
+                data-bs-dismiss="modal" class="btn btn-primary" icon="pi pi-times"
+                (click)="deleteSelectedUsers()">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!--Final dialogo Delete-->
+      <div class="modal fade" id="updateModalUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">UPDATE</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form >
+                <div class="mb-3">
+                  <label for="recipient-name" class="col-form-label">Nombre:</label>
+                  <input type="text" class="form-control" id="recipient-name" [(ngModel)]="userAux.nombre" name="nombre">
                 </div>
+        
+                <div class="mb-3">
+                  <label for="recipient-email" class="col-form-label">Email:</label>
+                  <input type="email" class="form-control" id="recipient-email" [(ngModel)]="userAux.email" name="email">
+                </div>
+        
+                <div class="mb-3">
+                  <label for="recipient-password" class="col-form-label">Password:</label>
+                  <input type="password" class="form-control" id="recipient-password" [(ngModel)]="userAux.password" name="password">
+                </div>
+        
+                <div class="mb-3">
+                  <label for="recipient-typeUser" class="col-form-label">UserType:</label>
+                  <select class="selector" id="recipient-typeUser" name="typeUser" [(ngModel)]="userAux.tipoUsuario">
+                    <option [value]="true">Admin</option>
+                    <option [value]="false">User</option>
+                  </select>
+                </div>
+  
+                  <div class="mb-3">
+                    <label for="recipient-userName" class="col-form-label">UserName:</label>
+                    <input type="text" class="form-control" id="recipient-userName" [(ngModel)]="userAux.nombreUsuario" name="userName">
+                  </div>
+  
+                  <div class="mb-3">
+                    <label for="recipient-phone" class="col-form-label">Phone:</label>
+                    <input type="number" class="form-control" id="recipient-phone" [(ngModel)]="userAux.telefono" name="phone">
+                  </div>
+                      
+                
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" icon="pi pi-check">Close</button>
-                  <input type="submit" class="btn btn-primary"
-                    style="color: rgb(255, 255, 255); background-color: rgb(124, 10, 10); border: none;" value="Add"
-                    data-bs-dismiss="modal">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                  <button type="button" class="btn btn-primary" style="color: white; background-color: rgb(124, 10, 10);"
+                    data-bs-dismiss="modal" (click)="updateUser()">Actualizar</button>
                 </div>
+              </form>
+              </div>
+            </div>
+          </div>
+      </div> 
+    
+      <!--Cierre tabla-->
+
+       }
+       @if(artistClick){
+          <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
+       <p class="work"><span class="workGradient">Artist</span> </p>
+       </div>
+      
+       <div class="card">
+        <p-toast></p-toast>
+        <p-toolbar styleClass="mb-4 gap-2">
+          <ng-template pTemplate="left">
+            <p-button pRipple severity="success" label="New" icon="pi pi-plus" class="mr-2" data-bs-toggle="modal"
+              data-bs-target="#newArtistaModal" styleClass="btn-rounded" (click)="openNewArtista()">
+            </p-button>
+            <p-button type="button" class="asd" data-bs-toggle="modal" data-bs-target="#deleteArtistaModal"
+              styleClass="btn-rounded" [disabled]="!selectedArtistas || !selectedArtistas.length" severity="danger"
+              label="Delete">
+            </p-button>
+            <p-button type="button" class="asd" data-bs-toggle="modal" data-bs-target="#updateArtistaModal" (onClick)="editArtista(selectedArtistas[0])"
+              styleClass="btn-rounded" [disabled]="!selectedArtistas || selectedArtistas.length !== 1" severity="warning"
+              label="Update">
+            </p-button>
+          </ng-template>
+        </p-toolbar>
+        <p-table #dt [value]="artistas" [rows]="10" [totalRecords]="totalRecords" [paginator]="true"
+          [(selection)]="selectedArtistas" [selectAll]="selectAll" [tableStyle]="{ 'min-width': '75rem' }"
+          [globalFilterFields]="['id', 'nombre', 'correo', 'telefono', 'nombreArtista']">
+          <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+              <h5 class="mb-4">Manage Artistas</h5>
+              <span class="p-input-icon-left">
+                <input pInputText type="text" #input (input)="dt.filterGlobal(input.value, 'contains')" placeholder="Search..." />
+              </span>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="width: 4rem">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+              </th>
+              <th pSortableColumn="id" style="width:15%">ID <p-sortIcon field="id"></p-sortIcon></th>
+              <th pSortableColumn="nombre" style="width:20%">Name <p-sortIcon field="nombre"></p-sortIcon></th>
+              <th pSortableColumn="correo" style="width:20%">Email <p-sortIcon field="correo"></p-sortIcon></th>
+              <th pSortableColumn="telefono" style="width:15%">Phone <p-sortIcon field="telefono"></p-sortIcon></th>
+              <th pSortableColumn="nombreArtista" style="width:20%">Artist Name <p-sortIcon field="nombreArtista"></p-sortIcon></th>
+              <th style="width:20%"></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-artista let-ri="rowIndex">
+            <tr [pEditableRow]="artista">
+              <td>
+                <p-tableCheckbox [value]="artista"></p-tableCheckbox>
+              </td>
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input pInputText type="text" [(ngModel)]="artista.id" />
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ artista.id }}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input pInputText type="text" [(ngModel)]="artista.nombre" required />
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ artista.nombre }}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input pInputText type="text" [(ngModel)]="artista.correo" required />
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ artista.correo }}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input pInputText type="text" [(ngModel)]="artista.telefono" />
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ artista.telefono }}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input pInputText type="text" [(ngModel)]="artista.nombreArtista" required />
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ artista.nombreArtista }}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+      
+      <!-- Dialogo New -->
+      <div class="modal fade" id="newArtistaModal" tabindex="-1" aria-labelledby="newArtistaModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="newArtistaModalLabel">New Artista</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form #newArtistaForm="ngForm" (ngSubmit)="storeArtista(newArtistaForm)">
+                <div class="mb-3">
+                  <label for="nombre" class="form-label">Name</label>
+                  <input type="text" class="form-control" id="nombre" [(ngModel)]="artistaAux.nombre" name="nombre" required />
+                </div>
+                <div class="mb-3">
+                  <label for="correo" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="correo" [(ngModel)]="artistaAux.correo" name="correo" required />
+                </div>
+                <div class="mb-3">
+                  <label for="password" class="form-label">Password</label>
+                  <input type="password" class="form-control" id="password" [(ngModel)]="artistaAux.password" name="password" required />
+                </div>
+                <div class="mb-3">
+                  <label for="telefono" class="form-label">Phone</label>
+                  <input type="text" class="form-control" id="telefono" [(ngModel)]="artistaAux.telefono" name="telefono" />
+                </div>
+                <div class="mb-3">
+                  <label for="nombreArtista" class="form-label">Artist Name</label>
+                  <input type="text" class="form-control" id="nombreArtista" [(ngModel)]="artistaAux.nombreArtista" name="nombreArtista" required />
+                </div>
+                <button type="submit" class="btn btn-primary" [disabled]="!newArtistaForm.valid">Save</button>
               </form>
             </div>
           </div>
         </div>
-    
-        <!--Final dialogo New-->
-    
-        <!--Inicio dialogo Delete-->
-    
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
-          header="Confirm Delete">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">DELETE
-                </h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
+      </div>
+      
+      <!-- Dialogo Update -->
+      <div class="modal fade" id="updateArtistaModal" tabindex="-1" aria-labelledby="updateArtistaModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="updateArtistaModalLabel">Update Artista</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form #updateArtistaForm="ngForm" (ngSubmit)="updateArtista()">
+                <div class="mb-3">
+                  <label for="nombre" class="form-label">Name</label>
+                  <input type="text" class="form-control" id="nombre" [(ngModel)]="artistaAux.nombre" name="nombre" required />
+                </div>
+                <div class="mb-3">
+                  <label for="correo" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="correo" [(ngModel)]="artistaAux.correo" name="correo" required />
+                </div>
+                <div class="mb-3">
+                  <label for="password" class="form-label">Password</label>
+                  <input type="password" class="form-control" id="password" [(ngModel)]="artistaAux.password" name="password" required />
+                </div>
+                <div class="mb-3">
+                  <label for="telefono" class="form-label">Phone</label>
+                  <input type="text" class="form-control" id="telefono" [(ngModel)]="artistaAux.telefono" name="telefono" />
+                </div>
+                <div class="mb-3">
+                  <label for="nombreArtista" class="form-label">Artist Name</label>
+                  <input type="text" class="form-control" id="nombreArtista" [(ngModel)]="artistaAux.nombreArtista" name="nombreArtista" required />
+                </div>
+                <button type="submit" class="btn btn-primary" [disabled]="!updateArtistaForm.valid">Save</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Dialogo Delete -->
+      <div class="modal fade" id="deleteArtistaModal" tabindex="-1" aria-labelledby="deleteArtistaModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="deleteArtistaModalLabel">Delete Artistas</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              Are you sure you want to delete the selected artistas?
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-danger" (click)="deleteSelectedArtistas()">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      
+      
+      }
+      @if(invoiceClick){
+          <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
+       <p class="work"><span class="workGradient">Invoices</span> </p>
+       </div>
+      }
+      @if(shippingClick){
+          <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
+       <p class="work"><span class="workGradient">Shipping</span> </p>
+       </div>
+      }
+      @if(workClick){
+          <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
+       <p class="work">Art <span class="workGradient">WORK</span> </p>
+       </div>
+      
+       <div class="card">
+        <p-toast></p-toast>
+        <p-toolbar styleClass="mb-4 gap-2">
+          <ng-template pTemplate="left">
+            <p-button pRipple severity="success" label="New" icon="pi pi-plus" class="mr-2" data-bs-toggle="modal"
+              data-bs-target="#newObraModal" styleClass="btn-rounded" (click)="openNew()">
+            </p-button>
+            <p-button type="button" class="asd" data-bs-toggle="modal" data-bs-target="#exampleModal"
+              styleClass="btn-rounded" [disabled]="!selectedObras ||!selectedObras.length" severity="danger"
+              label="Delete">
+            </p-button>
+            <p-button type="button" class="asd" data-bs-toggle="modal" data-bs-target="#updateModal" (onClick)="editObra(selectedObras[0])"
+            styleClass="btn-rounded" [disabled]="!selectedObras || selectedObras.length !== 1" severity="warning"
+            label="Update">
+          </p-button>
+          </ng-template>
+        </p-toolbar>
+        <p-table #dt [value]="obras" [rows]="10" [totalRecords]="totalRecords" [paginator]="true"
+          [(selection)]="selectedObras" [selectAll]="selectAll" [tableStyle]="{ 'min-width': '75rem' }"
+          [globalFilterFields]="['id', 'nombre', 'categoria', 'tecnica', 'tamano', 'fechaCreacion', 'fechaRegistro', 'disponibilidad']">
+  
+          <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+              <h5 class="mb-4">Manage work</h5>
+              <span class="p-input-icon-left">
+                <input pInputText type="text" #input (input)="dt.filterGlobal(input.value, 'contains')"
+                  placeholder="Search..." />
+              </span>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="width: 4rem">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+              </th>
+              <th pSortableColumn="id" style="width:20%">Code <p-sortIcon field="id"></p-sortIcon></th>
+              <th pSortableColumn="nombre" style="width:20%">Name <p-sortIcon field="nombre"></p-sortIcon></th>
+              <th pSortableColumn="categoria" style="width:20%">Category <p-sortIcon field="categoria"></p-sortIcon></th>
+              <th pSortableColumn="tecnica" style="width:20%">tecnica <p-sortIcon field="tecnica"></p-sortIcon></th>
+              <th pSortableColumn="tamano" style="width:20%">tamano <p-sortIcon field="tamano"></p-sortIcon></th>
+              <th pSortableColumn="fechaCreacion" style="width:20%">fechaCreacion <p-sortIcon
+                  field="fechaCreacion"></p-sortIcon></th>
+              <th pSortableColumn="fechaRegistro" style="width:20%">fechaRegistro <p-sortIcon
+                  field="fechaRegistro"></p-sortIcon></th>
+              <th pSortableColumn="disponibilidad" style="width:20%">disponibilidad <p-sortIcon
+                  field="disponibilidad"></p-sortIcon></th>
+              <th pSortableColumn="imagen" style="width:20%">imagen <p-sortIcon field="imagen"></p-sortIcon></th>
+              <th style="width:20%"></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-obra let-ri="rowIndex">
+            <tr [pEditableRow]="obra">
+              <td>
+                <p-tableCheckbox [value]="obra"></p-tableCheckbox>
+              </td>
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input pInputText type="text" [(ngModel)]="obra.id" />
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ obra.id }}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input pInputText type="text" [(ngModel)]="obra.nombre" required />
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ obra.nombre }}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input pInputText type="text" [(ngModel)]="obra.categoria" required />
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ obra.categoria }}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input pInputText type="text" [(ngModel)]="obra.tecnica" required />
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ obra.tecnica }}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input pInputText type="text" [(ngModel)]="obra.tamano" required />
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ obra.tamano }}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input pInputText type="text" [(ngModel)]="obra.fechaCreacion" required />
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ obra.fechaCreacion }}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input pInputText type="text" [(ngModel)]="obra.fechaRegistro" required />
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ obra.fechaRegistro }}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input pInputText type="text" [(ngModel)]="obra.disponibilidad" required />
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ obra.disponibilidad ? 'En venta' : 'Vendido' }}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input pInputText type="image" [(ngModel)]="obra.imagen" required />
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    <img src="{{urlAPI}}{{obra.imagen}}" alt="" style="width: 100px;" />
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <div class="flex align-items-center justify-content-center gap-2">
+                  <!-- Botones de acción -->
+                  <!-- <button pButton pRipple icon="pi pi-pencil" (click)="editProduct(obra)"></button>-->
+                  <!--  <button pButton pRipple icon="pi pi-trash" (click)="deleteProduct(obra)"></button>-->
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+  
+      <!--Inicio dialogo New-->
+  
+      <div class="modal fade" id="newObraModal" tabindex="-1" aria-labelledby="newObraModalLabel" aria-hidden="true"
+        header="Confirm Delete">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="newObraModalLabel">New Obra
+              </h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form enctype="multipart/form-data" #newObraForm="ngForm" (ngSubmit)="storeObra(newObraForm)">
               <div class="modal-body">
-                <p>Seguro que desea eliminar la obra?</p>
+                <div style="margin-bottom: 10px;" class="form-group">
+                  <label  for="idArtist">idArtist</label>
+                  <input id="idArtist" class="form-control" name="idArtist" type="text" #name="ngModel" [(ngModel)]="obra.idArtista"
+                    required>
+                </div>
+                <div style="margin-bottom: 10px;" class="form-group">
+                  <label  for="Name">Name</label>
+                  <input id="Name" class="form-control" name="name" type="text" #name="ngModel" [(ngModel)]="obra.nombre"
+                    required>
+                </div>
+                <div class="form-group ">
+                  <label style="margin-right: 20px;" for="Tecnic">Tecnic</label>
+                  <select class="selector" id="Tecnic" name="tecnic" #tecnic="ngModel" [(ngModel)]="obra.tecnica" required>
+                    <option value="Oil on canvas">Oil on canvas</option>
+                    <option value="Watercolor">Watercolor</option>
+                    <option value="Watercolor on paper">Watercolor on paper</option>
+                    <option value="Tempera">Tempera</option>
+                    <option value="Pastel painting">Pastel painting</option>
+                    <option value="Fresco painting">Fresco painting</option>
+                    <option value="Digital painting">Digital painting</option>
+                    <option value="Wood carving">Wood carving</option>
+                    <option value="Marble sculpture">Marble sculpture</option>
+                    <option value="Engraving">Engraving</option>
+                    <option value="Serigraphy">Serigraphy</option>
+                    <option value="Art photography">Art photography</option>
+                    <option value="Digital art">Digital art</option>
+                    <option value="Collage">Collage</option>
+                    <option value="Pyrography">Pyrography</option>
+                    <option value="Bronze sculpture">Bronze sculpture</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="Size">Size</label>
+                  <input id="Size" class="form-control" name="size" type="text" #size="ngModel" [(ngModel)]="obra.tamano"
+                    required>
+                </div>
+                <div class="form-group">
+                  <label for="Price">Price</label>
+                  <input id="Price" class="form-control" name="price" type="text" #price="ngModel"
+                    [(ngModel)]="obra.precio" required>
+                </div>
+                <div class="form-group ">
+                  <label style="margin-right: 20px;" for="Category">Category</label>
+                  <select class="selector" id="Category" name="category" #category="ngModel" [(ngModel)]="obra.categoria" required>
+                    <option value="Cubism">Cubism</option>
+                    <option value="Impressionism">Impressionism</option>
+                    <option value="Expressionism">Expressionism</option>
+                    <option value="Realism">Realism</option>
+                    <option value="Surrealism">Surrealism</option>
+                    <option value="Abstract">Abstract</option>
+                    <option value="Renaissance">Renaissance</option>
+                    <option value="Baroque">Baroque</option>
+                    <option value="Rococo">Rococo</option>
+                    <option value="Romanticism">Romanticism</option>
+                    <option value="Neoclassicism">Neoclassicism</option>
+                    <option value="Modernism">Modernism</option>
+                    <option value="Pop art">Pop Art</option>
+                    <option value="Naive art">Naïve Art</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="CreateDate">Create Date</label>
+                  <input id="CreateDate" class="form-control" name="createDate" type="date" (change)="onFechaChange($event)" #createDate="ngModel"
+                    [(ngModel)]="obra.fechaCreacion" required>
+                </div>
+                <div *ngIf="fechaSeleccionada">
+                  <p>Fecha seleccionada: Año: {{ ano }}, Mes: {{ mes }}, Día: {{ dia }}</p>
+                </div>
+                <div class="form-group">
+                  <label for="Image">Image</label>
+                  <input id="Image" class="form-control" name="image" type="file" (change)="onImageFileChange($event)"
+                    required>
+                </div>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" icon="pi pi-check">Close</button>
-                <button type="button" style="color: rgb(255, 255, 255); background-color: rgb(124, 10, 10); border: none;"
-                  data-bs-dismiss="modal" class="btn btn-primary" icon="pi pi-times"
-                  (click)="deleteSelectedObras()">Delete</button>
+                <input type="submit" class="btn btn-primary"
+                  style="color: rgb(255, 255, 255); background-color: rgb(124, 10, 10); border: none;" value="Add"
+                  data-bs-dismiss="modal">
               </div>
+            </form>
+          </div>
+        </div>
+      </div>
+  
+      <!--Final dialogo New-->
+  
+      <!--Inicio dialogo Delete-->
+  
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+        header="Confirm Delete">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">DELETE
+              </h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>Seguro que desea eliminar la obra?</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" icon="pi pi-check">Close</button>
+              <button type="button" style="color: rgb(255, 255, 255); background-color: rgb(124, 10, 10); border: none;"
+                data-bs-dismiss="modal" class="btn btn-primary" icon="pi pi-times"
+                (click)="deleteSelectedObras()">Delete</button>
             </div>
           </div>
         </div>
-    
-        <!--Final dialogo Delete-->
-        <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">UPDATE</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-    <!-- #updateObraForm="ngForm" (ngSubmit)="storeImage(updateObraForm)" -->
-                <form >
-                  <div class="mb-3">
-                    <label for="recipient-name" class="col-form-label">Nombre:</label>
-                    <input type="text" class="form-control" id="recipient-name" [(ngModel)]="obra.nombre" name="nombre">
-                  </div>
-                  <div class="mb-3">
-                    <label for="recipient-precio" class="col-form-label">Precio:</label>
-                    <input type="text" class="form-control" id="recipient-precio" [(ngModel)]="obra.precio" name="precio">
-                  </div>
-                  <div class="mb-3">
-                    <label for="recipient-categoria" class="col-form-label">Categoria:</label>
-                    <div class="dropdown">
-                      <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        {{obra.categoria}}
-                      </button>
-                      <ul class="dropdown-menu">
-                        <li *ngFor="let style1 of artStyles" (click)="selectCategoria(style1)">
-                          <a class="dropdown-item cambio-color">{{ style1 }}</a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div class="mb-3">
-                    <label for="recipient-tecnica" class="col-form-label">Tecnica:</label>
-                    <div class="dropdown">
-                      <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        {{obra.tecnica}}
-                      </button>
-                      <ul class="dropdown-menu">
-                        <li *ngFor="let tecnique of tecnicas" (click)="selectTecnica(tecnique)">
-                          <a class="dropdown-item cambio-color">{{ tecnique }}</a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                  <!-- <div class="mb-3">
-                    <label for="recipient-disponibilidad" class="col-form-label">Disponibilidad:</label>
-                    <input type="text" class="form-control" id="recipient-disponibilidad" [(ngModel)]="obra.disponibilidad"
-                      name="disponibilidad">
-                  </div> -->
-                  <div class="mb-3">
-                    <label for="recipient-tamano" class="col-form-label">Tamaño:</label>
-                    <input type="text" class="form-control" id="recipient-tamano" [(ngModel)]="obra.tamano" name="tamano">
-                  </div>
-                  <div class="mb-3">
-                    <label for="recipient-fecha-creacion" class="col-form-label">Fecha Creacion:</label>
-                    <input type="text" class="form-control" id="recipient-fecha-creacion" [(ngModel)]="obra.fechaCreacion"
-                      name="fechaCreacion">
-                  </div>
-                  <div class="mb-3">
-                    <label for="recipient-fecha-registro" class="col-form-label">Fecha Registro:</label>
-                    <input type="text" class="form-control" id="recipient-fecha-registro" [(ngModel)]="obra.fechaRegistro"
-                      name="fechaRegistro">
-                  </div>
-                  <div class="mb-3">
-                    <label for="recipient-imagen" class="col-form-label">Imagen:</label>
-                    <input type="file" class="form-control" id="recipient-imagen" (change)="onImageFileChange($event)">
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary" style="color: white; background-color: rgb(124, 10, 10);"
-                      data-bs-dismiss="modal" (click)="updateObra(obra.imagen)">Actualizar</button>
-                  </div>
-                </form>
-    
-              </div>
-    
+      </div>
+  
+      <!--Final dialogo Delete-->
+      <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">UPDATE</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <div class="modal-body">
+            <!-- #updateObraForm="ngForm" (ngSubmit)="storeImage(updateObraForm)" -->
+              <form >
+                <div class="mb-3">
+                  <label for="recipient-name" class="col-form-label">Nombre:</label>
+                  <input type="text" class="form-control" id="recipient-name" [(ngModel)]="obra.nombre" name="nombre">
+                </div>
+                <div class="mb-3">
+                  <label for="recipient-precio" class="col-form-label">Precio:</label>
+                  <input type="text" class="form-control" id="recipient-precio" [(ngModel)]="obra.precio" name="precio">
+                </div>
+                <div class="mb-3">
+                  <label for="recipient-categoria" class="col-form-label">Categoria:</label>
+                  <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                      aria-expanded="false">
+                      {{obra.categoria}}
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li *ngFor="let style1 of artStyles" (click)="selectCategoria(style1)">
+                        <a class="dropdown-item cambio-color">{{ style1 }}</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="recipient-tecnica" class="col-form-label">Tecnica:</label>
+                  <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                      aria-expanded="false">
+                      {{obra.tecnica}}
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li *ngFor="let tecnique of tecnicas" (click)="selectTecnica(tecnique)">
+                        <a class="dropdown-item cambio-color">{{ tecnique }}</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <!-- <div class="mb-3">
+                  <label for="recipient-disponibilidad" class="col-form-label">Disponibilidad:</label>
+                  <input type="text" class="form-control" id="recipient-disponibilidad" [(ngModel)]="obra.disponibilidad"
+                    name="disponibilidad">
+                </div> -->
+                <div class="mb-3">
+                  <label for="recipient-tamano" class="col-form-label">Tamaño:</label>
+                  <input type="text" class="form-control" id="recipient-tamano" [(ngModel)]="obra.tamano" name="tamano">
+                </div>
+                <div class="form-group">
+                  <label for="CreateDate">Create Date</label>
+                  <input id="CreateDate" class="form-control" name="createDate" type="date" (change)="onFechaChange($event)" #createDate="ngModel"
+                    [(ngModel)]="obra.fechaCreacion" required>
+                </div>
+                <div class="mb-3">
+                  <label for="recipient-imagen" class="col-form-label">Imagen:</label>
+                  <input type="file" class="form-control" id="recipient-imagen" (change)="onImageFileChange($event)">
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                  <button type="button" class="btn btn-primary" style="color: white; background-color: rgb(124, 10, 10);"
+                    data-bs-dismiss="modal" (click)="updateObra(obra.imagen)">Actualizar</button>
+                </div>
+              </form>
+  
+            </div>
+  
           </div>
         </div>
-        <!--Cierre tabla-->
-    
-    
-        }@else{<div>Error</div>}
-    </div>
+      </div>
+      <!--Cierre tabla-->
+
+      }
+  </div>
 </div>

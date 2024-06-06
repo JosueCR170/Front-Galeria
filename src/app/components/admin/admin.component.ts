@@ -48,6 +48,8 @@ export class AdminComponent {
   public obra: Obra;
   public _user: User;
   public _artista: Artista;
+  public currentDate = new Date();
+  public formattedDate = this.formatDate(this.currentDate);
 
   constructor(
     private _obraService: ObraService,
@@ -65,12 +67,11 @@ export class AdminComponent {
   }
 
   totalRecords!: number;
-  selectedObras!: Obra[];
-  selectedObra!: Obra[];
+  
   statuses!: any[];
   auxObras: Obra[] = [];
   categoryExists: string[] = [];
-  obras: Obra[] = [];
+  
   clonedProducts: { [s: string]: Obra } = {};
   selectedCategory: string = '';
   selectAll: boolean = false;
@@ -90,6 +91,22 @@ export class AdminComponent {
   artist: any;
   urlAPI: string;
   selectedFile: File | null = null;
+
+
+  obras: Obra[] = [];
+  selectedObras!: Obra[];
+  selectedObra!: Obra[];
+
+  /** Variables y Elementos para la tabla de Users **/
+  userAux = new User(1,"",false,"","",null,"");
+  users: User[] = [];
+  selectedUsers: User[] = [];
+  selectedUser: User[]=[];
+  /** Variables y Elementos para la tabla de Artists **/
+  artistaAux = new Artista(1,"","","","","");
+  artistas: Artista[] = [];
+  selectedArtistas: Artista[] = [];
+  selectedArtista: Artista[]=[];
 
   showHome(show: boolean) {
     this.flag = show;
@@ -153,6 +170,7 @@ export class AdminComponent {
     this.loadLoggedUser();
     this.index();
     this.indexUsers();
+    this.indexArtista()
   }
 
   loadLoggedUser(){
@@ -192,19 +210,19 @@ export class AdminComponent {
 
   /********************************* OPEN  *********************************/
   openNew() {
-    this.obra = new Obra(1, this.artist.iss, "", "", "", 1, true, "", null, null, null);
+    this.obra = new Obra(1, null, "", "", "", 1, true, "", null, null, null);
     this.submitted = false;
     this.productDialog = true;
   }
 
   openNewUser() {
-    this._user = new User(1, "", true,"","",null,"")
+    this.userAux = new User(1, "", true,"","",null,"")
     this.submitted = false;
     this.productDialog = true;
   }
 
-  openNewArtist(){
-    this._artista = new Artista(1,"","","","","")
+  openNewArtista(){
+    this.artistaAux = new Artista(1,"","","","","")
     this.submitted = false;
     this.productDialog = true;
   }
@@ -214,6 +232,7 @@ export class AdminComponent {
     this._obraService.index().subscribe({
       next: (response: any) => {
         this.obras = response['data'];
+        console.log();
       },
       error: (err: Error) => {
         console.error('Error al cargar las obras', err);
@@ -224,7 +243,7 @@ export class AdminComponent {
   indexUsers() {
     this._userService.index().subscribe({
       next: (response: any) => {
-        this.user = response['data'];
+        this.users = response['data'];
       },
       error: (err: Error) => {
         console.error('Error al cargar los users', err);
@@ -232,10 +251,10 @@ export class AdminComponent {
     });
   }
 
-  indexArtist() {
+  indexArtista() {
     this._artistaService.index().subscribe({
       next: (response: any) => {
-        this.artist = response['data'];
+        this.artistas = response['data'];
       },
       error: (err: Error) => {
         console.error('Error al cargar los artistas', err);
@@ -243,24 +262,34 @@ export class AdminComponent {
     });
   }
 
-  /********************************* UPDATE *********************************/
-  selectCategoria(categoria: string) {
-    this.obra.categoria = categoria;
-  }
+  /******************************** EDIT ********************************/
+    editObra(obra: Obra) {
+      this.obra = { ...obra };
+      this.productDialog = true;
+    }
+    
+    editUser(_artista: User) {
+      this.userAux = { ..._artista };
+      this.productDialog = true;
+    }
 
-  selectTecnica(tecnica: string) {
-    this.obra.tecnica = tecnica;
-  }
+    editArtista(_artista: Artista) {
+      this.artistaAux = { ..._artista };
+      this.productDialog = true;
+    }
+  
+    selectCategoria(categoria: string) {
+      this.obra.categoria = categoria;
+    }
 
-  editObra(obra: Obra) {
-    this.obra = { ...obra };
-    this.productDialog = true;
-  }
+    selectTecnica(tecnica: string) {
+      this.obra.tecnica = tecnica;
+    }
 
   onImageFileChange(event: any): void {
     this.selectedFile = event.target.files[0];
   }
-
+  /********************************* UPDATE *********************************/
   updateObra(filename: any) {
     if (this.selectedFile) {
       this._obraService.updateImage(this.selectedFile, filename).subscribe({
@@ -275,6 +304,7 @@ export class AdminComponent {
     this._obraService.update(this.obra).subscribe({
       next:(response:any)=>{
         console.log(response);
+        location.reload();
       },
       error:(err:Error)=>{
         console.log(err);
@@ -282,31 +312,46 @@ export class AdminComponent {
     });
   }
 
-  saveUpdatedObra(): void {
-    this._obraService.update(this.obra).subscribe({
+  updateUser() {
+    this._userService.update(this.userAux).subscribe({
       next: (response: any) => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'Obra Updated',
-          life: 3000
-        });
-        this.index(); // Recargar las obras después de la actualización
+        console.log('Usuario actualizado', response);
+        location.reload();
       },
-      error: (err: Error) => {
-        console.error('Error al actualizar la obra', err);
+      error: (err: any) => {
+        console.error('Error al actualizar el usuario', err);
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'Failed to update obra',
+          detail: `Failed to update user: ${this.userAux.nombre}`,
           life: 3000
         });
       }
     });
-    this.productDialog = false;
+    
   }
 
-  storeImage(form: any): void {
+  updateArtista() {
+    this._artistaService.update(this.artistaAux).subscribe({
+      next: (response: any) => {
+        console.log('Artista actualizado', response);
+        location.reload();
+      },
+      error: (err: any) => {
+        console.error('Error al actualizar el artista', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: `Failed to update artist: ${this.artistaAux.nombre}`,
+          life: 3000
+        });
+      }
+    });
+    
+  }
+
+  /********************************* STORE *********************************/
+  storeObra(form: any): void {
     if (form.valid) {
       console.log('Obra:', this.obra);
       if (this.selectedFile) {
@@ -315,7 +360,9 @@ export class AdminComponent {
           next: (response: any) => {
             console.log(response);
             if (response.filename) {
-              this.obra.imagen = response.filename;
+              this.obra.imagen = response.filename; 
+              this.obra.fechaCreacion = this.fechaSeleccionada;
+              this.obra.fechaRegistro = this.formattedDate;
               this._obraService.create(this.obra).subscribe({
                 next: (response2: any) => {
                   console.log(response2);
@@ -335,6 +382,46 @@ export class AdminComponent {
           }
         });
       }
+    }
+  }
+
+  storeUser(form: any): void {
+    if (form.valid) {
+      this._userService.create(this.userAux).subscribe({
+      next:(response)=>{
+        
+        console.log(response);
+        if(response.status==201){
+          form.reset();            
+            } else {
+              console.error('No se pudo ingrear el usuario');
+            }
+          },
+          error: (err: any) => {
+            console.error(err);
+          }
+        });
+        location.reload();
+    }
+  }
+
+  storeArtista(form: any): void {
+    if (form.valid) {
+      this._artistaService.create(this.artistaAux).subscribe({
+      next:(response)=>{
+        
+        console.log(response);
+        if(response.status==201){
+          form.reset();            
+            } else {
+              console.error('No se pudo ingrear el usuario');
+            }
+          },
+          error: (err: any) => {
+            console.error(err);
+          }
+        });
+        location.reload();
     }
   }
   
@@ -369,10 +456,97 @@ export class AdminComponent {
     this.displayConfirmationDialog = false;
   }
 
+  deleteSelectedUsers() {
+    this.selectedUsers.forEach(_user => {
+      this._userService.deleted(_user.id).subscribe({
+        next: () => {
+          this.users = this.users.filter(o => o.id !== _user.id);
+          this.totalRecords--;
+          console.log()
+        },
+        error: (err: Error) => {
+          console.error('Error al eliminar el usuario', err);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: `Failed to delete user: ${_user.nombre}`,
+            life: 3000
+          });
+        }
+      });
+    });
+
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Successful',
+      detail: 'Users Deleted',
+      life: 3000
+    });
+
+    this.selectedUsers = [];
+    this.displayConfirmationDialog = false;
+  }
+
+  deleteSelectedArtistas() {
+    this.selectedArtistas.forEach(_artista => {
+      this._artistaService.deleted(_artista.id).subscribe({
+        next: () => {
+          this.artistas = this.artistas.filter(o => o.id !== _artista.id);
+          this.totalRecords--;
+          console.log()
+        },
+        error: (err: Error) => {
+          console.error('Error al eliminar el artista', err);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: `Failed to delete artist: ${_artista.nombre}`,
+            life: 3000
+          });
+        }
+      });
+    });
+
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Successful',
+      detail: 'Artist Deleted',
+      life: 3000
+    });
+
+    this.selectedArtistas = [];
+    this.displayConfirmationDialog = false;
+  }
+
+
+
   hideConfirmationDialog() {
     this.displayConfirmationDialog = false;
   }
 
   /************************************************************************ */
   
+  fechaSeleccionada: string ='';
+  ano: number | null = null;
+  mes: string | null = null;
+  dia: string | null = null;
+
+  onFechaChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const fecha = new Date(input.value);
+    this.ano = fecha.getFullYear();
+    this.mes = ('0' + (fecha.getMonth() + 1)).slice(-2); // Mes se cuenta desde 0
+    this.dia = ('0' + fecha.getDate()).slice(-2);
+    this.fechaSeleccionada = `${this.ano}-${this.mes}-${this.dia}`;
+  }
+
+  private formatDate(date: Date): string {
+    console.log(date);
+    
+    const year = date.getFullYear();
+    const month = date.getMonth(); // Agrega un cero al mes si es necesario
+    const day = date.getDate(); // Agrega un cero al día si es necesario
+    return `${year}-${month}-${day}`;
+  }
+
 }
