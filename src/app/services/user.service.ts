@@ -55,7 +55,13 @@ export class UserService{
     }
 
     index():Observable<any>{
-        let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+        let headers;
+        let bearertoken = sessionStorage.getItem('token');
+        if (bearertoken){
+            headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded').set('bearertoken', bearertoken);
+        } else {
+            headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+        }
         let options = {
             headers
         };
@@ -74,6 +80,28 @@ export class UserService{
             headers
         };
         return this._http.delete(`${this.urlAPI}user/${id}`, options);
+    }
+
+    update(user:User): Observable<any> {
+        console.log(user);
+        let obraJson=JSON.stringify(user);
+        let id = user.id;
+        //let formData = new FormData();
+        let params='data='+obraJson;
+        let headers;
+        let bearertoken = sessionStorage.getItem('token');
+        
+        //formData.append('_method', 'PUT');
+        //formData.append('data', JSON.stringify(user));
+        if (bearertoken){
+            headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded').set('bearertoken', bearertoken);
+        } else {
+            headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+        }
+        let options = {
+            headers
+        };
+        return this._http.put(`${this.urlAPI}user/${id}`, params, options);
     }
 
 }

@@ -3,7 +3,7 @@
 export class Obra{
     constructor(
         public id:number,
-        public idArtista:number,
+        public idArtista:number | null,
         public tecnica:string,
         public nombre:string,
         public tamano:string,

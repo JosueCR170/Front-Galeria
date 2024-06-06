@@ -389,15 +389,10 @@
                 <label for="recipient-tamano" class="col-form-label">Tamaño:</label>
                 <input type="text" class="form-control" id="recipient-tamano" [(ngModel)]="obra.tamano" name="tamano">
               </div>
-              <div class="mb-3">
-                <label for="recipient-fecha-creacion" class="col-form-label">Fecha Creacion:</label>
-                <input type="text" class="form-control" id="recipient-fecha-creacion" [(ngModel)]="obra.fechaCreacion"
-                  name="fechaCreacion">
-              </div>
-              <div class="mb-3">
-                <label for="recipient-fecha-registro" class="col-form-label">Fecha Registro:</label>
-                <input type="text" class="form-control" id="recipient-fecha-registro" [(ngModel)]="obra.fechaRegistro"
-                  name="fechaRegistro">
+              <div class="form-group">
+                <label for="CreateDate">Create Date</label>
+                <input id="CreateDate" class="form-control" name="createDate" type="date" (change)="onFechaChange($event)" #createDate="ngModel"
+                  [(ngModel)]="obra.fechaCreacion" required>
               </div>
               <div class="mb-3">
                 <label for="recipient-imagen" class="col-form-label">Imagen:</label>
