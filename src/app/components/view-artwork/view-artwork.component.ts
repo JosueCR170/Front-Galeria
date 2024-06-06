@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user';
 import { ArtistService } from '../../services/artist.service';
+import { server } from '../../services/global';
 
 @Component({
   selector: 'app-view-artwork',
@@ -17,7 +18,8 @@ import { ArtistService } from '../../services/artist.service';
 export class ViewArtworkComponent {
   public obra: Obra;
   public status: number;
-
+  urlAPI: string;
+  
   constructor(
     private _obraService: ObraService,
     private _artistService: ArtistService,
@@ -26,11 +28,12 @@ export class ViewArtworkComponent {
     private _userService: UserService
   ) {
     this.status = -1;
+    this.urlAPI = server.url+'obra/getimage/';
     this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, null);
   }
   user: any;
   artistName:string='Anonimo';
-  urlAPI: string = "http://127.0.0.1:8000/api/v1/obra/getimage/";
+  
 
 
   ngOnInit(): void {

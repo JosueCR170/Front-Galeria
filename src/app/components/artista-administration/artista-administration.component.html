@@ -33,7 +33,297 @@
       <p class="work">YOUR <span class="workGradient">SHIPMENTS</span> </p>
     </div>
     <!--TABLA DELIVERY--->
+    <!--Inicio tabla-->
 
+    <div class="card">
+      <p-toast></p-toast>
+      <p-toolbar styleClass="mb-4 gap-2">
+        <ng-template pTemplate="left">
+          <p-button pRipple severity="success" label="New" icon="pi pi-plus" class="mr-2" data-bs-toggle="modal"
+            data-bs-target="#newObraModal" styleClass="btn-rounded" (click)="openNew()">
+          </p-button>
+          <p-button type="button" class="asd" data-bs-toggle="modal" data-bs-target="#updateModal"
+            (onClick)="editPedido(selectedPedidos[0])" styleClass="btn-rounded"
+            [disabled]="!selectedPedidos || selectedPedidos.length !== 1" severity="warning" label="Update">
+          </p-button>
+        </ng-template>
+      </p-toolbar>
+      <p-table #dts [value]="pedidosArtist" [rows]="10" [totalRecords]="totalRecords" [paginator]="true"
+        [(selection)]="selectedPedidos" [selectAll]="selectAll" [tableStyle]="{ 'min-width': '75rem' }"
+        [globalFilterFields]="['factura.idUsuario', 'factura.idObra', 'factura.fecha', 'factura.total', 'envio.direccion', 
+    'envio.estado', 'envio.fechaEnviado', 'envio.fechaRecibido']">
+
+        <ng-template pTemplate="caption">
+          <div class="flex align-items-center justify-content-between">
+            <h5 class="mb-4">Manage orders</h5>
+            <span class="p-input-icon-left">
+              <input pInputText type="text" #input (input)="dts.filterGlobal(input.value, 'contains')"
+                placeholder="Search..." />
+            </span>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 4rem">
+              <p-tableHeaderCheckbox disabled="true"></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="factura.idUsuario" style="width:9%">Usuario<p-sortIcon
+                field="factura.idUsuario"></p-sortIcon></th>
+            <th pSortableColumn="factura.idObra" style="width:7%">Obra<p-sortIcon field="factura.idObra"></p-sortIcon>
+            </th>
+            <th pSortableColumn="factura.fecha" style="width:6%">Fecha<p-sortIcon field="factura.fecha"></p-sortIcon>
+            </th>
+            <th pSortableColumn="factura.total" style="width:10%">Total<p-sortIcon field="factura.total"></p-sortIcon>
+            </th>
+            <th pSortableColumn="envio.direccion" style="width:9%">Direccion<p-sortIcon
+                field="envio.direccion"></p-sortIcon></th>
+            <th pSortableColumn="envio.estado" style="width:8%">EstadoPedido<p-sortIcon
+                field="envio.estado"></p-sortIcon></th>
+            <th pSortableColumn="envio.fechaEnviado" style="width:14%">FechaEnviado<p-sortIcon
+                field="envio.fechaEnviado"></p-sortIcon></th>
+            <th pSortableColumn="FechaRecibido" style="width:14%">FechaRecibido<p-sortIcon
+                field="envio.fechaRecibido"></p-sortIcon></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-pedido let-ri="rowIndex">
+          <tr [pEditableRow]="pedido">
+            <td>
+              <p-tableCheckbox [value]="pedido"></p-tableCheckbox>
+            </td>
+            <td>
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input pInputText type="text" [(ngModel)]="pedido.factura.idUsuario" />
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{ pedido.factura.idUsuario }}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td>
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input pInputText type="text" [(ngModel)]="pedido.factura.idObra" required />
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{ pedido.factura.idObra }}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td>
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input pInputText type="text" [(ngModel)]="pedido.factura.fecha" required />
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{ pedido.factura.fecha }}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td>
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input pInputText type="text" [(ngModel)]="pedido.factura.total" required />
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{ pedido.factura.total }}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td>
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input pInputText type="text" [(ngModel)]="pedido.envio.direccion" required />
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{ pedido.envio.direccion }}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td>
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input pInputText type="text" [(ngModel)]="pedido.envio.estado" required />
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{ pedido.envio.estado }}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td>
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input pInputText type="text" [(ngModel)]="pedido.envio.fechaEnviado" required />
+                </ng-template>
+                <ng-template pTemplate="output">
+                  @if(pedido.envio.fechaEnviado===null){
+                  Unassigned
+                  }@else {
+                  {{ pedido.envio.fechaEnviado }}
+                  }
+
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td>
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input pInputText type="text" [(ngModel)]="pedidoAux.envio.fechaRecibido" required />
+                </ng-template>
+                <ng-template pTemplate="output">
+                  @if(pedido.envio.fechaRecibido==null){
+                  Unassigned
+                  }@else {
+                  {{ pedido.envio.fechaRecibido }}
+                  }
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td>
+              <div class="flex align-items-center justify-content-center gap-2">
+              </div>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <!--Inicio dialogo New-->
+
+    <div class="modal fade" id="newObraModal" tabindex="-1" aria-labelledby="newObraModalLabel" aria-hidden="true"
+      header="Confirm Delete">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="newObraModalLabel">New Shipments
+            </h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form enctype="multipart/form-data" #newPedidoForm="ngForm" (ngSubmit)="storePedido(newPedidoForm)">
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="IdUsuario">Id Usuario</label>
+                <input id="IdUsuario" class="form-control" name="idUsuario" type="text" #name="ngModel"
+                  [(ngModel)]="pedido.factura.idUsuario" required>
+              </div>
+              <div class="form-group">
+                <label for="IdObra">IdObra</label>
+                <input id="IdObra" class="form-control" name="idObra" type="text" #name="ngModel"
+                  [(ngModel)]="pedido.factura.idObra" required>
+              </div>
+
+              <div class="form-group">
+                <label for="Fecha">Fecha</label>
+                <input id="Fecha" class="form-control" name="fecha" type="text" #name="ngModel"
+                  [(ngModel)]="pedido.factura.fecha" required>
+              </div>
+              <div class="form-group">
+                <label for="Descuento">Descuento</label>
+                <input id="Descuento" class="form-control" name="descuento" type="text" #name="ngModel"
+                  [(ngModel)]="pedido.factura.descuento" required>
+              </div>
+              <div class="form-group">
+                <label for="Direccion">Dirección</label>
+                <input id="Direccion" class="form-control" name="direccion" type="text" #name="ngModel"
+                  [(ngModel)]="pedido.envio.direccion" required>
+              </div>
+              <div>
+                <label for="Province" class="form-label">Province</label>
+                <select id="Province" required class="form-select" [(ngModel)]="pedido.envio.provincia" name="province">
+                  <option selected disabled hidden>Choose...</option>
+                  <option>Guanacaste</option>
+                  <option>Alajuela</option>
+                  <option>Heredia</option>
+                  <option>Puntarenas</option>
+                  <option>Limon</option>
+                  <option>San Jose</option>
+                  <option>Cartago</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="Ciudad">Ciudad</label>
+                <input id="Ciudad" class="form-control" name="fechaEnviado" type="text" #size="ngModel"
+                  [(ngModel)]="pedido.envio.ciudad" required>
+              </div>
+              <div class="form-group">
+                <label for="CodigoPostal">Codigo Postal</label>
+                <input id="CodigoPostal" class="form-control" name="codigoPostal" type="text" #size="ngModel"
+                  [(ngModel)]="pedido.envio.codigoPostal" required>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" icon="pi pi-check">Close</button>
+              <input type="submit" class="btn btn-primary"
+                style="color: rgb(255, 255, 255); background-color: rgb(124, 10, 10); border: none;" value="Add"
+                data-bs-dismiss="modal">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!--Final dialogo New-->
+
+    <!--Inicio dialogo Delete-->
+
+    <!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+  header="Confirm Delete">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">DELETE
+        </h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Seguro que desea eliminar la obra?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" icon="pi pi-check">Close</button>
+        <button type="button" style="color: rgb(255, 255, 255); background-color: rgb(124, 10, 10); border: none;"
+          data-bs-dismiss="modal" class="btn btn-primary" icon="pi pi-times"
+          (click)="deleteSelectedObras()">Delete</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+    <!--Final dialogo Delete-->
+    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">UPDATE</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="Estado">Estado</label>
+                <input id="Estado" class="form-control" name="estado" type="text" #name="ngModel"
+                  [(ngModel)]="pedidoAux.envio.estado" required>
+              </div>
+              <div class="form-group">
+                <label for="FechaEnviado">Fecha Enviado</label>
+                <input id="FechaEnviado" class="form-control" name="fechaEnviado" type="text" #size="ngModel"
+                  [(ngModel)]="pedidoAux.envio.fechaEnviado" required>
+              </div>
+              <div class="form-group">
+                <label for="FechaRecibido">Fecha Recibido</label>
+                <input id="FechaRecibido" class="form-control" name="fechaRecibido" type="text" #price="ngModel"
+                  [(ngModel)]="pedidoAux.envio.fechaRecibido" required>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" style="color: white; background-color: rgb(124, 10, 10);"
+                  data-bs-dismiss="modal" (click)="updatePedido()">Actualizar</button>
+              </div>
+            </form>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!--Cierre tabla-->
     }
 
 
@@ -55,9 +345,9 @@
             styleClass="btn-rounded" [disabled]="!selectedObras ||!selectedObras.length" severity="danger"
             label="Delete">
           </p-button>
-          <p-button type="button" class="asd" data-bs-toggle="modal" data-bs-target="#updateModal" (onClick)="editObra(selectedObras[0])"
-            styleClass="btn-rounded" [disabled]="!selectedObras || selectedObras.length !== 1" severity="warning"
-            label="Update">
+          <p-button type="button" class="asd" data-bs-toggle="modal" data-bs-target="#updateModal"
+            (onClick)="editObra(selectedObras[0])" styleClass="btn-rounded"
+            [disabled]="!selectedObras || selectedObras.length !== 1" severity="warning" label="Update">
           </p-button>
         </ng-template>
       </p-toolbar>
@@ -83,15 +373,15 @@
             <th pSortableColumn="nombre" style="width:7%">Name <p-sortIcon field="nombre"></p-sortIcon></th>
             <th pSortableColumn="categoria" style="width:6%">Category <p-sortIcon field="categoria"></p-sortIcon></th>
             <th pSortableColumn="tecnica" style="width:10%">Tecnica <p-sortIcon field="tecnica"></p-sortIcon></th>
-            <th pSortableColumn="tamano" style="width:9%">Tamano <p-sortIcon field="tamano"></p-sortIcon></th>
-            <th pSortableColumn="precio" style="width:8%">Precio <p-sortIcon field="precio"></p-sortIcon></th>
-            <th pSortableColumn="fechaCreacion" style="width:14%">Fecha de Creacion <p-sortIcon
+            <th pSortableColumn="tamano" style="width:9%">Size <p-sortIcon field="tamano"></p-sortIcon></th>
+            <th pSortableColumn="precio" style="width:8%">Price <p-sortIcon field="precio"></p-sortIcon></th>
+            <th pSortableColumn="fechaCreacion" style="width:14%">Creation Date <p-sortIcon
                 field="fechaCreacion"></p-sortIcon></th>
-            <th pSortableColumn="fechaRegistro" style="width:14%">Fecha de Registro <p-sortIcon
+            <th pSortableColumn="fechaRegistro" style="width:14%">Registration Date <p-sortIcon
                 field="fechaRegistro"></p-sortIcon></th>
-            <th pSortableColumn="disponibilidad" style="width:11%">Disponibilidad <p-sortIcon
+            <th pSortableColumn="disponibilidad" style="width:11%">Availability <p-sortIcon
                 field="disponibilidad"></p-sortIcon></th>
-            <th style="width:20%">Imagen</th>
+            <th style="width:20%">image</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-obra let-ri="rowIndex">
@@ -228,11 +518,12 @@
                 <label for="Name">Name</label>
                 <input id="Name" class="input-box" name="name" type="text" #name="ngModel" [(ngModel)]="obra.nombre"
                   required>
-                  <span class="underline"></span>
+                <span class="underline"></span>
               </div>
               <div class="form-group ">
                 <label for="Tecnic" style="margin-right: 10px;">Tecnic </label>
-                <select id="Tecnic" name="tecnic" class="selector " #tecnic="ngModel" [(ngModel)]="obra.tecnica" required>
+                <select id="Tecnic" name="tecnic" class="selector " #tecnic="ngModel" [(ngModel)]="obra.tecnica"
+                  required>
                   <option value="Oil on canvas">Oil on canvas</option>
                   <option value="Watercolor">Watercolor</option>
                   <option value="Watercolor on paper">Watercolor on paper</option>
@@ -258,12 +549,13 @@
               </div>
               <div class="form-group input-wrapper">
                 <label for="Price">Price</label>
-                <input id="Price" class="input-box" name="price" type="text" #price="ngModel"
-                  [(ngModel)]="obra.precio" required>
+                <input id="Price" class="input-box" name="price" type="text" #price="ngModel" [(ngModel)]="obra.precio"
+                  required>
               </div>
               <div class="form-group ">
                 <label for="Category" style="margin-right: 10px;">Category: </label>
-                <select id="Category" class="selector " name="category" #category="ngModel" [(ngModel)]="obra.categoria" required>
+                <select id="Category" class="selector " name="category" #category="ngModel" [(ngModel)]="obra.categoria"
+                  required>
                   <option value="Cubism">Cubism</option>
                   <option value="Impressionism">Impressionism</option>
                   <option value="Expressionism">Expressionism</option>
@@ -282,14 +574,14 @@
               </div>
               <div class="form-group">
                 <label for="CreateDate">Create Date</label>
-                <input id="CreateDate" class="form-control" name="createDate" type="date" (change)="onFechaChange($event)" #createDate="ngModel"
-                  [(ngModel)]="obra.fechaCreacion" required>
+                <input id="CreateDate" class="form-control" name="createDate" type="date"
+                  (change)="onFechaChange($event)" #createDate="ngModel" [(ngModel)]="obra.fechaCreacion" required>
               </div>
               <div *ngIf="fechaSeleccionada">
                 <p>Fecha seleccionada: Año: {{ ano }}, Mes: {{ mes }}, Día: {{ dia }}</p>
               </div>
-             
-              
+
+
               <div class="form-group">
                 <label for="Image">Image</label>
                 <input id="Image" class="form-control" name="image" type="file" (change)="onImageFileChange($event)"
@@ -321,7 +613,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <p>Seguro que desea eliminar la obra?</p>
+            <p>Are you sure you want to delete the artwork?</p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" icon="pi pi-check">Close</button>
@@ -342,8 +634,8 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-<!-- #updateObraForm="ngForm" (ngSubmit)="storeImage(updateObraForm)" -->
-            <form >
+            <!-- #updateObraForm="ngForm" (ngSubmit)="storeImage(updateObraForm)" -->
+            <form>
               <div class="mb-3">
                 <label for="recipient-name" class="col-form-label">Nombre:</label>
                 <input type="text" class="form-control" id="recipient-name" [(ngModel)]="obra.nombre" name="nombre">

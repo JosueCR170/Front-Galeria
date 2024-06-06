@@ -19,6 +19,12 @@ import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import Swal from 'sweetalert2';
 import { server } from '../../services/global';
+import { FacturaService } from '../../services/factura.service';
+import { Factura } from '../../models/Factura';
+import { Router, RouterLink } from '@angular/router';
+import { Envio } from '../../models/Envio';
+import { Pedido } from '../../models/Pedido';
+import { EnvioService } from '../../services/envio.service';
 @Component({
   selector: 'app-artista-administration',
   standalone: true,
@@ -29,6 +35,7 @@ import { server } from '../../services/global';
 
 })
 export class ArtistaAdministrationComponent {
+  public currentDate = new Date();
 
   productDialog: boolean = false;
   selectedObras!: Obra[];
@@ -42,45 +49,70 @@ export class ArtistaAdministrationComponent {
   /*-------*/
   displayConfirmationDialog: boolean = false;
 
-  public currentDate = new Date();
   delivry: boolean = false;
   administration: boolean = true;
   obras: Obra[] = [];
+  facturasArtist: Factura[] = [];
+  enviosArtist: Envio[] = [];
+  selectedPedidos: Pedido[] = [];
+
+  pedidosArtist: Pedido[] = [];
+
+  fechaSeleccionada: string = '';
+  ano: number | null = null;
+  mes: string | null = null;
+  dia: string | null = null;
+
   obrasPorArtista: Obra[] = [];
   public status: number;
   public obra: Obra;
+  public pedido: Pedido;
+  pedidoAux: Pedido;
   artist: any;
   selectedFile: File | null = null;
   urlAPI: string;
 
   artStyles: string[] = [
-    'Cubism','Impressionism','Expressionism','Realism','Surrealism','Abstract','Renaissance',
-    'Baroque','Rococo','Romanticism','Neoclassicism','Modernism','Pop Art','Naïve Art'
+    'Cubism', 'Impressionism', 'Expressionism', 'Realism', 'Surrealism', 'Abstract', 'Renaissance',
+    'Baroque', 'Rococo', 'Romanticism', 'Neoclassicism', 'Modernism', 'Pop Art', 'Naïve Art'
   ]
 
-  tecnicas: string[]=[
-    'Oil on canvas','Watercolor','Watercolor on paper','Tempera','Pastel painting','Fresco painting',
-    'Digital painting','Wood carving','Marble sculpture','Engraving','Serigraphy','Art photography',
-    'Digital art','Collage','Pyrography','Bronze sculpture'
+  tecnicas: string[] = [
+    'Oil on canvas', 'Watercolor', 'Watercolor on paper', 'Tempera', 'Pastel painting', 'Fresco painting',
+    'Digital painting', 'Wood carving', 'Marble sculpture', 'Engraving', 'Serigraphy', 'Art photography',
+    'Digital art', 'Collage', 'Pyrography', 'Bronze sculpture'
   ]
-
 
 
   public formattedDate = this.formatDate(this.currentDate);
   constructor(
     private obraService: ObraService,
     private messageService: MessageService,
-
+    private facturaService: FacturaService,
+    private envioService: EnvioService,
+    private _router: Router,
   ) {
     this.status = -1;
     this.urlAPI = server.url + 'obra/getimage/';
+
+    this.pedido = new Pedido(new Envio(1, 0, "Espera", "", "", "", "", "", ""),
+      new Factura(0, null, null, null, null, null, null));
+    this.pedidoAux = new Pedido(new Envio(1, 0, "Espera", "", "", "", "", "", ""),
+    new Factura(0, null, null, null, null, null, null));
+
     this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, this.formattedDate);
-    
   }
 
   ngOnInit(): void {
     this.loadLoggedArtist();
     this.index();
+    this.getFacturasByArtist();
+    this.indexEnvioByArtist();
+  }
+
+  logOut() {
+    sessionStorage.clear();
+    this._router.navigate([''])
   }
 
   loadLoggedArtist() {
@@ -88,12 +120,22 @@ export class ArtistaAdministrationComponent {
     this.artist = JSON.parse(this.artist);
   }
 
+  private formatDate(date: Date): string {
+    console.log(date);
+
+    const year = date.getFullYear();
+    const month = date.getMonth(); // Agrega un cero al mes si es necesario
+    const day = date.getDate(); // Agrega un cero al día si es necesario
+    return `${year}-${month}-${day}`;
+  }
+
+
   index() {
     this.obraService.index().subscribe({
       next: (response: any) => {
         this.obras = response['data'];
         this.filterObrasByArtista(this.artist.iss);
-        console.log(this.obrasPorArtista);
+        //console.log(this.obrasPorArtista);
         this.obras = this.obrasPorArtista;
       },
       error: (err: Error) => {
@@ -101,6 +143,8 @@ export class ArtistaAdministrationComponent {
       }
     });
   }
+
+
 
   filterObrasByArtista(idArtista: number) {
     this.obrasPorArtista = this.obras.filter(obra => obra.idArtista === idArtista);
@@ -120,7 +164,7 @@ export class ArtistaAdministrationComponent {
   }
 
   /************************* */
-  
+
   openNew() {
     this.obra = new Obra(1, this.artist.iss, "", "", "", 1, true, "", "", null, null);
     this.submitted = false;
@@ -153,6 +197,11 @@ export class ArtistaAdministrationComponent {
     this.productDialog = true;
   }
 
+  editPedido(pedido: Pedido) {
+    this.pedidoAux = { ...pedido };
+    this.productDialog = true;
+  }
+
   onImageFileChange(event: any): void {
     this.selectedFile = event.target.files[0];
   }
@@ -169,15 +218,52 @@ export class ArtistaAdministrationComponent {
       });
     }
     this.obraService.update(this.obra).subscribe({
-      next:(response:any)=>{
+      next: (response: any) => {
         console.log(response);
         location.reload();
       },
-      error:(err:Error)=>{
+      error: (err: Error) => {
         console.log(err);
       }
     });
-    
+  }
+
+  storePedido(form: any): void {
+    if (form.valid) {
+      this.facturaService.create(this.pedido.factura).subscribe({
+        next: (response: any) => {
+          if (response['Factura'].id) {
+            this.pedido.envio.idFactura = response['Factura'].id;
+            this.envioService.create(this.pedido.envio).subscribe({
+              next: (response2: any) => {
+                console.log(response2);
+                location.reload();
+              },
+              error: (err: any) => {
+                console.error(err);
+              }
+            });
+          } else {
+            console.error('No se recibió el id de la factura');
+          }
+        },
+        error: (err: any) => {
+          console.error(err);
+        }
+      });
+    }
+  }
+
+  updatePedido() {
+    console.log(this.pedidoAux.envio);
+    this.envioService.update(this.pedidoAux.envio).subscribe({
+      next: (response: any) => {
+        console.log(response);
+      },
+      error: (err: Error) => {
+        console.log(err);
+      }
+    });
   }
 
   /**Parte del DELETE Obra */
@@ -258,10 +344,50 @@ export class ArtistaAdministrationComponent {
     }
   }
 
-  fechaSeleccionada: string ='';
-  ano: number | null = null;
-  mes: string | null = null;
-  dia: string | null = null;
+
+
+  indexEnvioByArtist() {
+    this.envioService.indexByArtist().subscribe({
+      next: (response: any) => {
+        this.enviosArtist = response['data'];
+        console.log(this.enviosArtist);
+        this.fillPedidos();
+      },
+      error: (err: Error) => {
+        console.error('Error al cargar los envios del artista', err);
+      }
+    });
+  }
+
+
+  getFacturasByArtist() {
+    this.facturaService.indexByArtistId(this.artist['iss']).subscribe({
+      next: (response: any) => {
+        this.facturasArtist = response['data'];
+        console.log(this.facturasArtist);
+        // this.fillPedidos();
+      },
+      error: (err: Error) => {
+        console.error('Error al cargar las facturas', err);
+      }
+    });
+  }
+
+  fillPedidos() {
+    this.pedidosArtist = [];
+    for (let envio of this.enviosArtist) {
+      let factura = this.facturasArtist.find(f => f.id === envio.idFactura);
+      if (factura) {
+        let direccionCompleta = `${envio.direccion}, ${envio.provincia}, ${envio.ciudad}, Postal code: ${envio.codigoPostal}`;
+        envio.direccion = direccionCompleta; // Agregar el atributo direcciónCompleta al envío
+        let pedido = new Pedido(envio, factura);
+        this.pedidosArtist.push(pedido);
+      }
+    }
+    console.log("Pedidos: ", this.pedidosArtist);
+  }
+
+
 
   onFechaChange(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -270,15 +396,6 @@ export class ArtistaAdministrationComponent {
     this.mes = ('0' + (fecha.getMonth() + 1)).slice(-2); // Mes se cuenta desde 0
     this.dia = ('0' + fecha.getDate()).slice(-2);
     this.fechaSeleccionada = `${this.ano}-${this.mes}-${this.dia}`;
-  }
-
-  private formatDate(date: Date): string {
-    console.log(date);
-    
-    const year = date.getFullYear();
-    const month = date.getMonth(); // Agrega un cero al mes si es necesario
-    const day = date.getDate(); // Agrega un cero al día si es necesario
-    return `${year}-${month}-${day}`;
   }
 
 }
