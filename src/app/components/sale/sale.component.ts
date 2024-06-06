@@ -10,6 +10,7 @@ import { FacturaService } from '../../services/factura.service';
 import { EnvioService } from '../../services/envio.service';
 import Swal from 'sweetalert2';
 import { HttpErrorResponse } from '@angular/common/http';
+import { server } from '../../services/global';
 
 @Component({
   selector: 'app-sale',
@@ -29,7 +30,7 @@ export class SaleComponent {
   public factura:Factura;
   public errors:string[]=[];
   public currentDate = new Date();
-
+  urlAPI:string;
 //Formateamos la fecha en formato YYYY-MM-DD
 public formattedDate = this.formatDate(this.currentDate);
 
@@ -40,9 +41,11 @@ public formattedDate = this.formatDate(this.currentDate);
     private _userService: UserService,
     private _facturaService: FacturaService,
     private _envioService: EnvioService
+    
 
   ) {
     this.status = -1;
+    this.urlAPI = server.url+'obra/getimage/';
     this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, null);
     this.envio=new Envio(1,0,"Espera","","","","","","");
     this.factura=new Factura(1,1,1,this.formattedDate,0,0,0);
@@ -147,6 +150,8 @@ public formattedDate = this.formatDate(this.currentDate);
   }
   
   onSubmit(form:any){
+if(this.obra.disponibilidad){
+
     this.factura.idUsuario=this.user['iss'];
     this.factura.subTotal=this.factura.total;
     
@@ -161,6 +166,8 @@ public formattedDate = this.formatDate(this.currentDate);
           
           try{
             this.envioCreate();
+            //actualizar disponibilidad de obra
+            this.updateDisponibilidadObra(false);
           }catch(err){
             console.log(err);
           }
@@ -189,6 +196,8 @@ public formattedDate = this.formatDate(this.currentDate);
        // this.changeStatus(2);
       }
     })
+  }else {this.msgAlert('Obra no disponible','','error'); }
+
   }
 
   envioCreate(){
@@ -203,6 +212,36 @@ public formattedDate = this.formatDate(this.currentDate);
             <p>Artist email: <strong>${this.artista['correo']}</strong></p>`
 
           this.msgAlertHTML('Envio registrado con éxito',mensaje, 'success');
+        }else{
+          //this.changeStatus(1);
+        }
+      },
+      error:(error:HttpErrorResponse)=>{
+        if(error.status===406 && error.error && error.error.errors){
+          this.errors=[];
+          const errorObj = error.error.errors;
+          for (const key in errorObj) {
+            if (errorObj.hasOwnProperty(key)) {
+              this.errors.push(...errorObj[key]);
+            }
+          }
+          console.error(this.errors);
+        } else {
+          console.error('Otro tipo de error:', error);
+          this.msgAlert('Error, desde el servidor. Contacte al administrador','','error');
+        }
+        }
+    })
+  }
+
+  updateDisponibilidadObra(disponibilidad:boolean){
+    this.obra.disponibilidad=disponibilidad;
+
+    this._obraService.updateDisponibilidad(this.obra).subscribe({
+      next:(response)=>{
+        console.log('obraResponse',response);
+        if(response.status==201){
+          this.msgAlert('Disponibilidad actualizada con éxito','', 'success');
         }else{
           //this.changeStatus(1);
         }

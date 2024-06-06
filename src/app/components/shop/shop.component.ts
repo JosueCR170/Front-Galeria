@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ObraService } from '../../services/obra.service';
 import { Obra } from '../../models/Obra';
-import { UserService } from '../../services/user.service';
+import { server } from '../../services/global';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ArtistService } from '../../services/artist.service';
 import { Artista } from '../../models/Artista';
@@ -22,6 +22,9 @@ export class ShopComponent {
 
   public status: number;
   public obra: Obra;
+
+urlAPI: string;
+
   public artista: Artista;
   constructor(
     private _obraService: ObraService,
@@ -29,6 +32,7 @@ export class ShopComponent {
     private _artistas: ArtistService
   ) {
     this.status = -1;
+    this.urlAPI = server.url+'obra/getimage/';
     this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, null);
     this.artista = new Artista(1, "", "", "", "", "");
   }
@@ -48,7 +52,7 @@ export class ShopComponent {
   all: boolean = false;
   artistaMenu: boolean = false;
   user: any;
-  urlAPI: string = "http://127.0.0.1:8000/api/v1/obra/getimage/";
+  
 
   ngOnInit(): void {
     // Aquí puedes llamar al método que desees que se ejecute al cargar el componente
