@@ -150,7 +150,7 @@ public formattedDate = this.formatDate(this.currentDate);
   }
   
   onSubmit(form:any){
-if(!this.obra.disponibilidad){
+if(this.obra.disponibilidad){
 
     this.factura.idUsuario=this.user['iss'];
     this.factura.subTotal=this.factura.total;
@@ -197,7 +197,7 @@ if(!this.obra.disponibilidad){
       }
     })
   }else {this.msgAlert('Obra no disponible','','error'); }
-  
+
   }
 
   envioCreate(){

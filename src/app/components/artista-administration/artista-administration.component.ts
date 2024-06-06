@@ -21,6 +21,10 @@ import Swal from 'sweetalert2';
 import { server } from '../../services/global';
 import { FacturaService } from '../../services/factura.service';
 import { Factura } from '../../models/Factura';
+import { Router, RouterLink } from '@angular/router';
+import { Envio } from '../../models/Envio';
+import { Pedido } from '../../models/Pedido';
+import { EnvioService } from '../../services/envio.service';
 @Component({
   selector: 'app-artista-administration',
   standalone: true,
@@ -31,7 +35,7 @@ import { Factura } from '../../models/Factura';
 
 })
 export class ArtistaAdministrationComponent {
-
+  public currentDate = new Date();
   productDialog: boolean = false;
   selectedObras!: Obra[];
   submitted: boolean = false;
@@ -47,10 +51,15 @@ export class ArtistaAdministrationComponent {
   delivry: boolean = false;
   administration: boolean = true;
   obras: Obra[] = [];
-  facturas:Factura[]=[];
+  facturasArtist:Factura[]=[];
+  enviosArtist:Envio[]=[];
+  pedidosArtist:Pedido[]=[];
+  
+
   obrasPorArtista: Obra[] = [];
   public status: number;
   public obra: Obra;
+  public pedido:Pedido;
   artist: any;
   selectedFile: File | null = null;
   urlAPI: string;
@@ -65,22 +74,33 @@ export class ArtistaAdministrationComponent {
     'Digital painting','Wood carving','Marble sculpture','Engraving','Serigraphy','Art photography',
     'Digital art','Collage','Pyrography','Bronze sculpture'
   ]
+  
+  public formattedDate = this.formatDate(this.currentDate);
 
   constructor(
     private obraService: ObraService,
     private messageService: MessageService,
     private facturaService:FacturaService,
-
+    private envioService: EnvioService,
+    private _router:Router,
   ) {
     this.status = -1;
     this.urlAPI = server.url + 'obra/getimage/';
     this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, null);
+    this.pedido=new Pedido(new Envio(1,0,"Espera","","","","","",""), 
+    new Factura(1,1,1,this.formattedDate,0,0,0));
   }
 
   ngOnInit(): void {
     this.loadLoggedArtist();
     this.index();
     this.getFacturasByArtist();
+    this.indexEnvioByArtist();
+  }
+
+  logOut() {
+    sessionStorage.clear();
+    this._router.navigate([''])
   }
 
   loadLoggedArtist() {
@@ -88,17 +108,17 @@ export class ArtistaAdministrationComponent {
     this.artist = JSON.parse(this.artist);
   }
 
-  getFacturasByArtist() {
-    this.facturaService.indexByArtistId(this.artist['iss']).subscribe({
-      next: (response: any) => {
-        this.facturas = response['data'];
-        console.log(this.facturas);
-      },
-      error: (err: Error) => {
-        console.error('Error al cargar las facturas', err);
-      }
-    });
+  
+
+  private formatDate(date: Date): string {
+    console.log(date);
+    
+    const year = date.getFullYear();
+    const month = date.getMonth(); // Agrega un cero al mes si es necesario
+    const day = date.getDate(); // Agrega un cero al día si es necesario
+    return `${year}-${month}-${day}`;
   }
+
 
   index() {
     this.obraService.index().subscribe({
@@ -266,4 +286,46 @@ export class ArtistaAdministrationComponent {
       }
     }
   }
+
+
+  indexEnvioByArtist() {
+    this.envioService.indexByArtist().subscribe({
+      next: (response: any) => {
+        this.enviosArtist = response['data'];
+        console.log(this.enviosArtist);
+        this.fillPedidos();
+      },
+      error: (err: Error) => {
+        console.error('Error al cargar los envios del artista', err);
+      }
+    });
+  }
+
+
+  getFacturasByArtist() {
+    this.facturaService.indexByArtistId(this.artist['iss']).subscribe({
+      next: (response: any) => {
+        this.facturasArtist = response['data'];
+        console.log(this.facturasArtist);
+        this.fillPedidos();
+      },
+      error: (err: Error) => {
+        console.error('Error al cargar las facturas', err);
+      }
+    });
+  }
+
+  fillPedidos() {
+    this.pedidosArtist = [];
+    for (let envio of this.enviosArtist) {
+     
+      let factura = this.facturasArtist.find(f => f.id === envio.idFactura);
+      if (factura) {
+        let pedido = new Pedido(envio, factura);
+        this.pedidosArtist.push(pedido);
+      }
+    }
+    console.log(this.pedidosArtist);
+  }
+
 }
