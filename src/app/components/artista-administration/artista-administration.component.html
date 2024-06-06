@@ -43,11 +43,11 @@
         data-bs-target="#newObraModal" styleClass="btn-rounded" (click)="openNew()">
       </p-button>
       <p-button type="button" class="asd" data-bs-toggle="modal" data-bs-target="#exampleModal"
-        styleClass="btn-rounded" [disabled]="!selectedObras ||!selectedObras.length" severity="danger"
+        styleClass="btn-rounded" [disabled]="!selectedPedidos ||!selectedPedidos.length" severity="danger"
         label="Delete">
       </p-button>
       <p-button type="button" class="asd" data-bs-toggle="modal" data-bs-target="#updateModal" (onClick)="editObra(selectedObras[0])"
-        styleClass="btn-rounded" [disabled]="!selectedObras || selectedObras.length !== 1" severity="warning"
+        styleClass="btn-rounded" [disabled]="!selectedPedidos || selectedPedidos.length !== 1" severity="warning"
         label="Update">
       </p-button>
     </ng-template>

@@ -53,6 +53,7 @@ export class ArtistaAdministrationComponent {
   obras: Obra[] = [];
   facturasArtist:Factura[]=[];
   enviosArtist:Envio[]=[];
+  selectedPedidos:Pedido[]=[];
 
   pedidosArtist:Pedido[]=[];
   
@@ -114,8 +115,6 @@ export class ArtistaAdministrationComponent {
     this.artist = sessionStorage.getItem('identity');
     this.artist = JSON.parse(this.artist);
   }
-
-  
 
   private formatDate(date: Date): string {
     console.log(date);
