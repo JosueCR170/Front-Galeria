@@ -67,7 +67,6 @@ export class UserService{
         };
         return this._http.get(this.urlAPI+'user', options);
     }
-<<<<<<< HEAD
 
     deleted(id:number):Observable<any>{
         let headers;
@@ -104,8 +103,4 @@ export class UserService{
         };
         return this._http.put(`${this.urlAPI}user/${id}`, params, options);
     }
-
-=======
-    
->>>>>>> d9811ac13d55d51229fc26dba8c0c4c62de93840
 }
