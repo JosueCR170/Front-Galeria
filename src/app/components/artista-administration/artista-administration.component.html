@@ -54,7 +54,8 @@
   </p-toolbar>
   <p-table #dt [value]="pedidosArtist" [rows]="10" [totalRecords]="totalRecords" [paginator]="true"
     [(selection)]="selectedObras" [selectAll]="selectAll" [tableStyle]="{ 'min-width': '75rem' }"
-    [globalFilterFields]="['id', 'nombre', 'categoria', 'tecnica', 'tamano', 'precio', 'fechaCreacion', 'fechaRegistro', 'disponibilidad']">
+    [globalFilterFields]="['Usuario', 'Obra', 'Fecha', 'Total', 'Direccion', 'EstadoPedido', 'FechaEnviado', 
+    'FechaRecibido']">
 
     <ng-template pTemplate="caption">
       <div class="flex align-items-center justify-content-between">
@@ -70,20 +71,20 @@
         <th style="width: 4rem">
           <p-tableHeaderCheckbox disabled="true"></p-tableHeaderCheckbox>
         </th>
-        <th pSortableColumn="id" style="width:9%">Usuario <p-sortIcon field="id"></p-sortIcon></th>
-        <th pSortableColumn="nombre" style="width:7%">Obra <p-sortIcon field="nombre"></p-sortIcon></th>
-        <th pSortableColumn="categoria" style="width:6%">Fecha <p-sortIcon field="categoria"></p-sortIcon></th>
-        <th pSortableColumn="tecnica" style="width:10%">Total <p-sortIcon field="tecnica"></p-sortIcon></th>
-        <th pSortableColumn="tamano" style="width:9%">Direccion <p-sortIcon field="tamano"></p-sortIcon></th>
-        <th pSortableColumn="precio" style="width:8%">EstadoPedido <p-sortIcon field="precio"></p-sortIcon></th>
-        <th pSortableColumn="fechaCreacion" style="width:14%">Fecha enviado <p-sortIcon
-            field="fechaCreacion"></p-sortIcon></th>
-        <th pSortableColumn="fechaRegistro" style="width:14%">Fecha Recibido <p-sortIcon
-            field="fechaRegistro"></p-sortIcon></th>
+        <th pSortableColumn="Usuario" style="width:9%">Usuario <p-sortIcon field="Usuario"></p-sortIcon></th>
+        <th pSortableColumn="Obra" style="width:7%">Obra <p-sortIcon field="Obra"></p-sortIcon></th>
+        <th pSortableColumn="Fecha" style="width:6%">Fecha <p-sortIcon field="Fecha"></p-sortIcon></th>
+        <th pSortableColumn="Total" style="width:10%">Total <p-sortIcon field="Total"></p-sortIcon></th>
+        <th pSortableColumn="Direccion" style="width:9%">Direccion <p-sortIcon field="Direccion"></p-sortIcon></th>
+        <th pSortableColumn="EstadoPedido" style="width:8%">EstadoPedido <p-sortIcon field="EstadoPedido"></p-sortIcon></th>
+        <th pSortableColumn="FechaEnviado" style="width:14%">FechaEnviado <p-sortIcon
+            field="FechaEnviado"></p-sortIcon></th>
+        <th pSortableColumn="FechaRecibido" style="width:14%">FechaRecibido <p-sortIcon
+            field="FechaRecibido"></p-sortIcon></th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-pedido let-ri="rowIndex">
-      <tr [pEditableRow]="obra">
+      <tr [pEditableRow]="pedido">
         <td>
           <p-tableCheckbox [value]="pedido"></p-tableCheckbox>
         </td>
