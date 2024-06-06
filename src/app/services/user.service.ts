@@ -61,5 +61,5 @@ export class UserService{
         };
         return this._http.get(this.urlAPI+'user', options);
     }
-
+    
 }

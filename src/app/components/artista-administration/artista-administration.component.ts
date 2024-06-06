@@ -36,6 +36,7 @@ import { EnvioService } from '../../services/envio.service';
 })
 export class ArtistaAdministrationComponent {
   public currentDate = new Date();
+  
   productDialog: boolean = false;
   selectedObras!: Obra[];
   submitted: boolean = false;
@@ -54,7 +55,7 @@ export class ArtistaAdministrationComponent {
   facturasArtist:Factura[]=[];
   enviosArtist:Envio[]=[];
   selectedPedidos:Pedido[]=[];
-
+  
   pedidosArtist:Pedido[]=[];
   
   fechaSeleccionada: string ='';
@@ -94,7 +95,7 @@ export class ArtistaAdministrationComponent {
     this.urlAPI = server.url + 'obra/getimage/';
 
     this.pedido=new Pedido(new Envio(1,0,"Espera","","","","","",""), 
-    new Factura(1,1,1,this.formattedDate,0,0,0));
+    new Factura(0,null,null,null,null,null,null));
 
     this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, this.formattedDate);
   }
@@ -139,6 +140,8 @@ export class ArtistaAdministrationComponent {
       }
     });
   }
+
+ 
 
   filterObrasByArtista(idArtista: number) {
     this.obrasPorArtista = this.obras.filter(obra => obra.idArtista === idArtista);
@@ -215,7 +218,48 @@ export class ArtistaAdministrationComponent {
         console.log(err);
       }
     });
-    
+  }
+
+  storePedido(form: any): void {
+    if (form.valid) {
+      if (this.selectedFile) {
+        console.log('Imagen:', this.selectedFile);
+        this.facturaService.create(this.pedido.factura).subscribe({
+          next: (response: any) => {
+            console.log(response);
+            if (response.idFactura) {
+              this.pedido.envio.idFactura = response.idFactura;
+              this.envioService.create(this.pedido.envio).subscribe({
+                next: (response2: any) => {
+                  console.log(response2); 
+                  location.reload();
+                },
+                error: (err: any) => {
+                  console.error(err);
+                }
+              });
+            } else {
+              console.error('No se recibió el id de la factura');
+            }
+          },
+          error: (err: any) => {
+            console.error(err);
+          }
+        });
+      }
+    }
+  }
+
+  updatePedido(){
+    this.envioService.update(this.pedido.envio).subscribe({
+      next: (response: any) => {
+        console.log(response);
+        location.reload();
+      },
+      error: (err: Error) => {
+        console.log(err.message);
+      }
+    });
   }
 
   /**Parte del DELETE Obra */
@@ -326,17 +370,18 @@ export class ArtistaAdministrationComponent {
   }
 
   fillPedidos() {
-   // this.pedidosArtist = [];
+    this.pedidosArtist = [];
     for (let envio of this.enviosArtist) {
-     
-      let factura = this.facturasArtist.find(f => f.id === envio.idFactura);
-      if (factura) {
-        let pedido = new Pedido(envio, factura);
-        this.pedidosArtist.push(pedido);
-      }
+        let factura = this.facturasArtist.find(f => f.id === envio.idFactura);
+        if (factura) {
+            let direccionCompleta = `${envio.direccion}, ${envio.provincia}, ${envio.ciudad}, Postal code: ${envio.codigoPostal}`;
+            envio.direccion = direccionCompleta; // Agregar el atributo direcciónCompleta al envío
+            let pedido = new Pedido(envio, factura);
+            this.pedidosArtist.push(pedido);
+        }
     }
-    console.log("Pedidos: ",this.pedidosArtist);
-  }
+    console.log("Pedidos: ", this.pedidosArtist);
+}
 
  
 
