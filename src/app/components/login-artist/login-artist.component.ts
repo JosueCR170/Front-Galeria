@@ -43,14 +43,14 @@ export class LoginArtistComponent {
           })
         } else {
           this.status = 0;
-          this.msgAlert('Correo y/o contraseña incorrecta','error');
+          this.msgAlert('Incorrect email and/or password', 'error');
           form.reset(); 
         }
       },
-      error:(err:any)=>{
+      error: (err: any) => {
         console.log(err);
         this.status = 1;
-        this.msgAlert('Error, desde el servidor. Contacte al administrador','error');
+        this.msgAlert('Error from the server. Please contact the administrator', 'error');
       }
     })
   }
