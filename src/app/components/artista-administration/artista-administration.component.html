@@ -43,7 +43,7 @@
             data-bs-target="#newObraModal" styleClass="btn-rounded" (click)="openNew()">
           </p-button>
           <p-button type="button" class="asd" data-bs-toggle="modal" data-bs-target="#updateModal"
-            (onClick)="editObra(selectedObras[0])" styleClass="btn-rounded"
+            (onClick)="editPedido(selectedPedidos[0])" styleClass="btn-rounded"
             [disabled]="!selectedPedidos || selectedPedidos.length !== 1" severity="warning" label="Update">
           </p-button>
         </ng-template>
@@ -156,7 +156,7 @@
                   <input pInputText type="text" [(ngModel)]="pedido.envio.fechaEnviado" required />
                 </ng-template>
                 <ng-template pTemplate="output">
-                  @if(pedido.envio.fechaEnviado==null){
+                  @if(pedido.envio.fechaEnviado===null){
                   Unassigned
                   }@else {
                   {{ pedido.envio.fechaEnviado }}
@@ -168,7 +168,7 @@
             <td>
               <p-cellEditor>
                 <ng-template pTemplate="input">
-                  <input pInputText type="text" [(ngModel)]="pedido.envio.fechaRecibido" required />
+                  <input pInputText type="text" [(ngModel)]="pedidoAux.envio.fechaRecibido" required />
                 </ng-template>
                 <ng-template pTemplate="output">
                   @if(pedido.envio.fechaRecibido==null){
@@ -182,118 +182,6 @@
             <td>
               <div class="flex align-items-center justify-content-center gap-2">
               </div>
-        </ng-template>
-        <ng-template pTemplate="header">
-          <tr>
-            <th style="width: 4rem">
-              <p-tableHeaderCheckbox disabled="true"></p-tableHeaderCheckbox>
-            </th>
-            <th pSortableColumn="id" style="width:9%">Usuario <p-sortIcon field="id"></p-sortIcon></th>
-            <th pSortableColumn="nombre" style="width:7%">Obra <p-sortIcon field="nombre"></p-sortIcon></th>
-            <th pSortableColumn="fecha" style="width:6%">Fecha <p-sortIcon field="fecha"></p-sortIcon></th>
-            <th pSortableColumn="total" style="width:10%">Total <p-sortIcon field="total"></p-sortIcon></th>
-            <th pSortableColumn="direccion" style="width:9%">Direccion <p-sortIcon field="direccion"></p-sortIcon></th>
-            <th pSortableColumn="estadoPedido" style="width:8%">Estado Pedido <p-sortIcon
-                field="estadoPedido"></p-sortIcon></th>
-            <th pSortableColumn="fechaEnviado" style="width:14%">Fecha enviado <p-sortIcon
-                field="fechaEnviado"></p-sortIcon></th>
-            <th pSortableColumn="fechaRecibido" style="width:14%">Fecha Recibido <p-sortIcon
-                field="fechaRecibido"></p-sortIcon></th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-pedido let-ri="rowIndex">
-          <tr [pEditableRow]="obra">
-            <td>
-              <p-tableCheckbox [value]="pedido"></p-tableCheckbox>
-            </td>
-            <td>
-              <p-cellEditor>
-                <ng-template pTemplate="input">
-                  <input pInputText type="text" [(ngModel)]="pedido.factura.idUsuario" />
-                </ng-template>
-                <ng-template pTemplate="output">
-                  {{ pedido.factura.idUsuario }}
-                </ng-template>
-              </p-cellEditor>
-            </td>
-            <td>
-              <p-cellEditor>
-                <ng-template pTemplate="input">
-                  <input pInputText type="text" [(ngModel)]="pedido.factura.idObra" required />
-                </ng-template>
-                <ng-template pTemplate="output">
-                  {{ pedido.factura.idObra }}
-                </ng-template>
-              </p-cellEditor>
-            </td>
-            <td>
-              <p-cellEditor>
-                <ng-template pTemplate="input">
-                  <input pInputText type="text" [(ngModel)]="pedido.factura.fecha" required />
-                </ng-template>
-                <ng-template pTemplate="output">
-                  {{ pedido.factura.fecha }}
-                </ng-template>
-              </p-cellEditor>
-            </td>
-            <td>
-              <p-cellEditor>
-                <ng-template pTemplate="input">
-                  <input pInputText type="text" [(ngModel)]="pedido.factura.total" required />
-                </ng-template>
-                <ng-template pTemplate="output">
-                  {{ pedido.factura.total }}
-                </ng-template>
-              </p-cellEditor>
-            </td>
-            <td>
-              <p-cellEditor>
-                <ng-template pTemplate="input">
-                  <input pInputText type="text" [(ngModel)]="pedido.envio.direccion" required />
-                </ng-template>
-                <ng-template pTemplate="output">
-                  {{ pedido.envio.direccion }}
-                </ng-template>
-              </p-cellEditor>
-            </td>
-            <td>
-              <p-cellEditor>
-                <ng-template pTemplate="input">
-                  <input pInputText type="text" [(ngModel)]="pedido.envio.estado" required />
-                </ng-template>
-                <ng-template pTemplate="output">
-                  {{ pedido.envio.estado }}
-                </ng-template>
-              </p-cellEditor>
-            </td>
-            <td>
-              <p-cellEditor>
-                <ng-template pTemplate="input">
-                  <input pInputText type="text" [(ngModel)]="pedido.envio.fechaEnviado" required />
-                </ng-template>
-                <ng-template pTemplate="output">
-                  {{ pedido.envio.fechaEnviado }}
-                </ng-template>
-              </p-cellEditor>
-            </td>
-            <td>
-              <p-cellEditor>
-                <ng-template pTemplate="input">
-                  <input pInputText type="text" [(ngModel)]="pedido.envio.fechaRecibido" required />
-                </ng-template>
-                <ng-template pTemplate="output">
-                  {{ pedido.envio.fechaRecibido }}
-                </ng-template>
-              </p-cellEditor>
-            </td>
-            <td>
-              <div class="flex align-items-center justify-content-center gap-2">
-                <!-- Botones de acción -->
-                <!-- <button pButton pRipple icon="pi pi-pencil" (click)="editProduct(obra)"></button>-->
-                <!--  <button pButton pRipple icon="pi pi-trash" (click)="deleteProduct(obra)"></button>-->
-              </div>
-            </td>
-          </tr>
         </ng-template>
       </p-table>
     </div>
@@ -309,7 +197,7 @@
             </h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <form enctype="multipart/form-data" #newObraForm="ngForm" (ngSubmit)="storeImage(newObraForm)">
+          <form enctype="multipart/form-data" #newPedidoForm="ngForm" (ngSubmit)="storePedido(newPedidoForm)">
             <div class="modal-body">
               <div class="form-group">
                 <label for="IdUsuario">Id Usuario</label>
@@ -326,16 +214,6 @@
                 <label for="Fecha">Fecha</label>
                 <input id="Fecha" class="form-control" name="fecha" type="text" #name="ngModel"
                   [(ngModel)]="pedido.factura.fecha" required>
-              </div>
-              <div class="form-group">
-                <label for="Total">Total</label>
-                <input id="Total" class="form-control" name="total" type="text" #name="ngModel"
-                  [(ngModel)]="pedido.factura.total" required>
-              </div>
-              <div class="form-group">
-                <label for="SubTotal">SubTotal</label>
-                <input id="SubTotal" class="form-control" name="subTotal" type="text" #name="ngModel"
-                  [(ngModel)]="pedido.factura.subTotal" required>
               </div>
               <div class="form-group">
                 <label for="Descuento">Descuento</label>
@@ -363,7 +241,7 @@
               <div class="form-group">
                 <label for="Ciudad">Ciudad</label>
                 <input id="Ciudad" class="form-control" name="fechaEnviado" type="text" #size="ngModel"
-                  [(ngModel)]="pedido.envio.provincia" required>
+                  [(ngModel)]="pedido.envio.ciudad" required>
               </div>
               <div class="form-group">
                 <label for="CodigoPostal">Codigo Postal</label>
@@ -421,17 +299,17 @@
               <div class="form-group">
                 <label for="Estado">Estado</label>
                 <input id="Estado" class="form-control" name="estado" type="text" #name="ngModel"
-                  [(ngModel)]="pedido.envio.estado" required>
+                  [(ngModel)]="pedidoAux.envio.estado" required>
               </div>
               <div class="form-group">
                 <label for="FechaEnviado">Fecha Enviado</label>
                 <input id="FechaEnviado" class="form-control" name="fechaEnviado" type="text" #size="ngModel"
-                  [(ngModel)]="pedido.envio.fechaEnviado" required>
+                  [(ngModel)]="pedidoAux.envio.fechaEnviado" required>
               </div>
               <div class="form-group">
                 <label for="FechaRecibido">Fecha Recibido</label>
                 <input id="FechaRecibido" class="form-control" name="fechaRecibido" type="text" #price="ngModel"
-                  [(ngModel)]="pedido.envio.fechaRecibido" required>
+                  [(ngModel)]="pedidoAux.envio.fechaRecibido" required>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -496,10 +374,13 @@
             <th pSortableColumn="categoria" style="width:6%">Category <p-sortIcon field="categoria"></p-sortIcon></th>
             <th pSortableColumn="tecnica" style="width:10%">Tecnica <p-sortIcon field="tecnica"></p-sortIcon></th>
             <th pSortableColumn="tamano" style="width:9%">Size <p-sortIcon field="tamano"></p-sortIcon></th>
-<th pSortableColumn="precio" style="width:8%">Price <p-sortIcon field="precio"></p-sortIcon></th>
-<th pSortableColumn="fechaCreacion" style="width:14%">Creation Date <p-sortIcon field="fechaCreacion"></p-sortIcon></th>
-<th pSortableColumn="fechaRegistro" style="width:14%">Registration Date <p-sortIcon field="fechaRegistro"></p-sortIcon></th>
-<th pSortableColumn="disponibilidad" style="width:11%">Availability <p-sortIcon field="disponibilidad"></p-sortIcon></th>
+            <th pSortableColumn="precio" style="width:8%">Price <p-sortIcon field="precio"></p-sortIcon></th>
+            <th pSortableColumn="fechaCreacion" style="width:14%">Creation Date <p-sortIcon
+                field="fechaCreacion"></p-sortIcon></th>
+            <th pSortableColumn="fechaRegistro" style="width:14%">Registration Date <p-sortIcon
+                field="fechaRegistro"></p-sortIcon></th>
+            <th pSortableColumn="disponibilidad" style="width:11%">Availability <p-sortIcon
+                field="disponibilidad"></p-sortIcon></th>
             <th style="width:20%">image</th>
           </tr>
         </ng-template>
