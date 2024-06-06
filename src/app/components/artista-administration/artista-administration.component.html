@@ -12,7 +12,7 @@
           <ul style="margin-bottom: 0; padding: 0 0">
             <li><a style="cursor: pointer;" (click)="adminObras(true)">Manage works</a></li>
             <li><a style="cursor: pointer;" (click)="showDelivery(true)">Manage shipments</a></li>
-            <!-- <li class="logout"><a  >Log out</a></li> -->
+            <li class="logout"><a href="#">Log out</a></li>
           </ul>
         </nav>
         <div class="nav-left">
@@ -20,7 +20,7 @@
             <a class="nav-link dropdown-toggle user-name" href="#" id="DropdownUser" role="button"
               data-bs-toggle="dropdown" aria-expanded="false">{{artist.nombreArtista}}</a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="downItem" (click)="logOut()" style="color: rgb(184, 72, 72);">Log Out</a></li>
+              <li><a class="downItem" href="#" style="color: rgb(184, 72, 72);">Log Out</a></li>
             </ul>
           </li>
         </div>
@@ -495,15 +495,12 @@
             <th pSortableColumn="nombre" style="width:7%">Name <p-sortIcon field="nombre"></p-sortIcon></th>
             <th pSortableColumn="categoria" style="width:6%">Category <p-sortIcon field="categoria"></p-sortIcon></th>
             <th pSortableColumn="tecnica" style="width:10%">Tecnica <p-sortIcon field="tecnica"></p-sortIcon></th>
-            <th pSortableColumn="tamano" style="width:9%">Tamano <p-sortIcon field="tamano"></p-sortIcon></th>
-            <th pSortableColumn="precio" style="width:8%">Precio <p-sortIcon field="precio"></p-sortIcon></th>
-            <th pSortableColumn="fechaCreacion" style="width:14%">Fecha de Creacion <p-sortIcon
-                field="fechaCreacion"></p-sortIcon></th>
-            <th pSortableColumn="fechaRegistro" style="width:14%">Fecha de Registro <p-sortIcon
-                field="fechaRegistro"></p-sortIcon></th>
-            <th pSortableColumn="disponibilidad" style="width:11%">Disponibilidad <p-sortIcon
-                field="disponibilidad"></p-sortIcon></th>
-            <th style="width:20%">Imagen</th>
+            <th pSortableColumn="tamano" style="width:9%">Size <p-sortIcon field="tamano"></p-sortIcon></th>
+<th pSortableColumn="precio" style="width:8%">Price <p-sortIcon field="precio"></p-sortIcon></th>
+<th pSortableColumn="fechaCreacion" style="width:14%">Creation Date <p-sortIcon field="fechaCreacion"></p-sortIcon></th>
+<th pSortableColumn="fechaRegistro" style="width:14%">Registration Date <p-sortIcon field="fechaRegistro"></p-sortIcon></th>
+<th pSortableColumn="disponibilidad" style="width:11%">Availability <p-sortIcon field="disponibilidad"></p-sortIcon></th>
+            <th style="width:20%">image</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-obra let-ri="rowIndex">
@@ -735,7 +732,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <p>Seguro que desea eliminar la obra?</p>
+            <p>Are you sure you want to delete the artwork?</p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" icon="pi pi-check">Close</button>

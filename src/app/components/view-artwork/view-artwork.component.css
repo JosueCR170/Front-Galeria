@@ -1,185 +1,245 @@
 .view-body {
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    background-color: black;
-    overflow: auto;
-  }
-  .view-container {
-    width: 90%;
-    height: auto;
-  }
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  background-color: black;
+  overflow: auto;
+}
+.view-container {
+  width: 90%;
+  height: auto;
+}
+
+.miniMenu {
+  position: relative;
+  font-family: "Timmana", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  width: 100%;
+}
+.menu {
+  height: 8vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  /* Fija el navbar */
+  top: 0; /* Posición superior */
+  /* Ocupa todo el ancho */
+  z-index: 1000; /* Asegura que el navbar esté por encima de otros elementos */
+  background-color: #0505058c;
+  backdrop-filter: blur(5px); /* Ajusta según el diseño */
+  border-bottom: 1px solid white;
+  border-right: 1px solid white;
+  border-left: 1px solid white;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  transition: all 0.5s ease;
+}
+
+.menu #minuInfo {
+  font-family: "Bebas Neue", sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  font-style: normal;
+  color: antiquewhite;
+  animation: mover-derecha 2s 1;
+}
+.menu nav ul a:hover {
+  color: #000;
+}
+.menu nav ul li {
+  list-style: none; 
+  float: left;
+}
+
+.menu nav ul a {
+  font-family: "Timmana", sans-serif;
+  font-weight: 400;
+  font-style: normal;  
+  font-size: 25px;
+  color: antiquewhite;
+  text-decoration: none;
+  padding: 0 20px;
+  transition: 0.2s ease;
+}
+.menu nav ul a:hover {
+  color: #DBB385;
   
+}
+.menu nav ul .downItem:hover {
+  color: #000;
+}
+#checkbox {
+  display: none;
+}
+
+.toggle {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  display: none;
+  gap: 10px;
+  transition-duration: .5s;
+}
+
+.bars {
+  width: 100%;
+  height: 4px;
+  background-color: rgb(246, 246, 246);
+  border-radius: 4px;
+}
+
+.nav-left {
+  display: flex;
+  width: 20%;
+  justify-content: space-around;
+}
+.logout {
+  display: none;
+}
+
+#bar2 {
+  transition-duration: .8s;
+}
+
+#bar1, #bar3 {
+  width: 70%;
+}
+
+#checkbox:checked + .toggle .bars {
+  position: absolute;
+  transition-duration: .5s;
+}
+
+#checkbox:checked + .toggle #bar2 {
+  transform: scaleX(0);
+  transition-duration: .5s;
+}
+
+#checkbox:checked + .toggle #bar1 {
+  width: 100%;
+  transform: rotate(45deg);
+  transition-duration: .5s;
+}
+
+#checkbox:checked + .toggle #bar3 {
+  width: 100%;
+  transform: rotate(-45deg);
+  transition-duration: .5s;
+}
+
+#checkbox:checked + .toggle {
+  transition-duration: .5s;
+  transform: rotate(180deg);
+}
+
+.user-name {
+  display: flex;     
+  align-items: center;
+  color: white;
+  text-align: center;
+  font-size: 25px;
+  margin-top: 10px;
+}
+
+.dropdown-menu.show {
+  border: solid 2px white;
+  background-color: black;
+}
+
+.dropdown-menu li {
+  width: 100%;
+  display: block;
+  cursor: pointer; /* Esto hace que el cursor se convierta en una mano */
+}
+
+.dropdown-menu li:hover {
+  background-color: rgba(195, 187, 255, 0.956);
+}
+
+.downItem {
+  color: bisque;
+  width: 100%;
+  font-size: 20px;
+  text-decoration: none;
+  padding-left: 20px;
+  /*height: 4vh;*/
+  padding-top: 5px;
+  display: block; /* Hace que todo el elemento sea clicable */
+
+}
+.dropdown-menu li:hover .downItem{
+  color: black; /* Esto cambia el color del texto al pasar el mouse por encima */
+  transition: color 0.3s;
+}
+
+@media (max-width: 773px) {
   .miniMenu {
-    position: relative;
-    font-family: "Timmana", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-    width: 100%;
+      min-height: 70px;
+  }
+  .loOUt {
+      display: none !important;
   }
   .menu {
-    height: 8vh;
-    position: fixed;
-    width: 90%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    top: 0; /* Posición superior */
-    z-index: 1000; /* Asegura que el navbar esté por encima de otros elementos */
-    background-color: #0505058c;
-    backdrop-filter: blur(5px); /* Ajusta según el diseño */
-    background-color: #0505058c;
-    border-bottom: 1px solid white;
-    border-right: 1px solid white;
-    border-left: 1px solid white;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-    transition: all 0.5s ease;
+      height: 60px;
+      padding-left: 20px;
+      background-color: #0505058c;
   }
-  
-  .menu #minuInfo {
-    font-family: "Bebas Neue", sans-serif;
-    font-weight: 400;
-    font-size: 15px;
-    font-style: normal;
-    color: antiquewhite;
-    animation: mover-derecha 2s 1;
+  .menu .toggle {
+      display: inline-flex;
+      gap: 10px;
   }
-  .menu nav ul a:hover {
-    color: #000;
+  .menu nav {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      border-radius: 10px;
+      background-color: #5e5e5eb2;
+      display: none;
+  }
+  .menu nav ul {
+      margin: 0;
+      padding: 0;
+      width: 100%;
   }
   .menu nav ul li {
-    list-style: none; 
-    float: left;
+      width: 100%;
+      text-align: center;
   }
-  
-  .menu nav ul a {
-    font-family: "Timmana", sans-serif;
-    font-weight: 400;
-    font-style: normal;  
-    color: antiquewhite;
-    text-decoration: none;
-    padding: 0 20px;
-    transition: 0.2s ease;
-    font-size: 25px;
-    padding-left: 20px;
+  .menu nav ul li:hover {
+      background-color: rgba(76, 150, 173, 0.587);
   }
   .menu nav ul a:hover {
-    color: #DBB385;
-    
+      color: #000;
   }
-  .menu nav ul .downItem:hover {
-    color: #000;
+  .container {
+      width: 100vw;
   }
-  #checkbox {
-    display: none;
+  #checkbox:checked ~ nav {
+      display: initial;
   }
-  
-  .toggle {
-    position: relative;
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    display: none;
-    gap: 10px;
-    transition-duration: .5s;
-  }
-  
-  .bars {
-    width: 100%;
-    height: 4px;
-    background-color: rgb(246, 246, 246);
-    border-radius: 4px;
-  }
-  
-  .nav-left {
-    margin-right: 20px;
+  .UserIcon {
+      display: none;
   }
   .logout {
-    display: none;
+      display: initial;
   }
-  
-  #bar2 {
-    transition-duration: .8s;
-  }
-  
-  #bar1, #bar3 {
-    width: 70%;
-  }
-  
-  #checkbox:checked + .toggle .bars {
-    position: absolute;
-    transition-duration: .5s;
-  }
-  
-  #checkbox:checked + .toggle #bar2 {
-    transform: scaleX(0);
-    transition-duration: .5s;
-  }
-  
-  #checkbox:checked + .toggle #bar1 {
-    width: 100%;
-    transform: rotate(45deg);
-    transition-duration: .5s;
-  }
-  
-  #checkbox:checked + .toggle #bar3 {
-    width: 100%;
-    transform: rotate(-45deg);
-    transition-duration: .5s;
-  }
-  
-  #checkbox:checked + .toggle {
-    transition-duration: .5s;
-    transform: rotate(180deg);
-  }
-  
   .user-name {
-    display: flex;     
-    align-items: center;
-    color: white;
-    text-align: center;
-    font-size: 25px;
-    margin-top: 10px;
+      font-size: 2vw ;
   }
-  
-  .dropdown-menu.show {
-    border: solid 2px white;
-    background-color: black;
+  .busqueda {
+      width: 60% !important;
   }
-  
-  .dropdown-menu li {
-    width: 100%;
-    display: block;
-    cursor: pointer; /* Esto hace que el cursor se convierta en una mano */
-  }
-  
-  .dropdown-menu li:hover {
-    background-color: rgba(195, 187, 255, 0.956);
-  }
-  
-  .downItem {
-    color: bisque;
-    width: 100%;
-    font-size: 20px;
-    text-decoration: none;
-    padding-left: 20px;
-    /*height: 4vh;*/
-    padding-top: 5px;
-    display: block; /* Hace que todo el elemento sea clicable */
-  
-  }
-  .dropdown-menu li:hover .downItem{
-    color: black; /* Esto cambia el color del texto al pasar el mouse por encima */
-    transition: color 0.3s;
-  }
+}
   
 
 main {

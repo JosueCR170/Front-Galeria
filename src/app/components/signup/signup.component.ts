@@ -35,7 +35,7 @@ export class SignupComponent {
         if(response.status==201){
           form.reset();            
           this.changeStatus(0);
-          this.msgAlert('Usuario registrado con éxito','', 'success');
+          this.msgAlert('Artist registered successfully', '', 'success');
           setTimeout(()=>{
             this.redirectToLogin()
           },1000);
@@ -56,7 +56,7 @@ export class SignupComponent {
           console.error(this.errors);
         } else {
           console.error('Otro tipo de error:', error.statusText);
-          this.msgAlert('Error, desde el servidor. Contacte al administrador','','error');
+          this.msgAlert('Error from the server. Please contact the administrator', '', 'error');
         }
         this.changeStatus(2);
       }
