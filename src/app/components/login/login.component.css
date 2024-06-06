@@ -10,7 +10,7 @@
 
 .login-container {
     border: 2px solid #ffffff;
-    border-radius: 20px;
+    border-radius: 10px;
     padding: 20px;
     color: white;
     background-color: rgba(0, 0, 0, 0.5); 
@@ -71,3 +71,5 @@ label{
     box-shadow: none;
     border-color: #ffc107;
 }
+
+

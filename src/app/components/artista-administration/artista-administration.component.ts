@@ -53,8 +53,13 @@ export class ArtistaAdministrationComponent {
   obras: Obra[] = [];
   facturasArtist:Factura[]=[];
   enviosArtist:Envio[]=[];
+
   pedidosArtist:Pedido[]=[];
   
+  fechaSeleccionada: string ='';
+  ano: number | null = null;
+  mes: string | null = null;
+  dia: string | null = null;
 
   obrasPorArtista: Obra[] = [];
   public status: number;
@@ -75,8 +80,8 @@ export class ArtistaAdministrationComponent {
     'Digital art','Collage','Pyrography','Bronze sculpture'
   ]
   
-  public formattedDate = this.formatDate(this.currentDate);
 
+  public formattedDate = this.formatDate(this.currentDate);
   constructor(
     private obraService: ObraService,
     private messageService: MessageService,
@@ -86,9 +91,11 @@ export class ArtistaAdministrationComponent {
   ) {
     this.status = -1;
     this.urlAPI = server.url + 'obra/getimage/';
-    this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, null);
+
     this.pedido=new Pedido(new Envio(1,0,"Espera","","","","","",""), 
     new Factura(1,1,1,this.formattedDate,0,0,0));
+
+    this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, this.formattedDate);
   }
 
   ngOnInit(): void {
@@ -265,9 +272,12 @@ export class ArtistaAdministrationComponent {
             console.log(response);
             if (response.filename) {
               this.obra.imagen = response.filename;
+              this.obra.fechaCreacion = this.fechaSeleccionada;
+              this.obra.fechaRegistro = this.formattedDate;
+              console.log(this.obra)
               this.obraService.create(this.obra).subscribe({
                 next: (response2: any) => {
-                  console.log(response2);
+                  console.log(response2); console.log(this.obra)
                   location.reload();
                 },
                 error: (err: any) => {
@@ -286,6 +296,7 @@ export class ArtistaAdministrationComponent {
       }
     }
   }
+
 
 
   indexEnvioByArtist() {
@@ -307,7 +318,7 @@ export class ArtistaAdministrationComponent {
       next: (response: any) => {
         this.facturasArtist = response['data'];
         console.log(this.facturasArtist);
-        this.fillPedidos();
+       // this.fillPedidos();
       },
       error: (err: Error) => {
         console.error('Error al cargar las facturas', err);
@@ -316,7 +327,7 @@ export class ArtistaAdministrationComponent {
   }
 
   fillPedidos() {
-    this.pedidosArtist = [];
+   // this.pedidosArtist = [];
     for (let envio of this.enviosArtist) {
      
       let factura = this.facturasArtist.find(f => f.id === envio.idFactura);
@@ -325,7 +336,18 @@ export class ArtistaAdministrationComponent {
         this.pedidosArtist.push(pedido);
       }
     }
-    console.log(this.pedidosArtist);
+    console.log("Pedidos: ",this.pedidosArtist);
+  }
+
+ 
+
+  onFechaChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const fecha = new Date(input.value);
+    this.ano = fecha.getFullYear();
+    this.mes = ('0' + (fecha.getMonth() + 1)).slice(-2); // Mes se cuenta desde 0
+    this.dia = ('0' + fecha.getDate()).slice(-2);
+    this.fechaSeleccionada = `${this.ano}-${this.mes}-${this.dia}`;
   }
 
 }
