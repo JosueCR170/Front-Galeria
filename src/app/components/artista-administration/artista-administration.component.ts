@@ -54,7 +54,7 @@ export class ArtistaAdministrationComponent {
   obras: Obra[] = [];
   facturasArtist: Factura[] = [];
   enviosArtist: Envio[] = [];
-  selectedPedidos: Pedido[] = [];
+  selectedPedidos!: Pedido[];
 
   pedidosArtist: Pedido[] = [];
 
@@ -113,6 +113,23 @@ export class ArtistaAdministrationComponent {
   logOut() {
     sessionStorage.clear();
     this._router.navigate([''])
+  }
+
+  redirectToArtistLogin(){
+    this._router.navigate(['loginArtist'])
+  }
+
+  authTokenArtist(){
+    let aux = sessionStorage.getItem('identity');
+    if (aux == null){
+      return false;
+    } else {
+    let jason= JSON.parse(aux);
+    if(jason.nombreArtista == null){
+      return false;
+    }
+    return true;
+    }
   }
 
   loadLoggedArtist() {
@@ -254,11 +271,12 @@ export class ArtistaAdministrationComponent {
     }
   }
 
-  updatePedido() {
-    console.log(this.pedidoAux.envio);
-    this.envioService.update(this.pedidoAux.envio).subscribe({
+  updatePedido(envio: Envio) {
+    console.log(envio);
+    this.envioService.update(envio).subscribe({
       next: (response: any) => {
         console.log(response);
+        
       },
       error: (err: Error) => {
         console.log(err);

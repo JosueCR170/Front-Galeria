@@ -178,6 +178,20 @@ export class AdminComponent {
     this.user = JSON.parse(this.user);
   }
 
+  authTokenUserAdmin(){
+    let aux = sessionStorage.getItem('identity');
+    if (aux == null){
+      return false;
+    } else {
+    let jason= JSON.parse(aux);
+    return jason.tipoUsuario;
+    }
+  }
+
+  redirectToUserLogin(){
+    this._router.navigate(['login'])
+  }
+
   selectCategory(category: string) {
     this.selectedCategory = category;
   }

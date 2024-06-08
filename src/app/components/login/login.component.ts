@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UserService } from '../../services/user.service';
@@ -24,6 +24,14 @@ export class LoginComponent {
   ){
     this.status=-1;
     this.user=new User(1, "", true, "", "", null,"")
+  }
+
+  ngOnInit(){
+    this.logOut();
+  }
+
+  logOut() {
+    sessionStorage.clear();
   }
 
   loadArtist(){

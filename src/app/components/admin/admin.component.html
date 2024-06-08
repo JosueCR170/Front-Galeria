@@ -1,3 +1,6 @@
+@if(!authTokenUserAdmin()){
+  {{redirectToUserLogin()}}
+}@else{
 <div class="admin-body">
   <div class="conteiner">
       <header class="miniMenu">
@@ -900,4 +903,4 @@
 
       }
   </div>
-</div>
+</div>}
