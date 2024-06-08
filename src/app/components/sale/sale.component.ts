@@ -62,7 +62,7 @@ public formattedDate = this.formatDate(this.currentDate);
     console.log(date);
     
     const year = date.getFullYear();
-    const month = date.getMonth(); // Agrega un cero al mes si es necesario
+    const month = date.getMonth() + 1; // Agrega un cero al mes si es necesario
     const day = date.getDate(); // Agrega un cero al día si es necesario
     return `${year}-${month}-${day}`;
   }

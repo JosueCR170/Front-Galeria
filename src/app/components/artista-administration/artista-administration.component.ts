@@ -67,7 +67,6 @@ export class ArtistaAdministrationComponent {
   public status: number;
   public obra: Obra;
   public pedido: Pedido;
-  pedidoAux: Pedido;
   artist: any;
   selectedFile: File | null = null;
   urlAPI: string;
@@ -96,10 +95,7 @@ export class ArtistaAdministrationComponent {
     this.urlAPI = server.url + 'obra/getimage/';
 
     this.pedido = new Pedido(new Envio(1, 0, "Espera", "", "", "", "", "", ""),
-      new Factura(0, null, null, null, null, null, null));
-    this.pedidoAux = new Pedido(new Envio(1, 0, "Espera", "", "", "", "", "", ""),
-    new Factura(0, null, null, null, null, null, null));
-
+      new Factura(0, null, null, this.formattedDate, null, null, null));
     this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, this.formattedDate);
   }
 
@@ -132,6 +128,11 @@ export class ArtistaAdministrationComponent {
     }
   }
 
+  reloadTablePedidos(){
+    this.indexEnvioByArtist();
+    this.selectedPedidos = [];
+  }
+
   loadLoggedArtist() {
     this.artist = sessionStorage.getItem('identity');
     this.artist = JSON.parse(this.artist);
@@ -141,7 +142,7 @@ export class ArtistaAdministrationComponent {
     console.log(date);
 
     const year = date.getFullYear();
-    const month = date.getMonth(); // Agrega un cero al mes si es necesario
+    const month = date.getMonth() + 1; // Agrega un cero al mes si es necesario
     const day = date.getDate(); // Agrega un cero al día si es necesario
     return `${year}-${month}-${day}`;
   }
@@ -188,7 +189,6 @@ export class ArtistaAdministrationComponent {
     this.productDialog = true;
   }
 
-
   onSelectionChange(value = []) {
     this.selectAll = value.length === this.totalRecords;
     this.selectedObra = value;
@@ -215,7 +215,7 @@ export class ArtistaAdministrationComponent {
   }
 
   editPedido(pedido: Pedido) {
-    this.pedidoAux = { ...pedido };
+    this.pedido = { ...pedido };
     this.productDialog = true;
   }
 
@@ -405,8 +405,6 @@ export class ArtistaAdministrationComponent {
     console.log("Pedidos: ", this.pedidosArtist);
   }
 
-
-
   onFechaChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     const fecha = new Date(input.value);
@@ -414,6 +412,16 @@ export class ArtistaAdministrationComponent {
     this.mes = ('0' + (fecha.getMonth() + 1)).slice(-2); // Mes se cuenta desde 0
     this.dia = ('0' + fecha.getDate()).slice(-2);
     this.fechaSeleccionada = `${this.ano}-${this.mes}-${this.dia}`;
+  }
+
+  fillFechaPedido(event: Event, flag: boolean): void{
+    this.onFechaChange(event);
+    if (flag) {
+      this.pedido.envio.fechaEnviado = this.fechaSeleccionada;
+    } else {
+      this.pedido.envio.fechaRecibido = this.fechaSeleccionada;
+    }
+    
   }
 
 }
