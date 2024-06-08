@@ -442,23 +442,23 @@
               <form #newArtistaForm="ngForm" (ngSubmit)="storeArtista(newArtistaForm)">
                 <div class="mb-3">
                   <label for="nombre" class="form-label">Name</label>
-                  <input type="text" class="form-control" id="nombre" [(ngModel)]="artistaAux.nombre" name="nombre" required />
+                  <input type="text" class="form-control" id="nombreArtista" [(ngModel)]="artistaAux.nombre" name="nombre" required />
                 </div>
                 <div class="mb-3">
                   <label for="correo" class="form-label">Email</label>
-                  <input type="email" class="form-control" id="correo" [(ngModel)]="artistaAux.correo" name="correo" required />
+                  <input type="email" class="form-control" id="correoArtista" [(ngModel)]="artistaAux.correo" name="correo" required />
                 </div>
                 <div class="mb-3">
                   <label for="password" class="form-label">Password</label>
-                  <input type="password" class="form-control" id="password" [(ngModel)]="artistaAux.password" name="password" required />
+                  <input type="password" class="form-control" id="passwordArtista" [(ngModel)]="artistaAux.password" name="password" required />
                 </div>
                 <div class="mb-3">
                   <label for="telefono" class="form-label">Phone</label>
-                  <input type="text" class="form-control" id="telefono" [(ngModel)]="artistaAux.telefono" name="telefono" />
+                  <input type="text" class="form-control" id="telefonoArtista" [(ngModel)]="artistaAux.telefono" name="telefono" />
                 </div>
                 <div class="mb-3">
                   <label for="nombreArtista" class="form-label">Artist Name</label>
-                  <input type="text" class="form-control" id="nombreArtista" [(ngModel)]="artistaAux.nombreArtista" name="nombreArtista" required />
+                  <input type="text" class="form-control" id="ArtistaName" [(ngModel)]="artistaAux.nombreArtista" name="nombreArtista" required />
                 </div>
                 <button type="submit" class="btn btn-primary" [disabled]="!newArtistaForm.valid">Save</button>
               </form>
@@ -482,10 +482,6 @@
                   <input type="text" class="form-control" id="nombre" [(ngModel)]="artistaAux.nombre" name="nombre" required />
                 </div>
                 <div class="mb-3">
-                  <label for="correo" class="form-label">Email</label>
-                  <input type="email" class="form-control" id="correo" [(ngModel)]="artistaAux.correo" name="correo" required />
-                </div>
-                <div class="mb-3">
                   <label for="password" class="form-label">Password</label>
                   <input type="password" class="form-control" id="password" [(ngModel)]="artistaAux.password" name="password" required />
                 </div>
@@ -495,9 +491,9 @@
                 </div>
                 <div class="mb-3">
                   <label for="nombreArtista" class="form-label">Artist Name</label>
-                  <input type="text" class="form-control" id="nombreArtista" [(ngModel)]="artistaAux.nombreArtista" name="nombreArtista" required />
+                  <input type="text" class="form-control" id="nombreArtist" [(ngModel)]="artistaAux.nombreArtista" name="nombreArtista" required />
                 </div>
-                <button type="submit" class="btn btn-primary" [disabled]="!updateArtistaForm.valid">Save</button>
+                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" [disabled]="!updateArtistaForm.valid">Save</button>
               </form>
             </div>
           </div>
@@ -517,7 +513,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-              <button type="button" class="btn btn-danger" (click)="deleteSelectedArtistas()">Delete</button>
+              <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="deleteSelectedArtistas()">Delete</button>
             </div>
           </div>
         </div>

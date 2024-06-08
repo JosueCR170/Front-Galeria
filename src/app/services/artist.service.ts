@@ -83,10 +83,10 @@ export class ArtistService{
 
     update(artista:Artista): Observable<any> {
         console.log(artista);
-        let obraJson=JSON.stringify(artista);
+        let artistaJson=JSON.stringify(artista);
         let id = artista.id;
         //let formData = new FormData();
-        let params='data='+obraJson;
+        let params='data='+artistaJson;
         let headers;
         let bearertoken = sessionStorage.getItem('token');
         
