@@ -25,6 +25,7 @@ import { Router, RouterLink } from '@angular/router';
 import { Envio } from '../../models/Envio';
 import { Pedido } from '../../models/Pedido';
 import { EnvioService } from '../../services/envio.service';
+import { findIndex } from 'rxjs';
 @Component({
   selector: 'app-artista-administration',
   standalone: true,
@@ -111,24 +112,24 @@ export class ArtistaAdministrationComponent {
     this._router.navigate([''])
   }
 
-  redirectToArtistLogin(){
+  redirectToArtistLogin() {
     this._router.navigate(['loginArtist'])
   }
 
-  authTokenArtist(){
+  authTokenArtist() {
     let aux = sessionStorage.getItem('identity');
-    if (aux == null){
+    if (aux == null) {
       return false;
     } else {
-    let jason= JSON.parse(aux);
-    if(jason.nombreArtista == null){
-      return false;
-    }
-    return true;
+      let jason = JSON.parse(aux);
+      if (jason.nombreArtista == null) {
+        return false;
+      }
+      return true;
     }
   }
 
-  reloadTablePedidos(){
+  reloadTablePedidos() {
     this.indexEnvioByArtist();
     this.selectedPedidos = [];
   }
@@ -189,6 +190,13 @@ export class ArtistaAdministrationComponent {
     this.productDialog = true;
   }
 
+  openNewPedido() {
+    this.pedido = new Pedido(new Envio(1, 0, "Espera", "", "", "", "", "", ""),
+    new Factura(0, null, null, this.formattedDate, null, null, null));
+    this.submitted = false;
+    this.productDialog = true;
+  }
+
   onSelectionChange(value = []) {
     this.selectAll = value.length === this.totalRecords;
     this.selectedObra = value;
@@ -212,7 +220,7 @@ export class ArtistaAdministrationComponent {
   editObra(obra: Obra) {
     this.obra = { ...obra };
     this.productDialog = true;
-  }
+    }
 
   editPedido(pedido: Pedido) {
     this.pedido = { ...pedido };
@@ -247,27 +255,32 @@ export class ArtistaAdministrationComponent {
 
   storePedido(form: any): void {
     if (form.valid) {
-      this.facturaService.create(this.pedido.factura).subscribe({
-        next: (response: any) => {
-          if (response['Factura'].id) {
-            this.pedido.envio.idFactura = response['Factura'].id;
-            this.envioService.create(this.pedido.envio).subscribe({
-              next: (response2: any) => {
-                console.log(response2);
-                location.reload();
-              },
-              error: (err: any) => {
-                console.error(err);
-              }
-            });
-          } else {
-            console.error('No se recibió el id de la factura');
+      let obrita = this.obras.find(o => o.id == this.pedido.factura.idObra);
+      if (obrita?.disponibilidad) {
+        this.facturaService.create(this.pedido.factura).subscribe({
+          next: (response: any) => {
+            if (response['Factura'].id) {
+              this.pedido.envio.idFactura = response['Factura'].id;
+              this.envioService.create(this.pedido.envio).subscribe({
+                next: (response2: any) => {
+                  console.log(response2);
+                  location.reload();
+                },
+                error: (err: any) => {
+                  console.error(err);
+                }
+              });
+            } else {
+              console.error('No se recibió el id de la factura');
+            }
+          },
+          error: (err: any) => {
+            console.error(err);
           }
-        },
-        error: (err: any) => {
-          console.error(err);
-        }
-      });
+        });
+      } else {
+
+      }
     }
   }
 
@@ -276,7 +289,7 @@ export class ArtistaAdministrationComponent {
     this.envioService.update(envio).subscribe({
       next: (response: any) => {
         console.log(response);
-        
+
       },
       error: (err: Error) => {
         console.log(err);
@@ -414,14 +427,14 @@ export class ArtistaAdministrationComponent {
     this.fechaSeleccionada = `${this.ano}-${this.mes}-${this.dia}`;
   }
 
-  fillFechaPedido(event: Event, flag: boolean): void{
+  fillFechaPedido(event: Event, flag: boolean): void {
     this.onFechaChange(event);
     if (flag) {
       this.pedido.envio.fechaEnviado = this.fechaSeleccionada;
     } else {
       this.pedido.envio.fechaRecibido = this.fechaSeleccionada;
     }
-    
+
   }
 
 }
