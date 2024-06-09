@@ -26,6 +26,8 @@ import { Envio } from '../../models/Envio';
 import { Pedido } from '../../models/Pedido';
 import { EnvioService } from '../../services/envio.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { findIndex } from 'rxjs';
+
 @Component({
   selector: 'app-artista-administration',
   standalone: true,
@@ -110,24 +112,24 @@ export class ArtistaAdministrationComponent {
     this._router.navigate([''])
   }
 
-  redirectToArtistLogin(){
+  redirectToArtistLogin() {
     this._router.navigate(['loginArtist'])
   }
 
-  authTokenArtist(){
+  authTokenArtist() {
     let aux = sessionStorage.getItem('identity');
-    if (aux == null){
+    if (aux == null) {
       return false;
     } else {
-    let jason= JSON.parse(aux);
-    if(jason.nombreArtista == null){
-      return false;
-    }
-    return true;
+      let jason = JSON.parse(aux);
+      if (jason.nombreArtista == null) {
+        return false;
+      }
+      return true;
     }
   }
 
-  reloadTablePedidos(){
+  reloadTablePedidos() {
     this.indexEnvioByArtist();
     this.selectedPedidos = [];
   }
@@ -178,6 +180,7 @@ export class ArtistaAdministrationComponent {
     this.productDialog = true;
   }
 
+
   onSelectionChange(value = []) {
     this.selectAll = value.length === this.totalRecords;
     this.selectedObra = value;
@@ -201,7 +204,7 @@ export class ArtistaAdministrationComponent {
   editObra(obra: Obra) {
     this.obra = { ...obra };
     this.productDialog = true;
-  }
+    }
 
   editPedido(pedido: Pedido) {
     this.pedido = { ...pedido };
@@ -248,6 +251,7 @@ export class ArtistaAdministrationComponent {
                   this.updateDisponibilidadObra(obrita,false);
                   this.msgAlert('Order saved successfully','','success');
                   //location.reload();
+
                 },
                 error: (err: any) => {
                   console.error(err);
@@ -263,6 +267,7 @@ export class ArtistaAdministrationComponent {
         });
       } else {
         this.msgAlert('Order not save successfully','','error');
+
       }
     }
   }
@@ -271,11 +276,12 @@ export class ArtistaAdministrationComponent {
     //console.log(envio);
     this.envioService.update(envio).subscribe({
       next: (response: any) => {
+
        // console.log(response);
         this.msgAlert('Order updated successfully','','success');
         this.selectedPedidos = [];
        // this.indexEnvioByArtist();
-        
+
       },
       error: (err: Error) => {
         console.log(err);
@@ -472,6 +478,7 @@ export class ArtistaAdministrationComponent {
     new Factura(0, null, null, "", null, null, null));
     this.submitted = false;
     this.productDialog = true;
+
   }
 
 

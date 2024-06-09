@@ -46,7 +46,9 @@
       <p-toolbar styleClass="mb-4 gap-2">
         <ng-template pTemplate="left">
           <p-button pRipple severity="success" label="New" icon="pi pi-plus" class="mr-2" data-bs-toggle="modal"
+
             data-bs-target="#newPedidoModal" styleClass="btn-rounded" (click)="openNewPedido()">
+
           </p-button>
           <p-button type="button" class="asd" data-bs-toggle="modal" data-bs-target="#updateModal"
             (onClick)="editPedido(selectedPedidos[0])" styleClass="btn-rounded"
@@ -73,21 +75,21 @@
             <th style="width: 4rem">
               <p-tableHeaderCheckbox disabled="true"></p-tableHeaderCheckbox>
             </th>
-            <th pSortableColumn="factura.idUsuario" style="width:9%">Usuario<p-sortIcon
+            <th pSortableColumn="factura.idUsuario" style="width:9%">User<p-sortIcon
                 field="factura.idUsuario"></p-sortIcon></th>
-            <th pSortableColumn="factura.idObra" style="width:7%">Obra<p-sortIcon field="factura.idObra"></p-sortIcon>
+            <th pSortableColumn="factura.idObra" style="width:7%">Artwork<p-sortIcon field="factura.idObra"></p-sortIcon>
             </th>
-            <th pSortableColumn="factura.fecha" style="width:10%">Fecha<p-sortIcon field="factura.fecha"></p-sortIcon>
+            <th pSortableColumn="factura.fecha" style="width:10%">Date<p-sortIcon field="factura.fecha"></p-sortIcon>
             </th>
-            <th pSortableColumn="factura.total" style="width:10%">Total<p-sortIcon field="factura.total"></p-sortIcon>
+            <th pSortableColumn="factura.total" style="width:10%">Total price<p-sortIcon field="factura.total"></p-sortIcon>
             </th>
-            <th pSortableColumn="envio.direccion" style="width:20%">Direccion<p-sortIcon
+            <th pSortableColumn="envio.direccion" style="width:20%">Address<p-sortIcon
                 field="envio.direccion"></p-sortIcon></th>
-            <th pSortableColumn="envio.estado" style="width:12%">EstadoPedido<p-sortIcon
+            <th pSortableColumn="envio.estado" style="width:12%">Order Status<p-sortIcon
                 field="envio.estado"></p-sortIcon></th>
-            <th pSortableColumn="envio.fechaEnviado" style="width:14%">FechaEnviado<p-sortIcon
+            <th pSortableColumn="envio.fechaEnviado" style="width:14%">Sent Date<p-sortIcon
                 field="envio.fechaEnviado"></p-sortIcon></th>
-            <th pSortableColumn="FechaRecibido" style="width:14%">FechaRecibido<p-sortIcon
+            <th pSortableColumn="FechaRecibido" style="width:14%">Date Received<p-sortIcon
                 field="envio.fechaRecibido"></p-sortIcon></th>
           </tr>
         </ng-template>
@@ -206,22 +208,22 @@
           <form enctype="multipart/form-data" #newPedidoForm="ngForm" (ngSubmit)="storePedido(newPedidoForm)">
             <div class="modal-body">
               <div class="form-group">
-                <label for="IdUsuario">Id Usuario</label>
+                <label for="IdUsuario">Id User</label>
                 <input id="IdUsuario" class="form-control" name="idUsuario" type="text" #name="ngModel"
                   [(ngModel)]="pedido.factura.idUsuario" required>
               </div>
               <div class="form-group">
-                <label for="IdObra">IdObra</label>
+                <label for="IdObra">Id Artwork</label>
                 <input id="IdObra" class="form-control" name="idObra" type="text" #name="ngModel"
                   [(ngModel)]="pedido.factura.idObra" required>
               </div>
               <div class="form-group">
-                <label for="Descuento">Descuento</label>
+                <label for="Descuento">Discount</label>
                 <input id="Descuento" class="form-control" name="descuento" type="number" #name="ngModel"
                   [(ngModel)]="pedido.factura.descuento" required>
               </div>
               <div class="form-group">
-                <label for="Direccion">Dirección</label>
+                <label for="Direccion">Address</label>
                 <input id="Direccion" class="form-control" name="direccion" type="text" #name="ngModel"
                   [(ngModel)]="pedido.envio.direccion" required>
               </div>
@@ -244,7 +246,7 @@
                   [(ngModel)]="pedido.envio.ciudad" required>
               </div>
               <div class="form-group">
-                <label for="CodigoPostal">Codigo Postal</label>
+                <label for="CodigoPostal">Postal Code</label>
                 <input id="CodigoPostal" class="form-control" name="codigoPostal" type="text" #size="ngModel"
                   [(ngModel)]="pedido.envio.codigoPostal" required>
               </div>
@@ -271,30 +273,30 @@
           <div class="modal-body">
             <form>
               <div class="form-group">
-                <label for="Estado">Estado</label>
+                <label for="Estado">Order status</label>
 
                 <select id="Estado" required class="form-select" [(ngModel)]="pedido.envio.estado" name="estado">
                   <option selected disabled hidden>Choose...</option>
-                  <option>Espera</option>
-                  <option>Enviado</option>
-                  <option>En camino</option>
-                  <option>Recibido</option>
+                  <option>On hold</option>
+                  <option>Sent</option>
+                  <option>On the way</option>
+                  <option>Received</option>
                 </select>
               </div>
               <div class="form-group">
-                <label for="FechaEnviado">Fecha Enviado</label>
+                <label for="FechaEnviado">Sent Date</label>
                 <input id="FechaEnviado" class="form-control" name="fechaEnviado" type="date" (change)="formatDate($event)"
                   [(ngModel)]="pedido.envio.fechaEnviado" required>
               </div>
               <div class="form-group">
-                <label for="FechaRecibido">Fecha Recibido</label>
+                <label for="FechaRecibido">Date Received</label>
                 <input id="FechaRecibido" class="form-control" name="fechaRecibido" type="date" (change)="formatDate($event)"
                   [(ngModel)]="pedido.envio.fechaRecibido" required>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="reloadTablePedidos()">Cerrar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="reloadTablePedidos()">Close</button>
                 <button type="button" class="btn btn-primary" style="color: white; background-color: rgb(124, 10, 10);"
-                  data-bs-dismiss="modal" (click)="updatePedido(pedido.envio)">Actualizar</button>
+                  data-bs-dismiss="modal" (click)="updatePedido(pedido.envio)">Update</button>
               </div>
             </form>
 
@@ -488,7 +490,7 @@
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="newObraModalLabel">New Obra
+            <h1 class="modal-title fs-5" id="newObraModalLabel">New Artwork
             </h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
@@ -617,15 +619,15 @@
             <!-- #updateObraForm="ngForm" (ngSubmit)="storeImage(updateObraForm)" -->
             <form>
               <div class="mb-3">
-                <label for="recipient-name" class="col-form-label">Nombre:</label>
+                <label for="recipient-name" class="col-form-label">Name:</label>
                 <input type="text" class="form-control" id="recipient-name" [(ngModel)]="obra.nombre" name="nombre">
               </div>
               <div class="mb-3">
-                <label for="recipient-precio" class="col-form-label">Precio:</label>
+                <label for="recipient-precio" class="col-form-label">Price:</label>
                 <input type="text" class="form-control" id="recipient-precio" [(ngModel)]="obra.precio" name="precio">
               </div>
               <div class="mb-3">
-                <label for="recipient-categoria" class="col-form-label">Categoria:</label>
+                <label for="recipient-categoria" class="col-form-label">Category:</label>
                 <div class="dropdown">
                   <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                     aria-expanded="false">
@@ -639,7 +641,7 @@
                 </div>
               </div>
               <div class="mb-3">
-                <label for="recipient-tecnica" class="col-form-label">Tecnica:</label>
+                <label for="recipient-tecnica" class="col-form-label">Technique:</label>
                 <div class="dropdown">
                   <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                     aria-expanded="false">
@@ -658,7 +660,7 @@
                   name="disponibilidad">
               </div> -->
               <div class="mb-3">
-                <label for="recipient-tamano" class="col-form-label">Tamaño:</label>
+                <label for="recipient-tamano" class="col-form-label">Size:</label>
                 <input type="text" class="form-control" id="recipient-tamano" [(ngModel)]="obra.tamano" name="tamano">
               </div>
               <div class="form-group">
@@ -667,13 +669,13 @@
                   [(ngModel)]="obra.fechaCreacion" required>
               </div>
               <div class="mb-3">
-                <label for="recipient-imagen" class="col-form-label">Imagen:</label>
+                <label for="recipient-imagen" class="col-form-label">Image:</label>
                 <input type="file" class="form-control" id="recipient-imagen" (change)="onImageFileChange($event)">
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" style="color: white; background-color: rgb(124, 10, 10);"
-                  data-bs-dismiss="modal" (click)="updateObra(obra.imagen)">Actualizar</button>
+                  data-bs-dismiss="modal" (click)="updateObra(obra.imagen)">Update</button>
               </div>
             </form>
 
