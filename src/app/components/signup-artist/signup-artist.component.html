@@ -25,7 +25,7 @@
         <div class="form-group">            
             <label for="name">Name</label>
             <input id="name" type="text"  class="form-control" name="name" 
-                pattern="^(?=.*[a-z])(?=.*[A-Z]).{4,}$" #name="ngModel" [(ngModel)]="artista.nombre" required/>
+                pattern="^(?=.*[a-z])(?=.*[A-Z]).{1,}$" #name="ngModel" [(ngModel)]="artista.nombre" required/>
                 @if(!name.valid && name.touched){
                     <small class="invalid-feedback d-block">Formato invalido</small>
                 } 

@@ -22,7 +22,7 @@
         <div class="form-group">            
             <label for="name">Name</label>
             <input id="name" type="text"  #name="ngModel" class="form-control" name="name" 
-                pattern="^(?=.*[a-z])(?=.*[A-Z]).{4,}$" [(ngModel)]="user.nombre" required/>
+                pattern="^(?=.*[a-z])(?=.*[A-Z]).{1,}$" [(ngModel)]="user.nombre" required/>
                 @if(!name.valid && name.touched){
                     <small class="invalid-feedback d-block">Formato invalido</small>
                 }   

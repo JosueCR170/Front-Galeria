@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UserService } from '../../services/user.service';
@@ -26,16 +26,23 @@ export class LoginComponent {
     this.user=new User(1, "", true, "", "", null,"")
   }
 
+  ngOnInit(){
+    this.logOut();
+  }
+
+  logOut() {
+    sessionStorage.clear();
+  }
+
   loadArtist(){
     this._router.navigate(['/admin'])
     }
 
   onSubmit(form:any){
-    console.log(this.user)
+    //console.log(this.user)
     this._userService.login(this.user).subscribe({
       next:(response:any)=>{
         if(response.status != 401){
-          console.log(response)
           sessionStorage.setItem("token", response);
           this._userService.getIdentityFromAPI().subscribe({
             next:(resp:any)=>{

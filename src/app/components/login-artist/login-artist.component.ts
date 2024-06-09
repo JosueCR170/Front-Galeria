@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Artista } from '../../models/Artista';
@@ -25,6 +25,13 @@ export class LoginArtistComponent {
     this.artist=new Artista(1,"","","","","")
   }
 
+  ngOnInit(){
+    this.logOut();
+  }
+
+  logOut() {
+    sessionStorage.clear();
+  }
 
   onSubmitArtist(form:any){
     this._artistService.loginArtist(this.artist).subscribe({

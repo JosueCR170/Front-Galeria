@@ -31,11 +31,11 @@ export class SignupComponent {
     this.user.tipoUsuario=false;
     this._userService.create(this.user).subscribe({
       next:(response)=>{
-        console.log(response);
+        //console.log(response);
         if(response.status==201){
           form.reset();            
           this.changeStatus(0);
-          this.msgAlert('Artist registered successfully', '', 'success');
+          this.msgAlert('User registered successfully', '', 'success');
           setTimeout(()=>{
             this.redirectToLogin()
           },1000);

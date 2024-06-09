@@ -134,6 +134,15 @@ export class ObraService{
         return this._http.post(this.urlAPI+'obra/updateimage/'+filename, formData, { headers });
     }
 
+    destroyImage(filename: string){
+        const bearerToken = sessionStorage.getItem('token');
+        let headers = new HttpHeaders();
+        if (bearerToken) {
+        headers = headers.set('bearertoken', `${bearerToken}`);
+        }
+        return this._http.delete(this.urlAPI+'obra/image/'+filename, { headers });
+    }
+
     getImage(filename: string): Observable<any> {
         let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
         let options = {

@@ -25,6 +25,7 @@ import { Router, RouterLink } from '@angular/router';
 import { Envio } from '../../models/Envio';
 import { Pedido } from '../../models/Pedido';
 import { EnvioService } from '../../services/envio.service';
+import { HttpErrorResponse } from '@angular/common/http';
 @Component({
   selector: 'app-artista-administration',
   standalone: true,
@@ -36,7 +37,7 @@ import { EnvioService } from '../../services/envio.service';
 })
 export class ArtistaAdministrationComponent {
   public currentDate = new Date();
-
+  errors:string[]=[];
   productDialog: boolean = false;
   selectedObras!: Obra[];
   submitted: boolean = false;
@@ -54,7 +55,7 @@ export class ArtistaAdministrationComponent {
   obras: Obra[] = [];
   facturasArtist: Factura[] = [];
   enviosArtist: Envio[] = [];
-  selectedPedidos: Pedido[] = [];
+  selectedPedidos!: Pedido[];
 
   pedidosArtist: Pedido[] = [];
 
@@ -67,7 +68,6 @@ export class ArtistaAdministrationComponent {
   public status: number;
   public obra: Obra;
   public pedido: Pedido;
-  pedidoAux: Pedido;
   artist: any;
   selectedFile: File | null = null;
   urlAPI: string;
@@ -83,8 +83,6 @@ export class ArtistaAdministrationComponent {
     'Digital art', 'Collage', 'Pyrography', 'Bronze sculpture'
   ]
 
-
-  public formattedDate = this.formatDate(this.currentDate);
   constructor(
     private obraService: ObraService,
     private messageService: MessageService,
@@ -96,11 +94,8 @@ export class ArtistaAdministrationComponent {
     this.urlAPI = server.url + 'obra/getimage/';
 
     this.pedido = new Pedido(new Envio(1, 0, "Espera", "", "", "", "", "", ""),
-      new Factura(0, null, null, null, null, null, null));
-    this.pedidoAux = new Pedido(new Envio(1, 0, "Espera", "", "", "", "", "", ""),
-    new Factura(0, null, null, null, null, null, null));
-
-    this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, this.formattedDate);
+      new Factura(0, null, null, "", null, null, null));
+    this.obra = new Obra(1, 1, "", "", "", 0 , true, "", null, null, "");
   }
 
   ngOnInit(): void {
@@ -115,20 +110,32 @@ export class ArtistaAdministrationComponent {
     this._router.navigate([''])
   }
 
+  redirectToArtistLogin(){
+    this._router.navigate(['loginArtist'])
+  }
+
+  authTokenArtist(){
+    let aux = sessionStorage.getItem('identity');
+    if (aux == null){
+      return false;
+    } else {
+    let jason= JSON.parse(aux);
+    if(jason.nombreArtista == null){
+      return false;
+    }
+    return true;
+    }
+  }
+
+  reloadTablePedidos(){
+    this.indexEnvioByArtist();
+    this.selectedPedidos = [];
+  }
+
   loadLoggedArtist() {
     this.artist = sessionStorage.getItem('identity');
     this.artist = JSON.parse(this.artist);
   }
-
-  private formatDate(date: Date): string {
-    console.log(date);
-
-    const year = date.getFullYear();
-    const month = date.getMonth(); // Agrega un cero al mes si es necesario
-    const day = date.getDate(); // Agrega un cero al día si es necesario
-    return `${year}-${month}-${day}`;
-  }
-
 
   index() {
     this.obraService.index().subscribe({
@@ -166,11 +173,10 @@ export class ArtistaAdministrationComponent {
   /************************* */
 
   openNew() {
-    this.obra = new Obra(1, this.artist.iss, "", "", "", 1, true, "", "", null, null);
+    this.obra = new Obra(1, this.artist.iss, "", "", "", 0, true, "", "", null, null);
     this.submitted = false;
     this.productDialog = true;
   }
-
 
   onSelectionChange(value = []) {
     this.selectAll = value.length === this.totalRecords;
@@ -198,7 +204,7 @@ export class ArtistaAdministrationComponent {
   }
 
   editPedido(pedido: Pedido) {
-    this.pedidoAux = { ...pedido };
+    this.pedido = { ...pedido };
     this.productDialog = true;
   }
 
@@ -230,52 +236,104 @@ export class ArtistaAdministrationComponent {
 
   storePedido(form: any): void {
     if (form.valid) {
-      this.facturaService.create(this.pedido.factura).subscribe({
-        next: (response: any) => {
-          if (response['Factura'].id) {
-            this.pedido.envio.idFactura = response['Factura'].id;
-            this.envioService.create(this.pedido.envio).subscribe({
-              next: (response2: any) => {
-                console.log(response2);
-                location.reload();
-              },
-              error: (err: any) => {
-                console.error(err);
-              }
-            });
-          } else {
-            console.error('No se recibió el id de la factura');
+      let obrita = this.obras.find(o => o.id == this.pedido.factura.idObra);
+      if (obrita?.disponibilidad) {
+        this.facturaService.create(this.pedido.factura).subscribe({
+          next: (response: any) => {
+            if (response['Factura'].id) {
+              this.pedido.envio.idFactura = response['Factura'].id;
+              this.envioService.create(this.pedido.envio).subscribe({
+                next: (response2: any) => {
+                  console.log(response2);
+                  this.updateDisponibilidadObra(obrita,false);
+                  this.msgAlert('Order saved successfully','','success');
+                  //location.reload();
+                },
+                error: (err: any) => {
+                  console.error(err);
+                }
+              });
+            } else {
+              console.error('No se recibió el id de la factura');
+            }
+          },
+          error: (err: any) => {
+            console.error(err);
           }
-        },
-        error: (err: any) => {
-          console.error(err);
-        }
-      });
+        });
+      } else {
+        this.msgAlert('Order not save successfully','','error');
+      }
     }
   }
 
-  updatePedido() {
-    console.log(this.pedidoAux.envio);
-    this.envioService.update(this.pedidoAux.envio).subscribe({
+  updatePedido(envio: Envio) {
+    //console.log(envio);
+    this.envioService.update(envio).subscribe({
       next: (response: any) => {
-        console.log(response);
+       // console.log(response);
+        this.msgAlert('Order updated successfully','','success');
+        this.selectedPedidos = [];
+       // this.indexEnvioByArtist();
+        
       },
       error: (err: Error) => {
         console.log(err);
+        this.msgAlert('Error, from the server. Contact administrator','','error');
       }
     });
   }
 
+
+  deleteImage(filename:string|null){
+
+    if(filename==null){
+      this.msgAlert('Imagen no eliminada, contiene null','','error');
+      return;
+    }
+
+    this.obraService.destroyImage(filename).subscribe({
+      next:(response:any)=>{
+        console.log(response);
+        //this.msgAlert('Imagen eliminada','','success');
+      },
+      error:(error:any)=>{
+        console.error(error);
+       // this.msgAlert('Imagen no eliminada','','error');
+      }
+    });
+  }
   /**Parte del DELETE Obra */
   deleteSelectedObras() {
+    let allAvailable = true;
+
     this.selectedObras.forEach(obra => {
+        if (!obra.disponibilidad) {
+            allAvailable = false;
+        }
+    });
+
+    if (!allAvailable) {
+      this.selectedObras = [];
+        this.msgAlert('Error when deleting artwork, check that they are not sold', '', 'error');
+        return;
+    }
+
+    this.selectedObras.forEach(obra => {
+     
+
       this.obraService.deleted(obra.id).subscribe({
         next: () => {
+
+          this.deleteImage(obra.imagen);
+
           this.obras = this.obras.filter(o => o.id !== obra.id);
           this.totalRecords--;
+          this.msgAlert('artwork successfully eliminated','','success');
         },
         error: (err: Error) => {
           console.error('Error al eliminar la obra', err);
+          this.msgAlert('Error, from the server. Contact administrator','','error');
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
@@ -284,7 +342,9 @@ export class ArtistaAdministrationComponent {
           });
         }
       });
-    });
+})
+    
+  ;
 
     this.messageService.add({
       severity: 'success',
@@ -309,26 +369,29 @@ export class ArtistaAdministrationComponent {
     })
   }
 
-  storeImage(form: any): void {
+  storeImage(form: any) {
     if (form.valid) {
-      console.log('Obra:', this.obra);
+      //console.log('Obra:', this.obra);
       if (this.selectedFile) {
-        console.log('Imagen:', this.selectedFile);
+        //console.log('Imagen:', this.selectedFile);
         this.obraService.upLoadImage(this.selectedFile).subscribe({
           next: (response: any) => {
             console.log(response);
             if (response.filename) {
               this.obra.imagen = response.filename;
-              this.obra.fechaCreacion = this.fechaSeleccionada;
-              this.obra.fechaRegistro = this.formattedDate;
-              console.log(this.obra)
+              //this.obra.fechaCreacion = this.fechaSeleccionada;
+              this.obra.fechaRegistro = this.dateToString(new Date());
+              //console.log(this.obra);
               this.obraService.create(this.obra).subscribe({
                 next: (response2: any) => {
-                  console.log(response2); console.log(this.obra)
+                 // console.log(response2); console.log(this.obra)
                   location.reload();
+                  this.msgAlert('Saved artwork','','success');
+
                 },
                 error: (err: any) => {
                   console.error(err);
+                 this.msgAlert('Error, the artwork was not saved','','error');
 
                 }
               });
@@ -340,8 +403,8 @@ export class ArtistaAdministrationComponent {
             console.error(err);
           }
         });
-      }
-    }
+      }else{this.msgAlert('Error, file not chosen','','error');}
+    }else{console.error('No se hizo nada');}
   }
 
 
@@ -350,7 +413,7 @@ export class ArtistaAdministrationComponent {
     this.envioService.indexByArtist().subscribe({
       next: (response: any) => {
         this.enviosArtist = response['data'];
-        console.log(this.enviosArtist);
+        //console.log(this.enviosArtist);
         this.fillPedidos();
       },
       error: (err: Error) => {
@@ -364,7 +427,7 @@ export class ArtistaAdministrationComponent {
     this.facturaService.indexByArtistId(this.artist['iss']).subscribe({
       next: (response: any) => {
         this.facturasArtist = response['data'];
-        console.log(this.facturasArtist);
+       //console.log(this.facturasArtist);
         // this.fillPedidos();
       },
       error: (err: Error) => {
@@ -384,18 +447,62 @@ export class ArtistaAdministrationComponent {
         this.pedidosArtist.push(pedido);
       }
     }
-    console.log("Pedidos: ", this.pedidosArtist);
+    //console.log("Pedidos: ", this.pedidosArtist);
   }
 
+  dateToString(date: Date): string {
+    this.ano = date.getFullYear();
+    this.mes = ('0' + (date.getMonth() + 1)).slice(-2); // Mes se cuenta desde 0
+    this.dia = ('0' + date.getDate()).slice(-2);
+    return `${this.ano}-${this.mes}-${this.dia}`;
+  }
 
-
-  onFechaChange(event: Event): void {
+  public formatDate(event:Event): string {
     const input = event.target as HTMLInputElement;
     const fecha = new Date(input.value);
     this.ano = fecha.getFullYear();
     this.mes = ('0' + (fecha.getMonth() + 1)).slice(-2); // Mes se cuenta desde 0
     this.dia = ('0' + fecha.getDate()).slice(-2);
-    this.fechaSeleccionada = `${this.ano}-${this.mes}-${this.dia}`;
+    return `${this.ano}-${this.mes}-${this.dia}`;
   }
 
+
+  openNewPedido() {
+    this.pedido = new Pedido(new Envio(1, 0, "Espera", "", "", "", "", "", ""),
+    new Factura(0, null, null, "", null, null, null));
+    this.submitted = false;
+    this.productDialog = true;
+  }
+
+
+
+  updateDisponibilidadObra(obrita:Obra,disponibilidad:boolean){
+    obrita.disponibilidad=disponibilidad;
+
+    this.obraService.updateDisponibilidad(obrita).subscribe({
+      next:(response)=>{
+        //console.log('obraResponse',response);
+        if(response.status==201){
+          this.msgAlert('Successfully updated availability','', 'success');
+        }else{
+          //this.changeStatus(1);
+        }
+      },
+      error:(error:HttpErrorResponse)=>{
+        if(error.status===406 && error.error && error.error.errors){
+          this.errors=[];
+          const errorObj = error.error.errors;
+          for (const key in errorObj) {
+            if (errorObj.hasOwnProperty(key)) {
+              this.errors.push(...errorObj[key]);
+            }
+          }
+          console.error(this.errors);
+        } else {
+          console.error('Otro tipo de error:', error);
+          this.msgAlert('Error, from the server. Contact administrator','','error');
+        }
+        }
+    })
+  }
 }

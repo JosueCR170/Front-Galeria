@@ -178,6 +178,20 @@ export class AdminComponent {
     this.user = JSON.parse(this.user);
   }
 
+  authTokenUserAdmin(){
+    let aux = sessionStorage.getItem('identity');
+    if (aux == null){
+      return false;
+    } else {
+    let jason= JSON.parse(aux);
+    return jason.tipoUsuario;
+    }
+  }
+
+  redirectToUserLogin(){
+    this._router.navigate(['login'])
+  }
+
   selectCategory(category: string) {
     this.selectedCategory = category;
   }
@@ -243,7 +257,7 @@ export class AdminComponent {
   indexUsers() {
     this._userService.index().subscribe({
       next: (response: any) => {
-        this.users = response['data'];
+        this.users = response['data'].filter((user:any)=>user.id !==  this.user.iss);
       },
       error: (err: Error) => {
         console.error('Error al cargar los users', err);
@@ -268,12 +282,14 @@ export class AdminComponent {
       this.productDialog = true;
     }
     
-    editUser(_artista: User) {
-      this.userAux = { ..._artista };
+    editUser(user: User) {
+      if(user.password==''){return}
+      this.userAux = { ...user };
       this.productDialog = true;
     }
 
     editArtista(_artista: Artista) {
+      if(_artista.password==''){return}
       this.artistaAux = { ..._artista };
       this.productDialog = true;
     }
@@ -295,9 +311,11 @@ export class AdminComponent {
       this._obraService.updateImage(this.selectedFile, filename).subscribe({
         next: (response: any) => {
           console.log(response);
+          this.msgAlert('updated artwork','','success')
         },
         error: (err: Error) => {
           console.log(err.message);
+          this.msgAlert('error updating artwork','','error')
         }
       });
     }
@@ -313,13 +331,20 @@ export class AdminComponent {
   }
 
   updateUser() {
+if(this.userAux.password===''){
+  this.msgAlert('Error, empty password','','error')
+  return;
+}
+
     this._userService.update(this.userAux).subscribe({
       next: (response: any) => {
         console.log('Usuario actualizado', response);
+        this.msgAlert('updated user','','success')
         location.reload();
       },
       error: (err: any) => {
         console.error('Error al actualizar el usuario', err);
+        this.msgAlert('error updating user','','error')
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
@@ -328,17 +353,24 @@ export class AdminComponent {
         });
       }
     });
-    
   }
 
   updateArtista() {
+
+    if(this.artistaAux.password==''){
+      this.msgAlert('Error, empty password','','error')
+      return;
+    }
+
     this._artistaService.update(this.artistaAux).subscribe({
       next: (response: any) => {
         console.log('Artista actualizado', response);
+        this.msgAlert('Artist user','','success')
         location.reload();
       },
       error: (err: any) => {
         console.error('Error al actualizar el artista', err);
+        this.msgAlert('error updating artist','','error')
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
@@ -367,10 +399,11 @@ export class AdminComponent {
                 next: (response2: any) => {
                   console.log(response2);
                   location.reload();
+                  this.msgAlert('saved artwork','','success')
                 },
                 error: (err: any) => {
                   console.error(err);
-
+                  this.msgAlert('artwork saved error','','error')
                 }
               });
             } else {
@@ -426,15 +459,52 @@ export class AdminComponent {
   }
   
   /********************************* DELETE *********************************/
+
+
+  deleteImage(filename:string|null){
+
+    if(filename==null){
+      this.msgAlert('Imagen no eliminada, contiene null','','error');
+      return;
+    }
+
+    this._obraService.destroyImage(filename).subscribe({
+      next:(response:any)=>{
+        console.log(response);
+        //this.msgAlert('Imagen eliminada','','success');
+      },
+      error:(error:any)=>{
+        console.error(error);
+       // this.msgAlert('Imagen no eliminada','','error');
+      }
+    });
+  }
   deleteSelectedObras() {
+    let allAvailable = true;
+
+    this.selectedObras.forEach(obra => {
+        if (!obra.disponibilidad) {
+            allAvailable = false;
+        }
+    });
+
+    if (!allAvailable) {
+      this.selectedObras = [];
+        this.msgAlert('Error when deleting artwork, check that they are not sold', '', 'error');
+        return;
+    }
+
     this.selectedObras.forEach(obra => {
       this._obraService.deleted(obra.id).subscribe({
         next: () => {
           this.obras = this.obras.filter(o => o.id !== obra.id);
+          this.deleteImage(obra.imagen);
           this.totalRecords--;
+          this.msgAlert('Deleted artwork', '', 'error');
         },
         error: (err: Error) => {
           console.error('Error al eliminar la obra', err);
+          this.msgAlert('Error when deleting artwork', '', 'error');
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
@@ -462,10 +532,11 @@ export class AdminComponent {
         next: () => {
           this.users = this.users.filter(o => o.id !== _user.id);
           this.totalRecords--;
-          console.log()
+          this.msgAlert('User Deleted','','error');
         },
         error: (err: Error) => {
           console.error('Error al eliminar el usuario', err);
+          this.msgAlert('Error deleting user','','error');
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
@@ -488,35 +559,37 @@ export class AdminComponent {
   }
 
   deleteSelectedArtistas() {
+
+    //verifica si existen artistas con obras vendidas
     this.selectedArtistas.forEach(_artista => {
-      this._artistaService.deleted(_artista.id).subscribe({
-        next: () => {
-          this.artistas = this.artistas.filter(o => o.id !== _artista.id);
-          this.totalRecords--;
-          console.log()
-        },
-        error: (err: Error) => {
-          console.error('Error al eliminar el artista', err);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: `Failed to delete artist: ${_artista.nombre}`,
-            life: 3000
-          });
+      this.obras.forEach(element => {
+        if(element.idArtista==_artista.id && !element.disponibilidad){
+          this.selectedArtistas = [];
+          this.displayConfirmationDialog = false;
+          this.msgAlert('Error, verify that the artists do not have sold artwork','','error');
+          return;
         }
       });
     });
 
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Successful',
-      detail: 'Artist Deleted',
-      life: 3000
-    });
+      this.selectedArtistas.forEach(_artista => {
+
+      this._artistaService.deleted(_artista.id).subscribe({
+        next: () => {
+          this.artistas = this.artistas.filter(o => o.id !== _artista.id);
+          this.totalRecords--;
+          this.msgAlert('Artist successfully removed','','success');
+          
+        },
+        error: (err: Error) => {
+          console.error('Error al eliminar el artista', err);
+        }
+      });
 
     this.selectedArtistas = [];
     this.displayConfirmationDialog = false;
-  }
+  } );
+}
 
 
 
@@ -544,9 +617,17 @@ export class AdminComponent {
     console.log(date);
     
     const year = date.getFullYear();
-    const month = date.getMonth(); // Agrega un cero al mes si es necesario
+    const month = date.getMonth() + 1; // Agrega un cero al mes si es necesario
     const day = date.getDate(); // Agrega un cero al día si es necesario
     return `${year}-${month}-${day}`;
+  }
+
+  msgAlert = (title: any, text: any, icon: any) => {
+    Swal.fire({
+      title,
+      text,
+      icon,
+    })
   }
 
 }

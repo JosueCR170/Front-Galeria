@@ -85,10 +85,10 @@ export class UserService{
 
     update(user:User): Observable<any> {
         console.log(user);
-        let obraJson=JSON.stringify(user);
+        let userJson=JSON.stringify(user);
         let id = user.id;
         //let formData = new FormData();
-        let params='data='+obraJson;
+        let params='data='+userJson;
         let headers;
         let bearertoken = sessionStorage.getItem('token');
         

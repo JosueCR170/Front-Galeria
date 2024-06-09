@@ -62,7 +62,7 @@ public formattedDate = this.formatDate(this.currentDate);
     console.log(date);
     
     const year = date.getFullYear();
-    const month = date.getMonth(); // Agrega un cero al mes si es necesario
+    const month = date.getMonth() + 1; // Agrega un cero al mes si es necesario
     const day = date.getDate(); // Agrega un cero al día si es necesario
     return `${year}-${month}-${day}`;
   }
@@ -90,8 +90,8 @@ public formattedDate = this.formatDate(this.currentDate);
         this.artista=data['obra'].artista;
         this.factura.idObra=data['obra'].id;
     
-        console.log(this.obra);
-        console.log(this.artista);
+        //console.log(this.obra);
+        //console.log(this.artista);
       
         this.status = 1;
       },
@@ -121,7 +121,7 @@ public formattedDate = this.formatDate(this.currentDate);
   loadLoggedUser(){
     this.user = sessionStorage.getItem('identity');
     this.user = JSON.parse(this.user);
-    console.log( this.user)
+    //console.log( this.user)
   }
 
 
@@ -155,7 +155,7 @@ if(this.obra.disponibilidad){
     this.factura.idUsuario=this.user['iss'];
     this.factura.subTotal=this.factura.total;
     
-    console.log(this.factura);
+   // console.log(this.factura);
 
     this._facturaService.create(this.factura).subscribe({
       next:(facturaResponse)=>{

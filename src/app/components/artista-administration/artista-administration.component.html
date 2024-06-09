@@ -1,3 +1,9 @@
+@if(!authTokenArtist()){
+  {{redirectToArtistLogin()}}
+}@else{
+
+
+
 <div class="artist-body">
   <div class="conteiner">
     <header class="miniMenu">
@@ -40,7 +46,7 @@
       <p-toolbar styleClass="mb-4 gap-2">
         <ng-template pTemplate="left">
           <p-button pRipple severity="success" label="New" icon="pi pi-plus" class="mr-2" data-bs-toggle="modal"
-            data-bs-target="#newObraModal" styleClass="btn-rounded" (click)="openNew()">
+            data-bs-target="#newPedidoModal" styleClass="btn-rounded" (click)="openNewPedido()">
           </p-button>
           <p-button type="button" class="asd" data-bs-toggle="modal" data-bs-target="#updateModal"
             (onClick)="editPedido(selectedPedidos[0])" styleClass="btn-rounded"
@@ -71,13 +77,13 @@
                 field="factura.idUsuario"></p-sortIcon></th>
             <th pSortableColumn="factura.idObra" style="width:7%">Obra<p-sortIcon field="factura.idObra"></p-sortIcon>
             </th>
-            <th pSortableColumn="factura.fecha" style="width:6%">Fecha<p-sortIcon field="factura.fecha"></p-sortIcon>
+            <th pSortableColumn="factura.fecha" style="width:10%">Fecha<p-sortIcon field="factura.fecha"></p-sortIcon>
             </th>
             <th pSortableColumn="factura.total" style="width:10%">Total<p-sortIcon field="factura.total"></p-sortIcon>
             </th>
-            <th pSortableColumn="envio.direccion" style="width:9%">Direccion<p-sortIcon
+            <th pSortableColumn="envio.direccion" style="width:20%">Direccion<p-sortIcon
                 field="envio.direccion"></p-sortIcon></th>
-            <th pSortableColumn="envio.estado" style="width:8%">EstadoPedido<p-sortIcon
+            <th pSortableColumn="envio.estado" style="width:12%">EstadoPedido<p-sortIcon
                 field="envio.estado"></p-sortIcon></th>
             <th pSortableColumn="envio.fechaEnviado" style="width:14%">FechaEnviado<p-sortIcon
                 field="envio.fechaEnviado"></p-sortIcon></th>
@@ -168,7 +174,7 @@
             <td>
               <p-cellEditor>
                 <ng-template pTemplate="input">
-                  <input pInputText type="text" [(ngModel)]="pedidoAux.envio.fechaRecibido" required />
+                  <input pInputText type="text" [(ngModel)]="pedido.envio.fechaRecibido" required />
                 </ng-template>
                 <ng-template pTemplate="output">
                   @if(pedido.envio.fechaRecibido==null){
@@ -188,14 +194,14 @@
 
     <!--Inicio dialogo New-->
 
-    <div class="modal fade" id="newObraModal" tabindex="-1" aria-labelledby="newObraModalLabel" aria-hidden="true"
+    <div class="modal fade" id="newPedidoModal" tabindex="-1" aria-labelledby="newObraModalLabel" aria-hidden="true"
       header="Confirm Delete">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="newObraModalLabel">New Shipments
             </h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="reloadTablePedidos()"></button>
           </div>
           <form enctype="multipart/form-data" #newPedidoForm="ngForm" (ngSubmit)="storePedido(newPedidoForm)">
             <div class="modal-body">
@@ -209,15 +215,9 @@
                 <input id="IdObra" class="form-control" name="idObra" type="text" #name="ngModel"
                   [(ngModel)]="pedido.factura.idObra" required>
               </div>
-
-              <div class="form-group">
-                <label for="Fecha">Fecha</label>
-                <input id="Fecha" class="form-control" name="fecha" type="text" #name="ngModel"
-                  [(ngModel)]="pedido.factura.fecha" required>
-              </div>
               <div class="form-group">
                 <label for="Descuento">Descuento</label>
-                <input id="Descuento" class="form-control" name="descuento" type="text" #name="ngModel"
+                <input id="Descuento" class="form-control" name="descuento" type="number" #name="ngModel"
                   [(ngModel)]="pedido.factura.descuento" required>
               </div>
               <div class="form-group">
@@ -240,7 +240,7 @@
               </div>
               <div class="form-group">
                 <label for="Ciudad">Ciudad</label>
-                <input id="Ciudad" class="form-control" name="fechaEnviado" type="text" #size="ngModel"
+                <input id="Ciudad" class="form-control" name="ciudad" type="text" #size="ngModel"
                   [(ngModel)]="pedido.envio.ciudad" required>
               </div>
               <div class="form-group">
@@ -260,61 +260,41 @@
       </div>
     </div>
 
-    <!--Final dialogo New-->
 
-    <!--Inicio dialogo Delete-->
-
-    <!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
-  header="Confirm Delete">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">DELETE
-        </h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p>Seguro que desea eliminar la obra?</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" icon="pi pi-check">Close</button>
-        <button type="button" style="color: rgb(255, 255, 255); background-color: rgb(124, 10, 10); border: none;"
-          data-bs-dismiss="modal" class="btn btn-primary" icon="pi pi-times"
-          (click)="deleteSelectedObras()">Delete</button>
-      </div>
-    </div>
-  </div>
-</div> -->
-
-    <!--Final dialogo Delete-->
-    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="updateModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="exampleModalLabel">UPDATE</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="reloadTablePedidos()"></button>
           </div>
           <div class="modal-body">
             <form>
               <div class="form-group">
                 <label for="Estado">Estado</label>
-                <input id="Estado" class="form-control" name="estado" type="text" #name="ngModel"
-                  [(ngModel)]="pedidoAux.envio.estado" required>
+
+                <select id="Estado" required class="form-select" [(ngModel)]="pedido.envio.estado" name="estado">
+                  <option selected disabled hidden>Choose...</option>
+                  <option>Espera</option>
+                  <option>Enviado</option>
+                  <option>En camino</option>
+                  <option>Recibido</option>
+                </select>
               </div>
               <div class="form-group">
                 <label for="FechaEnviado">Fecha Enviado</label>
-                <input id="FechaEnviado" class="form-control" name="fechaEnviado" type="text" #size="ngModel"
-                  [(ngModel)]="pedidoAux.envio.fechaEnviado" required>
+                <input id="FechaEnviado" class="form-control" name="fechaEnviado" type="date" (change)="formatDate($event)"
+                  [(ngModel)]="pedido.envio.fechaEnviado" required>
               </div>
               <div class="form-group">
                 <label for="FechaRecibido">Fecha Recibido</label>
-                <input id="FechaRecibido" class="form-control" name="fechaRecibido" type="text" #price="ngModel"
-                  [(ngModel)]="pedidoAux.envio.fechaRecibido" required>
+                <input id="FechaRecibido" class="form-control" name="fechaRecibido" type="date" (change)="formatDate($event)"
+                  [(ngModel)]="pedido.envio.fechaRecibido" required>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="reloadTablePedidos()">Cerrar</button>
                 <button type="button" class="btn btn-primary" style="color: white; background-color: rgb(124, 10, 10);"
-                  data-bs-dismiss="modal" (click)="updatePedido()">Actualizar</button>
+                  data-bs-dismiss="modal" (click)="updatePedido(pedido.envio)">Actualizar</button>
               </div>
             </form>
 
@@ -383,7 +363,7 @@
                 field="disponibilidad"></p-sortIcon></th>
             <th style="width:20%">image</th>
           </tr>
-        </ng-template>
+        </ng-template> 
         <ng-template pTemplate="body" let-obra let-ri="rowIndex">
           <tr [pEditableRow]="obra">
             <td>
@@ -521,7 +501,7 @@
                 <span class="underline"></span>
               </div>
               <div class="form-group ">
-                <label for="Tecnic" style="margin-right: 10px;">Tecnic </label>
+                <label for="Tecnic" style="margin-right: 10px;">Technique </label>
                 <select id="Tecnic" name="tecnic" class="selector " #tecnic="ngModel" [(ngModel)]="obra.tecnica"
                   required>
                   <option value="Oil on canvas">Oil on canvas</option>
@@ -549,7 +529,7 @@
               </div>
               <div class="form-group input-wrapper">
                 <label for="Price">Price</label>
-                <input id="Price" class="input-box" name="price" type="text" #price="ngModel" [(ngModel)]="obra.precio"
+                <input id="Price" class="input-box" name="price" type="number" #price="ngModel" [(ngModel)]="obra.precio"
                   required>
               </div>
               <div class="form-group ">
@@ -575,11 +555,11 @@
               <div class="form-group">
                 <label for="CreateDate">Create Date</label>
                 <input id="CreateDate" class="form-control" name="createDate" type="date"
-                  (change)="onFechaChange($event)" #createDate="ngModel" [(ngModel)]="obra.fechaCreacion" required>
+                  (change)="formatDate($event)" #createDate="ngModel" [(ngModel)]="obra.fechaCreacion" required>
               </div>
-              <div *ngIf="fechaSeleccionada">
+              <!-- <div *ngIf="fechaSeleccionada">
                 <p>Fecha seleccionada: Año: {{ ano }}, Mes: {{ mes }}, Día: {{ dia }}</p>
-              </div>
+              </div> -->
 
 
               <div class="form-group">
@@ -683,7 +663,7 @@
               </div>
               <div class="form-group">
                 <label for="CreateDate">Create Date</label>
-                <input id="CreateDate" class="form-control" name="createDate" type="date" (change)="onFechaChange($event)" #createDate="ngModel"
+                <input id="CreateDate" class="form-control" name="createDate" type="date" (change)="formatDate($event)" #createDate="ngModel"
                   [(ngModel)]="obra.fechaCreacion" required>
               </div>
               <div class="mb-3">
@@ -709,3 +689,4 @@
 
   </div>
 </div>
+}
