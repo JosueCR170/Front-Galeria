@@ -330,7 +330,7 @@ export class AdminComponent {
     });
   }
 
-  updateUser() {
+updateUser() {
 if(this.userAux.password===''){
   this.msgAlert('Error, empty password','','error')
   return;
