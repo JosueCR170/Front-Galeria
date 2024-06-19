@@ -322,7 +322,7 @@ export class AdminComponent {
     this._obraService.update(this.obra).subscribe({
       next:(response:any)=>{
         console.log(response);
-        location.reload();
+        this.index()
       },
       error:(err:Error)=>{
         console.log(err);
@@ -340,7 +340,7 @@ if(this.userAux.password===''){
       next: (response: any) => {
         console.log('Usuario actualizado', response);
         this.msgAlert('updated user','','success')
-        location.reload();
+        this.indexUsers()
       },
       error: (err: any) => {
         console.error('Error al actualizar el usuario', err);
@@ -366,7 +366,7 @@ if(this.userAux.password===''){
       next: (response: any) => {
         console.log('Artista actualizado', response);
         this.msgAlert('Artist user','','success')
-        location.reload();
+        this.indexArtista()
       },
       error: (err: any) => {
         console.error('Error al actualizar el artista', err);
@@ -398,7 +398,7 @@ if(this.userAux.password===''){
               this._obraService.create(this.obra).subscribe({
                 next: (response2: any) => {
                   console.log(response2);
-                  location.reload();
+                  this.index()
                   this.msgAlert('saved artwork','','success')
                 },
                 error: (err: any) => {
@@ -434,7 +434,7 @@ if(this.userAux.password===''){
             console.error(err);
           }
         });
-        location.reload();
+        this.indexUsers();
     }
   }
 
@@ -454,7 +454,7 @@ if(this.userAux.password===''){
             console.error(err);
           }
         });
-        location.reload();
+        this.indexArtista()
     }
   }
   

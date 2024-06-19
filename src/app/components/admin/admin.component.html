@@ -459,7 +459,7 @@
                   <label for="nombreArtista" class="form-label">Artist Name</label>
                   <input type="text" class="form-control" id="ArtistaName" [(ngModel)]="artistaAux.nombreArtista" name="nombreArtista" required />
                 </div>
-                <button type="submit" class="btn btn-primary" [disabled]="!newArtistaForm.valid">Save</button>
+                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" [disabled]="!newArtistaForm.valid">Save</button>
               </form>
             </div>
           </div>
