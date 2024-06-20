@@ -48,13 +48,7 @@ export class ObraService{
         return this._http.delete(`${this.urlAPI}obra/${id}`, options);
     }
 
-    deleteImage(filename:string):Observable<any>{
-        let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-        let options = {
-            headers
-        };
-        return this._http.delete(`${this.urlAPI}obra/image/${filename}`, options);
-    }
+    
     
     update(obra:Obra): Observable<any> {
         console.log(obra);
