@@ -32,10 +32,11 @@ import Swal from 'sweetalert2';
   providers: [MessageService,ObraService, ConfirmationService],
 })
 export class AdminComponent {
+  public artistasList: { key: number, value: string }[] = [];
   
   artStyles: string[] = [
     'Cubism','Impressionism','Expressionism','Realism','Surrealism','Abstract','Renaissance',
-    'Baroque','Rococo','Romanticism','Neoclassicism','Modernism','Pop Art','Naïve Art'
+    'Baroque','Rococo','Romanticism','Neoclassicism','Modernism','Pop Art'
   ]
 
   tecnicas: string[]=[
@@ -50,6 +51,7 @@ export class AdminComponent {
   public _artista: Artista;
   public currentDate = new Date();
   public formattedDate = this.formatDate(this.currentDate);
+  public errores:string[]=[];
 
   constructor(
     private _obraService: ObraService,
@@ -246,6 +248,10 @@ export class AdminComponent {
     this._obraService.index().subscribe({
       next: (response: any) => {
         this.obras = response['data'];
+
+        this.artistasList=[];
+        this.loadArtistaName();
+
         console.log();
       },
       error: (err: Error) => {
@@ -269,6 +275,7 @@ export class AdminComponent {
     this._artistaService.index().subscribe({
       next: (response: any) => {
         this.artistas = response['data'];
+        
       },
       error: (err: Error) => {
         console.error('Error al cargar los artistas', err);
@@ -311,6 +318,7 @@ export class AdminComponent {
       this._obraService.updateImage(this.selectedFile, filename).subscribe({
         next: (response: any) => {
           console.log(response);
+          this.selectedObras=[];
           this.msgAlert('updated artwork','','success')
         },
         error: (err: Error) => {
@@ -322,7 +330,7 @@ export class AdminComponent {
     this._obraService.update(this.obra).subscribe({
       next:(response:any)=>{
         console.log(response);
-        location.reload();
+        this.index()
       },
       error:(err:Error)=>{
         console.log(err);
@@ -339,8 +347,10 @@ if(this.userAux.password===''){
     this._userService.update(this.userAux).subscribe({
       next: (response: any) => {
         console.log('Usuario actualizado', response);
-        this.msgAlert('updated user','','success')
-        location.reload();
+        this.msgAlert('updated user','','success');
+        // this.userAux = new User(1,"",false,"","",null,"");
+        this.selectedUsers=[];
+        this.indexUsers();
       },
       error: (err: any) => {
         console.error('Error al actualizar el usuario', err);
@@ -365,8 +375,11 @@ if(this.userAux.password===''){
     this._artistaService.update(this.artistaAux).subscribe({
       next: (response: any) => {
         console.log('Artista actualizado', response);
-        this.msgAlert('Artist user','','success')
-        location.reload();
+        this.selectedArtistas=[];
+        this.msgAlert('Artist updated','','success')
+        this.artistasList=[];
+        this.loadArtistaName();
+        this.indexArtista()
       },
       error: (err: any) => {
         console.error('Error al actualizar el artista', err);
@@ -384,7 +397,7 @@ if(this.userAux.password===''){
 
   /********************************* STORE *********************************/
   storeObra(form: any): void {
-    if (form.valid) {
+    // if (form.valid) {
       console.log('Obra:', this.obra);
       if (this.selectedFile) {
         console.log('Imagen:', this.selectedFile);
@@ -398,24 +411,52 @@ if(this.userAux.password===''){
               this._obraService.create(this.obra).subscribe({
                 next: (response2: any) => {
                   console.log(response2);
-                  location.reload();
+                  this.index()
                   this.msgAlert('saved artwork','','success')
                 },
-                error: (err: any) => {
-                  console.error(err);
-                  this.msgAlert('artwork saved error','','error')
+                error: (error: any) => {
+                  if (error.status === 406 && error.error && error.error.error) {
+                    this.errores = [];
+                    const errorObj = error.error.error;
+                    for (const key in errorObj) {
+                      if (errorObj.hasOwnProperty(key)) {
+                        this.errores.push(...errorObj[key]);
+                      }
+                    }
+                    //console.error(this.errores);
+                    this.msgAlert('Error adding artwork',this.errores,'error');     
+      
+                  } else {
+                    console.error('Other type of error:', error);
+                    this.msgAlert('Error from the server, contact an administrator', '', 'error');
+                  }
                 }
               });
             } else {
               console.error('No se recibió el nombre del archivo.');
             }
           },
-          error: (err: any) => {
-            console.error(err);
+          error: (error: any) => {
+            if (error.status === 406 && error.error && error.error.error) {
+              this.errores = [];
+              const errorObj = error.error.error;
+              for (const key in errorObj) {
+                if (errorObj.hasOwnProperty(key)) {
+                  this.errores.push(...errorObj[key]);
+                }
+              }
+              //console.error(this.errores);
+              this.msgAlert('Error adding artwork',this.errores,'error');     
+
+            } else {
+              console.error('Other type of error:', error);
+              this.msgAlert('Error from the server, contact an administrator', '', 'error');
+            }
+          
           }
         });
-      }
-    }
+      }else{ this.msgAlert('Error you must choose an image for the artwork', '', 'error');}
+    // }
   }
 
   storeUser(form: any): void {
@@ -425,16 +466,32 @@ if(this.userAux.password===''){
         
         console.log(response);
         if(response.status==201){
-          form.reset();            
+          form.reset();   
+          this.msgAlert('User added successfully','','success');          
             } else {
-              console.error('No se pudo ingrear el usuario');
+              console.error('No se pudo ingresar el usuario');
             }
           },
-          error: (err: any) => {
-            console.error(err);
+          error: (error: any) => {
+            if (error.status === 406 && error.error && error.error.error) {
+              this.errores = [];
+              const errorObj = error.error.error;
+              for (const key in errorObj) {
+                if (errorObj.hasOwnProperty(key)) {
+                  this.errores.push(...errorObj[key]);
+                }
+              }
+              //console.error(this.errores);
+              this.msgAlert('Error adding user',this.errores,'error');     
+
+            } else {
+              console.error('Other type of error:', error);
+              this.msgAlert('Error from the server, contact an administrator', '', 'error');
+            }
+          
           }
         });
-        location.reload();
+        this.indexUsers();
     }
   }
 
@@ -445,16 +502,33 @@ if(this.userAux.password===''){
         
         console.log(response);
         if(response.status==201){
-          form.reset();            
+          form.reset(); 
+          this.msgAlert('Artist added successfully','','success');
+          this.artistasList=[];
+          this.loadArtistaName();          
             } else {
-              console.error('No se pudo ingrear el usuario');
+              console.error('The artist could not be entered');
             }
           },
-          error: (err: any) => {
-            console.error(err);
+          error: (error: any) => {
+            if (error.status === 406 && error.error && error.error.errors) {
+              this.errores = [];
+              const errorObj = error.error.errors;
+              for (const key in errorObj) {
+                if (errorObj.hasOwnProperty(key)) {
+                  this.errores.push(...errorObj[key]);
+                }
+              }
+              //console.error(this.errores);
+              this.msgAlert('Error adding artist',this.errores,'error');     
+
+            } else {
+              console.error('Other type of error:', error);
+              this.msgAlert('Error from the server, contact an administrator', '', 'error');
+            }
           }
         });
-        location.reload();
+        this.indexArtista()
     }
   }
   
@@ -515,13 +589,6 @@ if(this.userAux.password===''){
       });
     });
 
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Successful',
-      detail: 'Obras Deleted',
-      life: 3000
-    });
-
     this.selectedObras = [];
     this.displayConfirmationDialog = false;
   }
@@ -545,13 +612,6 @@ if(this.userAux.password===''){
           });
         }
       });
-    });
-
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Successful',
-      detail: 'Users Deleted',
-      life: 3000
     });
 
     this.selectedUsers = [];
@@ -579,6 +639,8 @@ if(this.userAux.password===''){
           this.artistas = this.artistas.filter(o => o.id !== _artista.id);
           this.totalRecords--;
           this.msgAlert('Artist successfully removed','','success');
+          this.artistasList=[];
+          this.loadArtistaName();
           
         },
         error: (err: Error) => {
@@ -596,6 +658,32 @@ if(this.userAux.password===''){
   hideConfirmationDialog() {
     this.displayConfirmationDialog = false;
   }
+
+   /*****************************  Obtener nombre  *****************************/
+
+   loadArtistaName() {
+    this._artistaService.index().subscribe({
+      next: (response: any) => {
+        //console.log(response)
+        let artistas = response['data'];
+  artistas.forEach((e:any) => {
+    this.artistasList.push({
+          key: e.id,
+          value: e.nombre
+        });
+  });
+      },
+      error: (err: Error) => {
+        console.error('Error al buscar el artista', err);
+      }
+    });
+  }
+
+  getArtistaNameById(id: number): string {
+    const artista = this.artistasList.find(p => p.key === id);
+    return artista ? artista.value : 'Desconocido';
+  }
+
 
   /************************************************************************ */
   

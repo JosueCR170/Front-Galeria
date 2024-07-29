@@ -3,7 +3,6 @@ import { ObraService } from '../../services/obra.service';
 
 import { Obra } from '../../models/Obra';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { ProductService } from '../../services/productservice';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { CommonModule } from '@angular/common';
@@ -34,7 +33,7 @@ import { findIndex } from 'rxjs';
   imports: [TableModule, ConfirmDialogModule, ToastModule, ToolbarModule, CommonModule, DialogModule, FormsModule, IconFieldModule, InputIconModule, TagModule, DropdownModule, ButtonModule, InputTextModule],
   templateUrl: './artista-administration.component.html',
   styleUrl: './artista-administration.component.css',
-  providers: [ProductService, MessageService, ObraService, ConfirmationService],
+  providers: [MessageService, ObraService, ConfirmationService],
 
 })
 export class ArtistaAdministrationComponent {
