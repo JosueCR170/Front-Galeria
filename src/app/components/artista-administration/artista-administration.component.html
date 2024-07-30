@@ -311,64 +311,72 @@
 
 
     @if(administration){
-    <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
+    <div style="width: 100%; color: white;">
       <p class="work">YOUR <span class="workGradient">WORKS</span> </p>
     </div>
     <!--Inicio tabla-->
 
-    <div class="card">
+    <div class="card"> 
       <p-toast></p-toast>
-      <p-toolbar styleClass="mb-4 gap-2">
-        <ng-template pTemplate="left">
-          <p-button pRipple severity="success" label="New" icon="pi pi-plus" class="mr-2" data-bs-toggle="modal"
-            data-bs-target="#newObraModal" styleClass="btn-rounded" (click)="openNew()">
-          </p-button>
-          <p-button type="button" class="asd" data-bs-toggle="modal" data-bs-target="#exampleModal"
-            styleClass="btn-rounded" [disabled]="!selectedObras ||!selectedObras.length" severity="danger"
-            label="Delete">
-          </p-button>
-          <p-button type="button" class="asd" data-bs-toggle="modal" data-bs-target="#updateModal"
-            (onClick)="editObra(selectedObras[0])" styleClass="btn-rounded"
-            [disabled]="!selectedObras || selectedObras.length !== 1" severity="warning" label="Update">
-          </p-button>
-        </ng-template>
+      <p-toolbar class="tool" styleClass="gap-2" [style]="{background: 'linear-gradient(90deg, rgba(7,59,61,1) 0%, rgba(46,63,117,1) 100%)',border:'none', borderRadius:'10px 10px 0 0'}"> 
+        <div>
+          <button pButton
+          pRipple  label="+ New" class="aas" data-bs-toggle="modal" 
+            data-bs-target="#newObraModal" (click)="openNew()">
+          </button>
+          
+          <button  pButton class="aas" style="background: red; margin-left: 5px;"
+          pRipple data-bs-toggle="modal" data-bs-target="#exampleModal"
+            [disabled]="!selectedObras ||!selectedObras.length"
+            label="X Delete">
+          </button>
+          <button pButton class="aas" style="background: rgb(236, 144, 32); margin-left: 5px;"
+          pRipple data-bs-toggle="modal" data-bs-target="#updateModal"
+            (onClick)="editObra(selectedObras[0])"
+            [disabled]="!selectedObras || selectedObras.length !== 1" label="Ø Update">
+          </button>
+        </div>
+        <!--el buscar-->
+        <div class="align-items-center justify-content-between" style="display: flex;">
+          <h5 style="margin-right: 40px; color: rgb(255, 255, 255);">Manage work</h5>
+          <span style="margin-right: 10px;">
+            <input class="search__input" type="text" #input (input)="dt.filterGlobal(input.value, 'contains')"
+              placeholder="Search..." />
+              <svg class="search__icon" aria-hidden="true" viewBox="0 0 24 24">
+                <g>
+                    <path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path>
+                </g>
+            </svg>
+          </span>
+        </div>
       </p-toolbar>
       <p-table #dt [value]="obras" [rows]="10" [totalRecords]="totalRecords" [paginator]="true"
         [(selection)]="selectedObras" [selectAll]="selectAll" [tableStyle]="{ 'min-width': '75rem' }"
         [globalFilterFields]="['id', 'nombre', 'categoria', 'tecnica', 'tamano', 'precio', 'fechaCreacion', 'fechaRegistro', 'disponibilidad']">
 
-        <ng-template pTemplate="caption">
-          <div class="flex align-items-center justify-content-between">
-            <h5 class="mb-4">Manage work</h5>
-            <span class="p-input-icon-left">
-              <input pInputText type="text" #input (input)="dt.filterGlobal(input.value, 'contains')"
-                placeholder="Search..." />
-            </span>
-          </div>
-        </ng-template>
         <ng-template pTemplate="header">
           <tr>
             <th style="width: 4rem">
               <p-tableHeaderCheckbox disabled="true"></p-tableHeaderCheckbox>
             </th>
-            <th pSortableColumn="id" style="width:9%">Code <p-sortIcon field="id"></p-sortIcon></th>
-            <th pSortableColumn="nombre" style="width:7%">Name <p-sortIcon field="nombre"></p-sortIcon></th>
-            <th pSortableColumn="categoria" style="width:6%">Category <p-sortIcon field="categoria"></p-sortIcon></th>
-            <th pSortableColumn="tecnica" style="width:10%">Technique <p-sortIcon field="tecnica"></p-sortIcon></th>
-            <th pSortableColumn="tamano" style="width:9%">Size <p-sortIcon field="tamano"></p-sortIcon></th>
-            <th pSortableColumn="precio" style="width:8%">Price <p-sortIcon field="precio"></p-sortIcon></th>
-            <th pSortableColumn="fechaCreacion" style="width:14%">Creation Date <p-sortIcon
+            <th pSortableColumn="id" >Code <p-sortIcon field="id"></p-sortIcon></th>
+            <th pSortableColumn="nombre" >Name <p-sortIcon field="nombre"></p-sortIcon></th>
+            <th pSortableColumn="categoria" >Category <p-sortIcon field="categoria"></p-sortIcon></th>
+            <th pSortableColumn="tecnica" >Technique <p-sortIcon field="tecnica"></p-sortIcon></th>
+            <th pSortableColumn="tamano" >Size <p-sortIcon field="tamano"></p-sortIcon></th>
+            <th pSortableColumn="precio" >Price <p-sortIcon field="precio"></p-sortIcon></th>
+            <th pSortableColumn="fechaCreacion">Creation Date <p-sortIcon
                 field="fechaCreacion"></p-sortIcon></th>
-            <th pSortableColumn="fechaRegistro" style="width:14%">Registration Date <p-sortIcon
+            <th pSortableColumn="fechaRegistro" >Registration Date <p-sortIcon
                 field="fechaRegistro"></p-sortIcon></th>
-            <th pSortableColumn="disponibilidad" style="width:11%">Availability <p-sortIcon
+            <th pSortableColumn="disponibilidad" >Availability <p-sortIcon
                 field="disponibilidad"></p-sortIcon></th>
-            <th style="width:20%">image</th>
+            <th style="text-align: center;">image</th>
           </tr>
         </ng-template> 
         <ng-template pTemplate="body" let-obra let-ri="rowIndex">
-          <tr [pEditableRow]="obra">
-            <td>
+          <tr [pEditableRow]="obra" style="background: linear-gradient(90deg, rgba(7,59,61,1) 0%, rgba(46,63,117,1) 100%); color: rgb(230, 230, 230);border-bottom: 2px solid white;">
+            <td >
               <p-tableCheckbox [value]="obra"></p-tableCheckbox>
             </td>
             <td>
@@ -467,17 +475,11 @@
                   <input pInputText type="image" [(ngModel)]="obra.imagen" required />
                 </ng-template>
                 <ng-template pTemplate="output">
-                  <img src="{{urlAPI}}{{obra.imagen}}" alt="" style="width: 150px;" />
+                  <img src="{{urlAPI}}{{obra.imagen}}" alt="" style="width: 90px; border-radius: 20px;" />
                 </ng-template>
               </p-cellEditor>
             </td>
-            <td>
-              <div class="flex align-items-center justify-content-center gap-2">
-                <!-- Botones de acción -->
-                <!-- <button pButton pRipple icon="pi pi-pencil" (click)="editProduct(obra)"></button>-->
-                <!--  <button pButton pRipple icon="pi pi-trash" (click)="deleteProduct(obra)"></button>-->
-              </div>
-            </td>
+            
           </tr>
         </ng-template>
       </p-table>
