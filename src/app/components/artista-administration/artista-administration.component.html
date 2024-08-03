@@ -35,7 +35,7 @@
     <!--Abajo del nav-->
 
     @if(delivry){
-    <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
+    <div style="width: 100%; color: white;">
       <p class="work">YOUR <span class="workGradient">SHIPMENTS</span> </p>
     </div>
     <!--TABLA DELIVERY--->
@@ -43,33 +43,38 @@
 
     <div class="card">
       <p-toast></p-toast>
-      <p-toolbar styleClass="mb-4 gap-2">
-        <ng-template pTemplate="left">
-          <p-button pRipple severity="success" label="New" icon="pi pi-plus" class="mr-2" data-bs-toggle="modal"
-
-            data-bs-target="#newPedidoModal" styleClass="btn-rounded" (click)="openNewPedido()">
-
-          </p-button>
-          <p-button type="button" class="asd" data-bs-toggle="modal" data-bs-target="#updateModal"
-            (onClick)="editPedido(selectedPedidos[0])" styleClass="btn-rounded"
-            [disabled]="!selectedPedidos || selectedPedidos.length !== 1" severity="warning" label="Update">
-          </p-button>
-        </ng-template>
+      <p-toolbar styleClass="gap-2"  [style]="{background: 'linear-gradient(90deg, rgba(7,59,61,1) 0%, rgba(46,63,117,1) 100%)',border:'none', borderRadius:'10px 10px 0 0'}">
+      <div>
+      <button pButton 
+      pRipple  label="+ New" class="aas" data-bs-toggle="modal" 
+        data-bs-target="#newPedidoModal"  (click)="openNewPedido()">
+      </button>
+      <button pButton style="background: rgb(236, 144, 32); margin-left: 5px;"
+      pRipple  label="Update" class="aas" data-bs-toggle="modal" 
+        data-bs-target="#updateModal"(onClick)="editPedido(selectedPedidos[0])"
+        [disabled]="!selectedPedidos || selectedPedidos.length !== 1">
+      </button>
+      </div>
+      <div class="align-items-center justify-content-between" style="display: flex;">
+        <h5 style="margin-right: 40px; color: rgb(255, 255, 255);">Manage work</h5>
+        <span style="margin-right: 10px;">
+          <input class="search__input" type="text" #input (input)="dts.filterGlobal(input.value, 'contains')"
+            placeholder="Search..." />
+            <svg class="search__icon" aria-hidden="true" viewBox="0 0 24 24">
+              <g>
+                  <path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path>
+              </g>
+          </svg>
+        </span>
+      </div>
+        
+      
       </p-toolbar>
       <p-table #dts [value]="pedidosArtist" [rows]="10" [totalRecords]="totalRecords" [paginator]="true"
         [(selection)]="selectedPedidos" [selectAll]="selectAll" [tableStyle]="{ 'min-width': '75rem' }"
         [globalFilterFields]="['factura.idUsuario', 'factura.idObra', 'factura.fecha', 'factura.total', 'envio.direccion', 
     'envio.estado', 'envio.fechaEnviado', 'envio.fechaRecibido']">
 
-        <ng-template pTemplate="caption">
-          <div class="flex align-items-center justify-content-between">
-            <h5 class="mb-4">Manage orders</h5>
-            <span class="p-input-icon-left">
-              <input pInputText type="text" #input (input)="dts.filterGlobal(input.value, 'contains')"
-                placeholder="Search..." />
-            </span>
-          </div>
-        </ng-template>
         <ng-template pTemplate="header">
           <tr>
             <th style="width: 4rem">
@@ -94,7 +99,7 @@
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-pedido let-ri="rowIndex">
-          <tr [pEditableRow]="pedido">
+          <tr [pEditableRow]="pedido" style="background: linear-gradient(90deg, rgba(7,59,61,1) 0%, rgba(46,63,117,1) 100%); color: rgb(230, 230, 230);border-bottom: 2px solid white;">
             <td>
               <p-tableCheckbox [value]="pedido"></p-tableCheckbox>
             </td>
