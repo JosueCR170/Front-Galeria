@@ -288,3 +288,63 @@
     background-image: radial-gradient(circle 8px at 92% 63%, rgb(255,250,85) 0%,transparent 22%),radial-gradient(circle 2px at 73% 80%, rgb(201,242,255) 0%,transparent 60%),radial-gradient(circle 2px at 88% 58%, rgb(201,242,255) 0%,transparent 5%),radial-gradient(circle 2px at 39% 24%, rgb(201,242,255) 0%,transparent 17%),radial-gradient(circle 2px at 31% 10%, rgb(201,242,255) 0%,transparent 83%),radial-gradient(circle 2px at 25% 64%, rgb(201,242,255) 0%,transparent 65%),radial-gradient(circle 2px at 46% 18%, rgb(201,242,255) 0%,transparent 86%),radial-gradient(circle 2px at 27% 89%, rgb(201,242,255) 0%,transparent 61%),radial-gradient(circle 2px at 72% 43%, rgb(201,242,255) 0%,transparent 46%),radial-gradient(circle 2px at 73% 2%, rgb(201,242,255) 0%,transparent 87%),radial-gradient(circle 5px at 94% 33%, rgb(253,250,147) 0%,transparent 93%),radial-gradient(circle 5px at 35% 87%, rgb(253,250,147) 0%,transparent 42%),radial-gradient(circle 4px at 78% 1%, rgb(255,249,27) 0%,transparent 76%),radial-gradient(circle 4px at 71% 51%, rgb(255,249,27) 0%,transparent 69%),radial-gradient(circle 4px at 26% 45%, rgb(255,249,27) 0%,transparent 83%),linear-gradient(90deg, rgb(35,35,35) 0%, rgb(35,35,35) 50%,rgb(35,35,35) 50%, rgb(35,35,35) 100%); background-size: 278px 278px;
   }
   
+  .search__input {
+    font-family: inherit;
+    font-size: inherit;
+    background-color: #f4f2f2;
+    border: none;
+    border-bottom: 3px solid rgba(219, 133, 133, 1);
+    color: #646464;
+    padding: 0.7rem 2rem 0.7rem 1rem;
+    border-radius: 10px 10px 0 0;
+    width: 12rem;
+    transition: all ease-in-out .5s;
+    margin-right: -2rem;
+  }
+  .search__input:hover, .search__input:focus {
+    box-shadow: 0 0 1em #000000bb;
+    border-bottom: 2px solid rgb(18, 18, 187);
+  }
+  
+  .search__input:focus {
+    outline: none;
+    background-color: #f0eeee;
+    border-bottom: 2px solid rgb(18, 18, 187);
+  }
+  
+  .search__input::-webkit-input-placeholder {
+    font-weight: 100;
+    color: rgb(0, 0, 0);
+  }
+  .search__icon {
+    height: 1.3em;
+    width: 1.3em;
+    fill:rgb(0, 0, 0);
+  }
+  .card{border: none;}
+  p-toolbar{
+    background: #000;
+  }
+  
+  .aas {
+    background-color: green;
+    color: white;
+    border-radius: 10em;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 0.5em 1.5em;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border: 1px solid black;
+    box-shadow: 0 0 0 0 black;
+  }
+  
+  .aas:hover {
+    transform: translateY(-4px) translateX(-2px);
+    box-shadow: 2px 5px 0 0 black;
+  };
+  
+  .aas:active {
+    transform: translateY(2px) translateX(1px);
+    box-shadow: 0 0 0 0 black;
+  };
