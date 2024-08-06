@@ -293,20 +293,12 @@
         
                 <div class="mb-3">
                   <label for="recipient-email" class="col-form-label">Email:</label>
-                  <input type="email" class="form-control" id="recipient-email" [(ngModel)]="userAux.email" name="email">
+                  <input type="email" class="form-control" id="recipient-email" [(ngModel)]="userAux.email" name="email" disabled="true">
                 </div>
         
                 <div class="mb-3">
                   <label for="recipient-password" class="col-form-label">Password:</label>
                   <input type="password" class="form-control" id="recipient-password" [(ngModel)]="userAux.password" name="password" required>
-                </div>
-        
-                <div class="mb-3">
-                  <label for="recipient-typeUser" class="col-form-label">UserType:</label>
-                  <select class="selector" id="recipient-typeUser" name="typeUser" [(ngModel)]="userAux.tipoUsuario">
-                    <option [value]="1">Admin</option>
-                    <option [value]="0">User</option>
-                  </select>
                 </div>
   
                   <div class="mb-3">
@@ -617,8 +609,9 @@
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-obra let-ri="rowIndex">
-            <tr [pEditableRow]="obra" style="background: linear-gradient(90deg, rgba(7,59,61,1) 0%, rgba(46,63,117,1) 100%); color: rgb(230, 230, 230);border-bottom: 2px solid white;">
-              <td >
+            <tr [pEditableRow]="obra" style="background: linear-gradient(90deg, rgba(128,0,128,1) 0%, rgba(75,0,130,1) 100%); color: rgb(230, 230, 230);border-bottom: 2px solid white;">
+             
+            <td >
                 <p-tableCheckbox [value]="obra"></p-tableCheckbox>
               </td>
               <td>
