@@ -1,4 +1,5 @@
 <div class="shop-body">
+  <div class="opacidad">
   <div class="conteiner">
     <header class="miniMenu">
       <div class="menu">
@@ -61,35 +62,32 @@
 
     <!--Cambie acá-->
     @if (loadObrasLength(selectedCategory) >= 1) {
-    <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
-      <p class="work"><span class="workGradient">WORK</span> ART</p>
+    <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141); text-align: center;">
+      <p class="work"><span class="workGradient">{{ selectedCategory }}</span></p>
     </div>
     <div style="border-bottom: solid 2px gray;">
-      <div class="categoria" >{{ selectedCategory }}</div>
+ 
       <div class="colums">
         <div class="cardColm-a" *ngFor="let obra of auxObras">
           <div class="card" style="height: 100%;">
             <div class="image-container">
-              <img src="{{urlAPI}}{{obra.imagen}}" class="card-img-top" alt="...">
-              <div class="overlay-text">
-                @if(obra.disponibilidad){
-                <span class="info-value venta-S"><i class="fa-solid fa-tag"></i> <strong> On Sale</strong> </span>
-                }@else{
-                <span class="info-value venta-N" style="color: rgb(208, 29, 29);"><i
-                    class="fa-solid fa-tag"></i><strong> Not Available</strong> </span>
-                }
-              </div>
+              <img src="{{urlAPI}}{{obra.imagen}}" [routerLink]="['viewArtwork', obra.id]" class="card-img-top" alt="...">
+              <button class="botonVenta">
+                <a>+ Add car</a>
+                </button>
             </div>
             <div class="card-body">
-
-              <h5 class="card-title">{{ obra.nombre }}</h5>
-              <p class="card-text"><strong>$ {{ obra.precio }}</strong></p>
-
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <a href="#" class="btn btn-primary"
-                  style="width: 100%; background: linear-gradient(90deg,rgba(219, 133, 133, 1),rgba(54, 0, 207, 1)); border: none;"
-                  [routerLink]="['viewArtwork', obra.id]">View</a>
+              <div class="card-title">
+                 <strong>{{ obra.nombre }} - </strong>
+                  @if(obra.disponibilidad){
+                  <span class="info-value venta-S" style="color: rgb(36, 130, 27);" ><i class="fa-solid fa-tag"></i> <strong> Sale</strong> </span>
+                  }@else{
+                  <span class="info-value venta-N" style="color: rgb(208, 29, 29);"><i
+                      class="fa-solid fa-tag"></i><strong> SOLD</strong> </span>
+                  }
               </div>
+              <p class="card-text"><strong>$ {{ obra.precio }}</strong></p>
+             
             </div>
           </div>
         </div>
@@ -104,7 +102,7 @@
     }
 
     @if(flag){
-    <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
+    <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141); text-align: center;">
       <p class="work"><span class="workGradient">WORK</span> ART</p>
     </div>
 
@@ -115,14 +113,13 @@
       <div style="border-bottom: solid 2px gray;">
         <div class="categoria"><a class="subtitle" (click)="selectCategory(categoria)">{{categoria }}</a></div>
         <div class="colums">
-          <div class="cardColm-a" *ngFor="let obra of auxObras.slice(0, 8)">
+          <div class="cardColm-a" *ngFor="let obra of auxObras.slice(0, 4)">
             <!-- Card -->
             <div class="card" style="height: 100%;">
               <div class="image-container">
-                <img src="{{urlAPI}}{{obra.imagen}}" class="card-img-top" alt="...">
+                <img src="{{urlAPI}}{{obra.imagen}}" [routerLink]="['viewArtwork', obra.id]" class="card-img-top" alt="...">
                 <button class="botonVenta">
-                  <a href="#" 
-                    [routerLink]="['viewArtwork', obra.id]">View</a>
+                  <a>+ Add car</a>
                   </button>
               </div>
               <div class="card-body">
@@ -148,33 +145,30 @@
     }@else{<div></div>}
 
     @if(all){
-    <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
+    <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141); text-align: center;">
       <p class="work"><span class="workGradient">All</span> ART</p>
     </div>
     <div class="colums">
       <div class="cardColm-a" style="margin-top: 20px;" *ngFor="let obra of obras">
         <div class="card" style="height: 100%;">
           <div class="image-container">
-            <img src="{{urlAPI}}{{obra.imagen}}" class="card-img-top" alt="...">
-            <div class="overlay-text">
-              @if(obra.disponibilidad){
-              <span class="info-value venta-S"><i class="fa-solid fa-tag"></i> <strong> On Sale</strong> </span>
-              }@else{
-              <span class="info-value venta-N" style="color: rgb(208, 29, 29);"><i class="fa-solid fa-tag"></i><strong>
-                  Not Available</strong> </span>
-              }
-            </div>
+            <img src="{{urlAPI}}{{obra.imagen}}" [routerLink]="['viewArtwork', obra.id]" class="card-img-top" alt="...">
+            <button class="botonVenta">
+              <a>+ Add car</a>
+              </button>
           </div>
           <div class="card-body">
-
-            <h5 class="card-title">{{ obra.nombre }}</h5>
-            <p class="card-text"><strong>$ {{ obra.precio }}</strong></p>
-
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <a href="#" class="btn btn-primary"
-                style="width: 100%; background: linear-gradient(90deg,rgba(219, 133, 133, 1),rgba(54, 0, 207, 1)); border: none;"
-                [routerLink]="['viewArtwork', obra.id]">View</a>
+            <div class="card-title">
+               <strong>{{ obra.nombre }} - </strong>
+                @if(obra.disponibilidad){
+                <span class="info-value venta-S" style="color: rgb(36, 130, 27);" ><i class="fa-solid fa-tag"></i> <strong> Sale</strong> </span>
+                }@else{
+                <span class="info-value venta-N" style="color: rgb(208, 29, 29);"><i
+                    class="fa-solid fa-tag"></i><strong> SOLD</strong> </span>
+                }
             </div>
+            <p class="card-text"><strong>$ {{ obra.precio }}</strong></p>
+           
           </div>
         </div>
       </div>
@@ -182,33 +176,30 @@
     }
 
     @if (artistaMenu) {
-    <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
+    <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141); text-align: center;">
       <p class="work"><span class="workGradient">All</span> {{artista.nombre}}</p>
     </div>
     <div class="colums">
       <div class="cardColm-a" style="margin-top: 20px;" *ngFor="let obra of auxObras2">
         <div class="card" style="height: 100%;">
           <div class="image-container">
-            <img src="{{urlAPI}}{{obra.imagen}}" class="card-img-top" alt="...">
-            <div class="overlay-text">
-              @if(obra.disponibilidad){
-              <span class="info-value venta-S"><i class="fa-solid fa-tag"></i> <strong> On Sale</strong> </span>
-              }@else{
-              <span class="info-value venta-N" style="color: rgb(208, 29, 29);"><i class="fa-solid fa-tag"></i><strong>
-                  Not Available</strong> </span>
-              }
-            </div>
+            <img src="{{urlAPI}}{{obra.imagen}}" [routerLink]="['viewArtwork', obra.id]" class="card-img-top" alt="...">
+            <button class="botonVenta">
+              <a>+ Add car</a>
+              </button>
           </div>
           <div class="card-body">
-
-            <h5 class="card-title">{{ obra.nombre }}</h5>
-            <p class="card-text"><strong>$ {{ obra.precio }}</strong></p>
-
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <a href="#" class="btn btn-primary"
-                style="width: 100%; background: linear-gradient(90deg,rgba(219, 133, 133, 1),rgba(54, 0, 207, 1)); border: none;"
-                [routerLink]="['viewArtwork', obra.id]">View</a>
+            <div class="card-title">
+               <strong>{{ obra.nombre }} - </strong>
+                @if(obra.disponibilidad){
+                <span class="info-value venta-S" style="color: rgb(36, 130, 27);" ><i class="fa-solid fa-tag"></i> <strong> Sale</strong> </span>
+                }@else{
+                <span class="info-value venta-N" style="color: rgb(208, 29, 29);"><i
+                    class="fa-solid fa-tag"></i><strong> SOLD</strong> </span>
+                }
             </div>
+            <p class="card-text"><strong>$ {{ obra.precio }}</strong></p>
+           
           </div>
         </div>
       </div>
@@ -290,4 +281,5 @@
       </div>
     </div>
   </div>
+</div>
 </div>

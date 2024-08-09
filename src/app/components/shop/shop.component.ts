@@ -174,6 +174,7 @@ export class ShopComponent {
     this.artistaMenu = false
   }
   showArtist(artistTrue: boolean) {
+    this.selectedCategory = '';
     this.all = false;
     this.flag = false;
     this.onClick = false;

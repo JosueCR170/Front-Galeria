@@ -1,6 +1,7 @@
 /* Estilo del contenedor de inicio de sesión */
 .login-body{
-    background-image: repeating-radial-gradient(circle at center center, transparent 0px, transparent 9px,rgba(255,255,255,0.05) 9px, rgba(255,255,255,0.05) 12px,transparent 12px, transparent 22px,rgba(255,255,255,0.05) 22px, rgba(255,255,255,0.05) 29px,transparent 29px, transparent 38px,rgba(255,255,255,0.05) 38px, rgba(255,255,255,0.05) 40px),repeating-radial-gradient(circle at center center, rgb(0,0,0) 0px, rgb(0,0,0) 5px,rgb(0,0,0) 5px, rgb(0,0,0) 17px,rgb(0,0,0) 17px, rgb(0,0,0) 18px,rgb(0,0,0) 18px, rgb(0,0,0) 32px,rgb(0,0,0) 32px, rgb(0,0,0) 33px,rgb(0,0,0) 33px, rgb(0,0,0) 47px); background-size: 82px 82px;
+    background: linear-gradient(115deg, rgb(211, 255, 215) 0%, rgb(0, 0, 0) 100%), radial-gradient(90% 100% at 50% 0%, rgb(200, 200, 200) 0%, rgb(22, 0, 45) 100%), radial-gradient(100% 100% at 50% 0%, rgb(250, 255, 0) 0%, rgb(36, 0, 0) 100%), radial-gradient(150% 213.32% at 100% 0%, rgb(112, 255, 0) 0%, rgb(20, 175, 125) 150%, rgb(0, 10, 255) 100%), radial-gradient(100% 200% at 100% 0%, rgb(255, 77, 0) 0%, rgba(0, 200, 255, 1) 100%), linear-gradient(60deg, rgb(255, 0, 0) 0%, rgb(120, 86, 255) 100%);
+    background-blend-mode: overlay, overlay, difference, difference, difference, normal;
     height: 100vh;
     width: 100%;
     display: flex;
@@ -58,7 +59,7 @@ label{
 .btn:hover {
     color: #ffffff;
 }
-
+/*
 .form-control {
     background: transparent;
     border: none;
@@ -70,5 +71,35 @@ label{
 .form-control:focus {
     box-shadow: none;
     border-color: #ffc107;
-}
+}*/
 
+
+.UserName {
+    --input-focus: #2d8cf0;
+    --font-color: #323232;
+    --font-color-sub: #666;
+    --bg-color: #fff;
+    --main-color: #000000;
+    width: 100%;
+    height: 40px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 2px solid var(--main-color);
+    background-color: var(--bg-color);
+    box-shadow: 4px 4px var(--main-color);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--font-color);
+    padding: 5px 10px;
+    outline: none;
+  }
+  
+  .UserName::placeholder {
+    color: var(--font-color-sub);
+    opacity: 0.8;
+  }
+  
+  .UserName:focus {
+    border: 2px solid var(--input-focus);
+  }
