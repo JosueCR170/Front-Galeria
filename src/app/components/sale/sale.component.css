@@ -320,15 +320,14 @@
    .datosResivo{
     display: flex; justify-content: space-between; size: 18px; 
    }
-  .card-body{
-    width: 100%;
-  }
+ 
   @media (max-width: 700px) {
     .conteiner{
       width: 100%;
     }
     .contenido{
       grid-template-columns: 1fr;
+      margin-top: 0px;
     }
   }
   .modal-title{
@@ -361,8 +360,8 @@
 
 .cont{
   display: flex;
-  flex-direction: column;
+
 }
 .imgBuy{
-  width: 100%;
+  width: 34%;
 }

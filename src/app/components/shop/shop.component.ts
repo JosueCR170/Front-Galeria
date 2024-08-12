@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Type } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -43,6 +43,7 @@ export class ShopComponent {
   items: any[] | undefined;
   selectedItem: any;
   suggestions: any[] = [];
+  obrasCArrito: Obra[] = [];
   artistas: Artista[] = [];
   obras: Obra[] = [];
   auxObras: Obra[] = [];
@@ -62,6 +63,9 @@ export class ShopComponent {
     this.index();
     this.loadLoggedUser();
     this.indexArtista();
+    const carrito = localStorage.getItem('obras');
+   this.obrasCArrito = carrito ? JSON.parse(carrito) : [];
+   this.obrasCArrito = Array.isArray( this.obrasCArrito) ?  this.obrasCArrito : [];
   }
 
   logOut() {
@@ -81,6 +85,14 @@ export class ShopComponent {
     })
   }
 
+    addCarFuncion(id: number){
+    let obra = this.obras.find((o: any) => o.id === id);
+    console.log(obra)
+    if (obra) {
+   this.obrasCArrito.push(obra);
+   localStorage.setItem('obras', JSON.stringify( this.obrasCArrito));
+    }
+    }
 
   indexArtista() {
     this._artistas.index().subscribe({

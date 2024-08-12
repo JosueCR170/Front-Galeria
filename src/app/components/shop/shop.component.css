@@ -107,7 +107,8 @@
 
 .nav-left {
   display: flex;
-  width: 20%;
+  margin-right: 20px;
+  width: 15%;
   justify-content: space-around;
 }
 .logout {
@@ -157,7 +158,16 @@
   font-size: 25px;
   margin-top: 10px;
 }
-
+.iconCar{
+  cursor: pointer;
+  color: white;
+  text-align: center;
+  font-size: 25px;
+  transition: 0.5s;
+}
+.iconCar:hover{
+ color: rgb(114, 235, 132);
+}
 .dropdown-menu.show {
   border: solid 2px white;
   background-color: black;
@@ -241,10 +251,10 @@
       display: initial;
   }
   .user-name {
-      font-size: 2vw ;
+      font-size: 3vw;
   }
   .busqueda {
-      width: 60% !important;
+      width: 40% !important;
   }
 }
 

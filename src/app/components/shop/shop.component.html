@@ -42,6 +42,12 @@
           <input class="form-control me-2" style="padding-top: 10px;" type="search" placeholder="Search"
             aria-label="Search" (input)="searchObras($event)">
         </div>
+        <div style="margin-top: 10px;">
+          <i class="fa-solid fa-cart-shopping iconCar" data-bs-toggle="offcanvas" 
+        data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"></i>
+        </div>
+        
+
         <div class="nav-left">
           <li class="nav-item dropdown" style="list-style: none;">
             <a class="nav-link dropdown-toggle user-name" href="#" id="DropdownUser" role="button"
@@ -72,9 +78,11 @@
           <div class="card" style="height: 100%;">
             <div class="image-container">
               <img src="{{urlAPI}}{{obra.imagen}}" [routerLink]="['viewArtwork', obra.id]" class="card-img-top" alt="...">
-              <button class="botonVenta">
-                <a>+ Add car</a>
-                </button>
+              @if(obra.disponibilidad){
+                <button class="botonVenta" (click)="addCarFuncion(obra.id)" >
+                  <a>+ Add car</a>
+                  </button>
+                 } @else{}
             </div>
             <div class="card-body">
               <div class="card-title">
@@ -118,9 +126,11 @@
             <div class="card" style="height: 100%;">
               <div class="image-container">
                 <img src="{{urlAPI}}{{obra.imagen}}" [routerLink]="['viewArtwork', obra.id]" class="card-img-top" alt="...">
-                <button class="botonVenta">
-                  <a>+ Add car</a>
-                  </button>
+                @if(obra.disponibilidad){
+                  <button class="botonVenta"  (click)="addCarFuncion(obra.id)">
+                    <a>+ Add car</a>
+                    </button>
+                   } @else{}
               </div>
               <div class="card-body">
                 <div class="card-title">
@@ -153,9 +163,11 @@
         <div class="card" style="height: 100%;">
           <div class="image-container">
             <img src="{{urlAPI}}{{obra.imagen}}" [routerLink]="['viewArtwork', obra.id]" class="card-img-top" alt="...">
-            <button class="botonVenta">
-              <a>+ Add car</a>
-              </button>
+            @if(obra.disponibilidad){
+              <button class="botonVenta">
+                <a>+ Add car</a>
+                </button>
+               } @else{}
           </div>
           <div class="card-body">
             <div class="card-title">
@@ -184,9 +196,11 @@
         <div class="card" style="height: 100%;">
           <div class="image-container">
             <img src="{{urlAPI}}{{obra.imagen}}" [routerLink]="['viewArtwork', obra.id]" class="card-img-top" alt="...">
+            @if(obra.disponibilidad){
             <button class="botonVenta">
               <a>+ Add car</a>
               </button>
+             } @else{}
           </div>
           <div class="card-body">
             <div class="card-title">
@@ -199,14 +213,13 @@
                 }
             </div>
             <p class="card-text"><strong>$ {{ obra.precio }}</strong></p>
-           
           </div>
         </div>
       </div>
     </div>
     }
 
-
+    <!--Offcanvas de artistas -->
     <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions"
       aria-labelledby="offcanvasWithBothOptionsLabel" style="    box-shadow: 10px 10px 20px #000;">
       <div class="offcanvas-header">
@@ -232,6 +245,20 @@
       </div>
     </div>
 
+    <!--Offcanvas de Carrito -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasRightLabel">Shopping cart
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div>
+        <div style="padding: 1rem;" *ngFor="let car of obrasCArrito">
+           <p>{{car.nombre}}</p>
+        </div>
+         
+      </div>
+    </div>
 
 
     <div class="social-footer  text-center" style="margin-top: 90px; ">
