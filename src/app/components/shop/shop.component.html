@@ -274,7 +274,7 @@
                   <div class="car-container-body">
                     <div style="display: flex; justify-content: space-between;">
                       <p>{{car.nombre}}</p>
-                      <p>₡ {{car.precio}}</p>
+                      <p>$ {{car.precio}}</p>
                     </div>
                     <div style="display: flex; justify-content: space-between;">
                       <p>Artist: {{getArtistaById(car.idArtista)?.nombre}}</p>
@@ -293,8 +293,8 @@
                   <div class="arrow"></div>
                   </div>
                 </button>   
-                <label >
-                      Total 
+                <label style=" border: 2px solid white; color: white; border-top-right-radius: 10px;border-bottom-right-radius: 10px; width:auto; padding: 10px;">
+                  Total: $ {{grupo.total}}
                 </label>
                 </div>
               </div>

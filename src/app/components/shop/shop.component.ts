@@ -57,6 +57,7 @@ export class ShopComponent {
   onClick: boolean = false;
   all: boolean = false;
   artistaMenu: boolean = false;
+  total:any;
   user: any;
   public acc: any[] = [];
   userAux = new User(1,"",false,"","",null,"");
@@ -64,6 +65,8 @@ export class ShopComponent {
   ngOnInit(): void {
     this.index();
     this.loadLoggedUser(); 
+    this.indexCarrito();
+    
   }
 
   logOut() {
@@ -92,16 +95,15 @@ export class ShopComponent {
     if (obra) {
    this.obrasCArrito.push(obra);
    localStorage.setItem('obras', JSON.stringify( this.obrasCArrito));
-  
     }
-    }
+  }
 
   indexArtista() {
     this._artistas.index().subscribe({
       next: (response: any) => {
         this.auxArtistas = this.artistas = response['data'];
         console.log(this.artistas)
-        this.indexCarrito();
+      
       },
       error: (err: Error) => {
 
@@ -115,9 +117,8 @@ export class ShopComponent {
     const carrito = localStorage.getItem('obras');
     this.obrasCArrito = carrito ? JSON.parse(carrito) : [];
     this.obrasCArrito = Array.isArray( this.obrasCArrito) ?  this.obrasCArrito : [];
-
-  const groupedObras =  this.obrasCArrito.reduce((acc, obra) => {
-  const idArtista = obra.idArtista;
+    const groupedObras =  this.obrasCArrito.reduce((acc, obra) => {
+    const idArtista = obra.idArtista;
     if (typeof idArtista === 'number') {
       if (!acc[idArtista]) {
         acc[idArtista] = [];
@@ -126,12 +127,16 @@ export class ShopComponent {
     }
   console.log(acc)
     return acc;
-  }, {} as { [key: number]: any[] }); // Usa un tipo de índice explícito
-
+  }, {} as { [key: number]: any[] });
   this.obrasAgrupadasPorArtista = Object.entries(groupedObras);
-  console.log(console.log)
-  }
+  this.obrasAgrupadasPorArtista.forEach(grupo => {
+  grupo.total = this.calcularTotalPrecios(grupo[1]);
+  });
 
+}
+calcularTotalPrecios(obras: any[]): number {
+  return obras.reduce((total, obra) => total + obra.precio, 0);
+}
   countObrasOfArtista(id: number) {
     let i = 0;
     this.obras.forEach(obra => {
