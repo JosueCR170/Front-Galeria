@@ -28,6 +28,7 @@ export class ShopComponent {
   urlAPI: string;
 
   public artista: Artista;
+  obrasAgrupadasPorArtista: any[] = [];
   constructor(
     private _obraService: ObraService,
     private _router: Router,
@@ -38,6 +39,7 @@ export class ShopComponent {
     this.urlAPI = server.url+'obra/getimage/';
     this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, null);
     this.artista = new Artista(1, "", "", "", "", "");
+    
   }
 
   items: any[] | undefined;
@@ -56,16 +58,12 @@ export class ShopComponent {
   all: boolean = false;
   artistaMenu: boolean = false;
   user: any;
+  public acc: any[] = [];
   userAux = new User(1,"",false,"","",null,"");
 
   ngOnInit(): void {
-    // Aquí puedes llamar al método que desees que se ejecute al cargar el componente
     this.index();
-    this.loadLoggedUser();
-    this.indexArtista();
-    const carrito = localStorage.getItem('obras');
-   this.obrasCArrito = carrito ? JSON.parse(carrito) : [];
-   this.obrasCArrito = Array.isArray( this.obrasCArrito) ?  this.obrasCArrito : [];
+    this.loadLoggedUser(); 
   }
 
   logOut() {
@@ -78,34 +76,60 @@ export class ShopComponent {
       next: (response: any) => {
         this.obras = response['data'];
         this.loadCategorysExists();
+         this.indexArtista();
       },
       error: (err: Error) => {
 
       }
-    })
+    })  
+   
+   
   }
 
-    addCarFuncion(id: number){
+  addCarFuncion(id: number){
     let obra = this.obras.find((o: any) => o.id === id);
     console.log(obra)
     if (obra) {
    this.obrasCArrito.push(obra);
    localStorage.setItem('obras', JSON.stringify( this.obrasCArrito));
+  
     }
     }
 
   indexArtista() {
     this._artistas.index().subscribe({
       next: (response: any) => {
-
         this.auxArtistas = this.artistas = response['data'];
         console.log(this.artistas)
-
+        this.indexCarrito();
       },
       error: (err: Error) => {
 
       }
-    })
+    });
+ 
+    
+  }
+
+  indexCarrito(){
+    const carrito = localStorage.getItem('obras');
+    this.obrasCArrito = carrito ? JSON.parse(carrito) : [];
+    this.obrasCArrito = Array.isArray( this.obrasCArrito) ?  this.obrasCArrito : [];
+
+  const groupedObras =  this.obrasCArrito.reduce((acc, obra) => {
+  const idArtista = obra.idArtista;
+    if (typeof idArtista === 'number') {
+      if (!acc[idArtista]) {
+        acc[idArtista] = [];
+      }
+      acc[idArtista].push(obra);
+    }
+  console.log(acc)
+    return acc;
+  }, {} as { [key: number]: any[] }); // Usa un tipo de índice explícito
+
+  this.obrasAgrupadasPorArtista = Object.entries(groupedObras);
+  console.log(console.log)
   }
 
   countObrasOfArtista(id: number) {
@@ -128,14 +152,12 @@ export class ShopComponent {
     }
   }
 
-  getArtistaById(id:number) {
-    this.artistas.forEach(artista => {
-      if (artista.id == id){
-        this.artista = artista;
-      }
-    });
+  getArtistaById(id: number | null): Artista | undefined {
+    if (id === null) {
+      return undefined; // O manejar el caso de manera apropiada
+    }
+    return this.artistas.find(artista => artista.id === id); 
   }
-
   loadAuxObras(category: string) {
     this.auxObras = this.obras.filter(obra => obra.categoria === category);
   }
@@ -277,11 +299,9 @@ export class ShopComponent {
         // Proporcionar un objeto predeterminado en caso de que storedUserInfo sea null
         userInfo = {};
       }
-
       // Actualiza solo las propiedades necesarias
       userInfo.telefono = this.user.telefono;
       userInfo.nombre = this.user.nombre;
-
       // Guarda el objeto actualizado de nuevo en sessionStorage
       sessionStorage.setItem('identity', JSON.stringify(userInfo));
       location.reload();
