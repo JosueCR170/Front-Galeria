@@ -26,50 +26,51 @@
             </div>
         </div>
 
-        <div class="colums">
+        <div class="colums" *ngIf="images.length > 0">
             <div class="colum1">
-                <div class="cardColm-a">
-                    <img src="../../../assets/img/prueba2.jpg" class="card-img-top card-image" alt="...">
-                </div>
-                <div class="cardColm-s">
-                    <img src="../../../assets/img/prueba3.jpg" class="card-img-top card-image" alt="...">
-                </div>
-                <div class="cardColm-a">
-                    <img src="../../../assets/img/prueba4.jpg" class="card-img-top card-image" alt="...">
-                </div>
-                <div class="cardColm-s">
-                    <img src="../../../assets/img/prueba5.jpg" class="card-img-top card-image" alt="...">
-                </div>
+              <div class="cardColm-a">
+                <img [src]="images[0] === placeholderImage ? images[0] : urlAPI + images[0]" class="card-img-top card-image" alt="...">
+              </div>
+              <div class="cardColm-s">
+                <img [src]="images[1] === placeholderImage ? images[1] : urlAPI + images[1]" class="card-img-top card-image" alt="...">
+              </div>
+              <div class="cardColm-a">
+                <img [src]="images[2] === placeholderImage ? images[2] : urlAPI + images[2]" class="card-img-top card-image" alt="...">
+              </div>
+              <div class="cardColm-s">
+                <img [src]="images[3] === placeholderImage ? images[3] : urlAPI + images[3]" class="card-img-top card-image" alt="...">
+              </div>
             </div>
             <div class="colum2">
-                <div class="cardColm-s">
-                    <img src="../../../assets/img/prueba6.jpg" class="card-img-top card-image" alt="...">
-                </div>
-                <div class="cardColm-a">
-                    <img src="../../../assets/img/prueba7.jpg" class="card-img-top card-image" alt="...">
-                </div>
-                <div class="cardColm-s">
-                    <img src="../../../assets/img/prueba8.jpg" class="card-img-top card-image" alt="...">
-                </div>
-                <div class="cardColm-a">
-                    <img src="../../../assets/img/prueba9.jpg" class="card-img-top card-image" alt="...">
-                </div>
+              <div class="cardColm-s">
+                <img [src]="images[4] === placeholderImage ? images[4] : urlAPI + images[4]" class="card-img-top card-image" alt="...">
+              </div>
+              <div class="cardColm-a">
+                <img [src]="images[5] === placeholderImage ? images[5] : urlAPI + images[5]" class="card-img-top card-image" alt="...">
+              </div>
+              <div class="cardColm-s">
+                <img [src]="images[6] === placeholderImage ? images[6] : urlAPI + images[6]" class="card-img-top card-image" alt="...">
+              </div>
+              <div class="cardColm-a">
+                <img [src]="images[7] === placeholderImage ? images[7] : urlAPI + images[7]" class="card-img-top card-image" alt="...">
+              </div>
             </div>
             <div class="colum1">
-                <div class="cardColm-a">
-                    <img src="../../../assets/img/prueba10.jpg" class="card-img-top card-image" alt="...">
-                </div>
-                <div class="cardColm-s">
-                    <img src="../../../assets/img/prueba11.jpg" class="card-img-top card-image" alt="...">
-                </div>
-                <div class="cardColm-a">
-                    <img src="../../../assets/img/prueba12.jpg" class="card-img-top card-image" alt="...">
-                </div>
-                <div class="cardColm-s">
-                    <img src="../../../assets/img/prueba3.jpg" class="card-img-top card-image" alt="...">
-                </div>
+              <div class="cardColm-a">
+                <img [src]="images[8] === placeholderImage ? images[8] : urlAPI + images[8]" class="card-img-top card-image" alt="...">
+              </div>
+              <div class="cardColm-s">
+                <img [src]="images[9] === placeholderImage ? images[9] : urlAPI + images[9]" class="card-img-top card-image" alt="...">
+              </div>
+              <div class="cardColm-a">
+                <img [src]="images[10] === placeholderImage ? images[10] : urlAPI + images[10]" class="card-img-top card-image" alt="...">
+              </div>
+              <div class="cardColm-s">
+                <img [src]="images[11] === placeholderImage ? images[11] : urlAPI + images[11]" class="card-img-top card-image" alt="...">
+              </div>
             </div>
-        </div>
+          </div>
+          
         
         
         <div class="social-footer  text-center" style="margin-top: 90px">
