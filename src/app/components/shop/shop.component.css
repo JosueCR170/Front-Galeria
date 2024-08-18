@@ -445,18 +445,7 @@
   margin-top: 10px;
   color: #ccc;
 }
-@media screen and (max-width: 700px){
- .cabeza{
-  height: 40%;
- }
- .container_tex2{
-  margin-top: 4rem;
- }
- .btna {
-  /* Ajusta el ancho del botón en pantallas pequeñas */
-  font-size: 0.8rem; /* Ajusta el tamaño de la fuente para pantallas pequeñas */
-}
-}
+
 
 .btnArtist{
   font-size: 18px;
@@ -473,10 +462,181 @@
   background-image: linear-gradient(67.5deg, rgb(39,39,51) 0%, rgb(39,39,51) 2%,rgb(63,56,79) 2%, rgb(63,56,79) 18%,rgb(81,69,114) 18%, rgb(81,69,114) 23%,rgb(112,91,158) 23%, rgb(112,91,158) 64%,rgb(151, 111, 203) 64%, rgb(151, 111, 203) 93%,rgb(172, 123, 219) 93%, rgb(172, 123, 219) 95%,rgb(193, 134, 235) 95%, rgb(193, 134, 235) 100%),linear-gradient(22.5deg, rgb(39,39,51) 0%, rgb(39,39,51) 2%,rgb(63,56,79) 2%, rgb(63,56,79) 18%,rgb(81,69,114) 18%, rgb(81,69,114) 23%,rgb(112,91,158) 23%, rgb(112,91,158) 64%,rgb(151, 111, 203) 64%, rgb(151, 111, 203) 93%,rgb(172, 123, 219) 93%, rgb(172, 123, 219) 95%,rgb(193, 134, 235) 95%, rgb(193, 134, 235) 100%),linear-gradient(45deg, rgb(39,39,51) 0%, rgb(39,39,51) 2%,rgb(63,56,79) 2%, rgb(63,56,79) 18%,rgb(81,69,114) 18%, rgb(81,69,114) 23%,rgb(112,91,158) 23%, rgb(112,91,158) 64%,rgb(151, 111, 203) 64%, rgb(151, 111, 203) 93%,rgb(172, 123, 219) 93%, rgb(172, 123, 219) 95%,rgb(193, 134, 235) 95%, rgb(193, 134, 235) 100%),linear-gradient(90deg, rgb(39,39,51) 0%, rgb(39,39,51) 2%,rgb(63,56,79) 2%, rgb(63,56,79) 18%,rgb(81,69,114) 18%, rgb(81,69,114) 23%,rgb(112,91,158) 23%, rgb(112,91,158) 64%,rgb(151, 111, 203) 64%, rgb(151, 111, 203) 93%,rgb(172, 123, 219) 93%, rgb(172, 123, 219) 95%,rgb(193, 134, 235) 95%, rgb(193, 134, 235) 100%),linear-gradient(90deg, rgb(34,24,24),rgb(81,36,36)) !important; 
   background-blend-mode:overlay,overlay,overlay,overlay,normal;
   color: aliceblue !important;
+  overflow-y: auto;
+  max-height: 100vh;
+  scrollbar-width: none;
 }
+
+.accordion-button{
+  background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,242,1) 50%, rgba(252,176,69,1) 100%);
+  font-size: 18px;
+  font-family: "Righteous", sans-serif;
+  font-weight: 400;
+  color: white;
+}
+
 .btn-close{
   color: aliceblue !important;
 }
+.cart-car{
+  color: white;
+  display: flex; 
+   padding: 0.7rem 0px;
+  
+}
+.car-container-img{
+  width: 25%;
+  height: 90px;
+
+}
+.car-container-img img{
+border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border: 2px solid white;
+}
+.car-container-body{
+  height: auto;
+  padding: 5px 25px;
+  width: 75%;
+  background-color: #00000074;
+  border: 2px solid white;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+/*Acordeon*/
+.accordion-body{
+  background-color: #00000085;
+}
+.accordion-item{
+  background: #00000063;
+}
 
 
 
+.BtnDelete {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 35px;
+  height: 35px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition-duration: 0.3s;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+  background-color:rgb(185, 29, 29);
+}
+
+/* plus sign */
+.deleIcon {
+  width: 100%;
+  transition-duration: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.deleIcon i {
+  color: rgb(255, 255, 255);
+  font-size: 2px;
+}
+.BtnDelete:hover{
+ font-size: 19px;
+ background-color: #8d0707;
+ 
+}
+.BtnDelete:hover i{
+  font-size: 16px;
+  transition: 0.3s;
+}
+.cart-btn {
+  --primary-color: #645bff;
+  --secondary-color: #fff;
+  --hover-color: #355a33;
+  --arrow-width: 10px;
+  --arrow-stroke: 2px;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 20px;
+  color: var(--secondary-color);
+  padding: 0.5rem 1.5rem;
+  background: var(--primary-color);
+  display: flex;
+  transition: 0.2s background;
+  align-items: center;
+  gap: 0.6em;
+  font-weight: bold;
+}
+
+.cart-btn .arrow-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cart-btn .arrow {
+  margin-top: 1px;
+  width: var(--arrow-width);
+  background: var(--primary-color);
+  height: var(--arrow-stroke);
+  position: relative;
+  transition: 0.2s;
+}
+
+.cart-btn .arrow::before {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  border: solid var(--secondary-color);
+  border-width: 0 var(--arrow-stroke) var(--arrow-stroke) 0;
+  display: inline-block;
+  top: -3px;
+  right: 3px;
+  transition: 0.2s;
+  padding: 3px;
+  transform: rotate(-45deg);
+}
+
+.cart-btn:hover {
+  background-color: var(--hover-color);
+}
+
+.cart-btn:hover .arrow {
+  background: var(--secondary-color);
+}
+
+.cart-btn:hover .arrow:before {
+  right: 0;
+}
+
+
+@media screen and (max-width: 700px){
+  .cabeza{
+   height: 40%;
+  }
+  .container_tex2{
+   margin-top: 4rem;
+  }
+  .btna {
+   /* Ajusta el ancho del botón en pantallas pequeñas */
+   font-size: 0.8rem; /* Ajusta el tamaño de la fuente para pantallas pequeñas */
+ }
+ .BtnDelete {
+  transition-duration: 0s; /* Desactiva las transiciones en pantallas pequeñas */
+  width: 35px; /* Ajusta el ancho del botón en pantallas pequeñas si es necesario */
+  border-radius: 50%; /* Asegúrate de que el borde sea redondeado */
+}
+
+.BtnDelete .deleIcon {
+  width: 100%; /* Asegura que el ícono ocupa el espacio completo */
+  padding-left: 0; /* Elimina el relleno adicional en pantallas pequeñas */
+}
+
+.BtnDelete .textDelte {
+  opacity: 0; /* Oculta el texto */
+  width: 0%; /* Ajusta el ancho del texto a 0% */
+  padding-right: 0; /* Elimina el relleno en pantallas pequeñas */
+}
+ }
