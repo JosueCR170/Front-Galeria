@@ -1,4 +1,4 @@
-import { Component, OnInit, Type } from '@angular/core';
+import { Component, OnInit,  ViewChild, ElementRef} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -12,17 +12,21 @@ import { UserService } from '../../services/user.service';
 import Swal from 'sweetalert2';
 import { User } from '../../models/user';
 
+import { MessageService } from 'primeng/api';
+
+
 @Component({
   selector: 'app-shop',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink, AutoCompleteModule],
   templateUrl: './shop.component.html',
   styleUrl: './shop.component.css',
-  providers: [ObraService]
+  providers: [ObraService, MessageService]
 })
 export class ShopComponent {
-  artistName: string = '';
 
+  @ViewChild('liveToast', { static: true }) liveToast: ElementRef | undefined
+  artistName: string = '';
   public status: number;
   public obra: Obra;
   urlAPI: string;
@@ -33,15 +37,16 @@ export class ShopComponent {
     private _obraService: ObraService,
     private _router: Router,
     private _artistas: ArtistService,
-    private userService:UserService
+    private userService:UserService,
+    private messageService: MessageService
   ) {
     this.status = -1;
     this.urlAPI = server.url+'obra/getimage/';
     this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, null);
     this.artista = new Artista(1, "", "", "", "", "");
-    
   }
 
+  flagNoti: boolean = false;
   items: any[] | undefined;
   selectedItem: any;
   suggestions: any[] = [];
@@ -57,7 +62,7 @@ export class ShopComponent {
   onClick: boolean = false;
   all: boolean = false;
   artistaMenu: boolean = false;
-  total:any;
+  total:number = 1;
   user: any;
   public acc: any[] = [];
   userAux = new User(1,"",false,"","",null,"");
@@ -88,16 +93,6 @@ export class ShopComponent {
    
    
   }
-
-  addCarFuncion(id: number){
-    let obra = this.obras.find((o: any) => o.id === id);
-    console.log(obra)
-    if (obra) {
-   this.obrasCArrito.push(obra);
-   localStorage.setItem('obras', JSON.stringify( this.obrasCArrito));
-    }
-  }
-
   indexArtista() {
     this._artistas.index().subscribe({
       next: (response: any) => {
@@ -117,7 +112,48 @@ export class ShopComponent {
     const carrito = localStorage.getItem('obras');
     this.obrasCArrito = carrito ? JSON.parse(carrito) : [];
     this.obrasCArrito = Array.isArray( this.obrasCArrito) ?  this.obrasCArrito : [];
-    const groupedObras =  this.obrasCArrito.reduce((acc, obra) => {
+    this.agrupamiento();
+   }
+
+addCarFuncion(id: number){
+  let obra = this.obras.find((o: any) => o.id === id);
+  console.log(obra)
+  if(obra){
+    const yaEnCarrito = this.obrasCArrito.some((item: any) => item.id === obra?.id);
+    if(!yaEnCarrito){
+       this.obrasCArrito.push(obra)
+     localStorage.setItem('obras', JSON.stringify( this.obrasCArrito));
+     this.msgAlertGood('added work','','success','#000','#ffffff');
+    }else{
+      this.msgAlertGood('You cannot add the same artwork to the cart','','error','#ffffff','#eb5151');
+    }
+  }
+  
+  }
+
+/*ANIMACION DE DESAPARECER CARD DEL CARRITO*/
+startFadeOut(car: any) {
+  car.isFadingOut = true;
+  this.deleteItemCar(car.id);
+}
+
+deleteItemCar(id: number) {
+  const carrito = localStorage.getItem('obras');
+  this.obrasCArrito = carrito ? JSON.parse(carrito) : [];
+  this.obrasCArrito = Array.isArray(this.obrasCArrito) ? this.obrasCArrito : [];
+  this.obrasCArrito.forEach(obraSeleccionada =>{
+    if(obraSeleccionada.id === id){
+      this.total -= obraSeleccionada.precio;
+    }
+  })
+  this.obrasCArrito = this.obrasCArrito.filter(obra => obra.id != id);
+  localStorage.setItem('obras', JSON.stringify(this.obrasCArrito));
+  if(this.obrasCArrito.length!=0){
+    console.log(this.obrasCArrito.length)
+  }else{this.indexCarrito()}
+}
+agrupamiento(){
+  const groupedObras =  this.obrasCArrito.reduce((acc, obra) => {
     const idArtista = obra.idArtista;
     if (typeof idArtista === 'number') {
       if (!acc[idArtista]) {
@@ -125,17 +161,15 @@ export class ShopComponent {
       }
       acc[idArtista].push(obra);
     }
-  console.log(acc)
     return acc;
   }, {} as { [key: number]: any[] });
   this.obrasAgrupadasPorArtista = Object.entries(groupedObras);
   this.obrasAgrupadasPorArtista.forEach(grupo => {
   grupo.total = this.calcularTotalPrecios(grupo[1]);
   });
-
 }
 calcularTotalPrecios(obras: any[]): number {
-  return obras.reduce((total, obra) => total + obra.precio, 0);
+  return this.total = obras.reduce((total, obra) => total + obra.precio, 0);
 }
   countObrasOfArtista(id: number) {
     let i = 0;
@@ -283,11 +317,11 @@ calcularTotalPrecios(obras: any[]): number {
     this.flag = false;
     this.onClick = false;
     this.artistaMenu = true;
-    // this.auxObras2 = this.auxObras;
+
   }
 
   updateUser() {
-    //this.userAux.id=this.user['iss'];
+  
     this.user.id=this.user.iss;
     console.log('User antes de ',this.user);
         this.userService.update(this.user).subscribe({
@@ -334,4 +368,19 @@ calcularTotalPrecios(obras: any[]): number {
           icon,
         })
       }
+      msgAlertGood = (title: any, text: any, icon: any, color: any, background:any) => {
+        Swal.fire({
+          toast: true,
+          position: "top-end",
+          title,
+          text,
+          icon, 
+          color,
+          timer: 2000,
+          showConfirmButton: false,
+          background,
+
+        })
+      }
+      
 }
