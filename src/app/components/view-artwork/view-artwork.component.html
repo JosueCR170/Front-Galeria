@@ -1,4 +1,5 @@
 <div class="view-body">
+  <div class="opacidad">
   <div class="view-container">
     <header class="miniMenu">
       <div class="menu">
@@ -73,7 +74,11 @@
                   <div class="btn-container">
                       <a class="back-btn" [routerLink]="['/shop']">BACK</a>
                       @if(obra.disponibilidad){
-                          <button class="cart-btn" [routerLink]="['/shop/viewArtwork', obra.id, 'sale', obra.id]">Buy</button>
+                          <button class="cart-btn" [routerLink]="['/shop/viewArtwork', obra.id, 'sale', obra.id]">Buy
+                            <div class="arrow-wrapper">
+                            <div class="arrow"></div>
+                    
+                        </div></button>
                       }@else{
                       }
                   </div>
@@ -81,4 +86,5 @@
           </div>
       </main>
   </div>
+</div>
 </div>

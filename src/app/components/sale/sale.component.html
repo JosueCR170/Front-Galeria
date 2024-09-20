@@ -30,7 +30,7 @@
       </div>
     </header>
     <!--Abajo del nav-->
-    <div class="contenido" style="margin-top: 6rem;">
+    <div class="contenido" >
       <div class="formG">
         <div class="email">
           <label for="email" style="margin-bottom: 7px;">Email</label>
@@ -105,27 +105,26 @@
 
       <div class="formG-rigth">
         <div class="card" style="border-bottom: 0;">
-          <div class="row g-0 cont">
-            
-            <div >
+          <div class="cart g-0 cont">
+            <div style="width: 66%;">
               <div class="card-body">
                 <div style="display: flex; justify-content: space-between; border-bottom: solid 2px gray;">
                   <h5 class="card-title" style="font-size: 20px;"><strong>{{obra.nombre}}</strong></h5>
                   <p class="card-text" style="margin-bottom: 25px;"><strong>Price:</strong> {{obra.precio}}</p>
                 </div>
                 <div>
-                  <div class="datosResivo" style="margin-top: 20px">
-                    <h6 class="card-title" style="font-size: 18px; color: rgb(106, 106, 106);">SubTotal</h6>
-                    <p class="card-text" style="margin-bottom: 15px;"><strong style="font-size: 18px;">{{obra.precio}}</strong></p>
+                  <div class="datosResivo" style="margin-top: 10px">
+                    <h6 class="" style="font-size: 18px; color: rgb(106, 106, 106);">SubTotal</h6>
+                    <p class="card-text" ><strong style="font-size: 18px;">{{obra.precio}}</strong></p>
                   </div>
                   <div class="datosResivo">
                     <h6 class="card-title" style="font-size: 18px; color: rgb(106, 106, 106);">Shipping method (tax)</h6>
-                    <p class="card-text" style="margin-bottom: 15px;"><strong style="font-size: 18px;" id="shippingMethod">{{shippingCost}}</strong></p>
+                    <p class="card-text" ><strong style="font-size: 18px;" id="shippingMethod">{{shippingCost}}</strong></p>
                   </div>
                   <div>
                     <div class="datosResivo">
                       <h6 class="card-title" style="font-size: 18px; color: rgb(0, 0, 0);">Total</h6>
-                      <p class="card-text" style="margin-bottom: 15px;"><strong style="font-size: 18px;">{{totalCost}}</strong></p>
+                      <p class="card-text" ><strong style="font-size: 18px;">{{totalCost}}</strong></p>
                     </div>
                   </div>
                   <div class="datosResivo">
@@ -136,7 +135,7 @@
               </div>
             </div>
 
-            <div class="col-md-4 imgBuy">
+            <div class="imgBuy">
               <img style="object-fit: cover; width: 100%;" src="{{urlAPI}}{{obra.imagen}}" alt="idk">
             </div>
           </div>

@@ -1,3 +1,7 @@
+:root {
+  --color-principal: #3498db;
+  --color-secundario: #2ecc71;
+}
 .artist-body {
     top: 0;
     left: 0;
@@ -187,6 +191,7 @@
     .loOUt {
         display: none !important;
     }
+    
     .menu {
         height: 60px;
         padding-left: 20px;
@@ -244,9 +249,10 @@
   .work{
     margin-top: 4rem;
     font-family: "Righteous", sans-serif;
+    margin-bottom: 0;
     font-weight: 400;
     font-style: normal;
-    font-size: clamp(4em,10vw, 9em);
+    font-size: clamp(4em,6vw, 9em);
     
   }
   .workGradient{
@@ -279,6 +285,12 @@
     background-color: rgb(96, 114, 129);
     
   }
+  @media(max-width:993px){
+    .work{
+      margin-top: 0px;
+    }
+  }
+  
 .form-group{
     margin-top: 15px;
 }
@@ -335,4 +347,63 @@
 .input-box:focus + .underline {
   transform: scaleX(1);
 }
+.search__input {
+  font-family: inherit;
+  font-size: inherit;
+  background-color: #f4f2f2;
+  border: none;
+  border-bottom: 3px solid rgba(219, 133, 133, 1);
+  color: #646464;
+  padding: 0.7rem 2rem 0.7rem 1rem;
+  border-radius: 10px 10px 0 0;
+  width: 12rem;
+  transition: all ease-in-out .5s;
+  margin-right: -2rem;
+}
+.search__input:hover, .search__input:focus {
+  box-shadow: 0 0 1em #000000bb;
+  border-bottom: 2px solid rgb(18, 18, 187);
+}
 
+.search__input:focus {
+  outline: none;
+  background-color: #f0eeee;
+  border-bottom: 2px solid rgb(18, 18, 187);
+}
+
+.search__input::-webkit-input-placeholder {
+  font-weight: 100;
+  color: rgb(0, 0, 0);
+}
+.search__icon {
+  height: 1.3em;
+  width: 1.3em;
+  fill:rgb(0, 0, 0);
+}
+.card{border: none;}
+p-toolbar{
+  background: #000;
+}
+
+.aas {
+  background-color: green;
+  color: white;
+  border-radius: 10em;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 0.5em 1.5em;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  border: 1px solid black;
+  box-shadow: 0 0 0 0 black;
+}
+
+.aas:hover {
+  transform: translateY(-4px) translateX(-2px);
+  box-shadow: 2px 5px 0 0 black;
+}
+
+.aas:active {
+  transform: translateY(2px) translateX(1px);
+  box-shadow: 0 0 0 0 black;
+}

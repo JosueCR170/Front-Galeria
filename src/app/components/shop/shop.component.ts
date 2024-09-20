@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,  ViewChild, ElementRef} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -12,27 +12,33 @@ import { UserService } from '../../services/user.service';
 import Swal from 'sweetalert2';
 import { User } from '../../models/user';
 
+import { MessageService } from 'primeng/api';
+
+
 @Component({
   selector: 'app-shop',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink, AutoCompleteModule],
   templateUrl: './shop.component.html',
   styleUrl: './shop.component.css',
-  providers: [ObraService]
+  providers: [ObraService, MessageService]
 })
 export class ShopComponent {
-  artistName: string = '';
 
+  @ViewChild('liveToast', { static: true }) liveToast: ElementRef | undefined
+  artistName: string = '';
   public status: number;
   public obra: Obra;
   urlAPI: string;
 
   public artista: Artista;
+  obrasAgrupadasPorArtista: any[] = [];
   constructor(
     private _obraService: ObraService,
     private _router: Router,
     private _artistas: ArtistService,
-    private userService:UserService
+    private userService:UserService,
+    private messageService: MessageService
   ) {
     this.status = -1;
     this.urlAPI = server.url+'obra/getimage/';
@@ -40,9 +46,11 @@ export class ShopComponent {
     this.artista = new Artista(1, "", "", "", "", "");
   }
 
+  flagNoti: boolean = false;
   items: any[] | undefined;
   selectedItem: any;
   suggestions: any[] = [];
+  obrasCArrito: Obra[] = [];
   artistas: Artista[] = [];
   obras: Obra[] = [];
   auxObras: Obra[] = [];
@@ -54,14 +62,16 @@ export class ShopComponent {
   onClick: boolean = false;
   all: boolean = false;
   artistaMenu: boolean = false;
+  total:number = 1;
   user: any;
+  public acc: any[] = [];
   userAux = new User(1,"",false,"","",null,"");
 
   ngOnInit(): void {
-    // Aquí puedes llamar al método que desees que se ejecute al cargar el componente
     this.index();
-    this.loadLoggedUser();
-    this.indexArtista();
+    this.loadLoggedUser(); 
+    this.indexCarrito();
+    
   }
 
   logOut() {
@@ -74,28 +84,93 @@ export class ShopComponent {
       next: (response: any) => {
         this.obras = response['data'];
         this.loadCategorysExists();
+         this.indexArtista();
       },
       error: (err: Error) => {
 
       }
-    })
+    })  
+   
+   
   }
-
-
   indexArtista() {
     this._artistas.index().subscribe({
       next: (response: any) => {
-
         this.auxArtistas = this.artistas = response['data'];
         console.log(this.artistas)
-
+      
       },
       error: (err: Error) => {
 
       }
-    })
+    });
+ 
+    
   }
 
+  indexCarrito(){
+    const carrito = localStorage.getItem('obras');
+    this.obrasCArrito = carrito ? JSON.parse(carrito) : [];
+    this.obrasCArrito = Array.isArray( this.obrasCArrito) ?  this.obrasCArrito : [];
+    this.agrupamiento();
+   }
+
+addCarFuncion(id: number){
+  let obra = this.obras.find((o: any) => o.id === id);
+  console.log(obra)
+  if(obra){
+    const yaEnCarrito = this.obrasCArrito.some((item: any) => item.id === obra?.id);
+    if(!yaEnCarrito){
+       this.obrasCArrito.push(obra)
+     localStorage.setItem('obras', JSON.stringify( this.obrasCArrito));
+     this.msgAlertGood('added work','','success','#000','#ffffff');
+    }else{
+      this.msgAlertGood('You cannot add the same artwork to the cart','','error','#ffffff','#eb5151');
+    }
+  }
+  
+  }
+
+/*ANIMACION DE DESAPARECER CARD DEL CARRITO*/
+startFadeOut(car: any) {
+  car.isFadingOut = true;
+  this.deleteItemCar(car.id);
+}
+
+deleteItemCar(id: number) {
+  const carrito = localStorage.getItem('obras');
+  this.obrasCArrito = carrito ? JSON.parse(carrito) : [];
+  this.obrasCArrito = Array.isArray(this.obrasCArrito) ? this.obrasCArrito : [];
+  this.obrasCArrito.forEach(obraSeleccionada =>{
+    if(obraSeleccionada.id === id){
+      this.total -= obraSeleccionada.precio;
+    }
+  })
+  this.obrasCArrito = this.obrasCArrito.filter(obra => obra.id != id);
+  localStorage.setItem('obras', JSON.stringify(this.obrasCArrito));
+  if(this.obrasCArrito.length!=0){
+    console.log(this.obrasCArrito.length)
+  }else{this.indexCarrito()}
+}
+agrupamiento(){
+  const groupedObras =  this.obrasCArrito.reduce((acc, obra) => {
+    const idArtista = obra.idArtista;
+    if (typeof idArtista === 'number') {
+      if (!acc[idArtista]) {
+        acc[idArtista] = [];
+      }
+      acc[idArtista].push(obra);
+    }
+    return acc;
+  }, {} as { [key: number]: any[] });
+  this.obrasAgrupadasPorArtista = Object.entries(groupedObras);
+  this.obrasAgrupadasPorArtista.forEach(grupo => {
+  grupo.total = this.calcularTotalPrecios(grupo[1]);
+  });
+}
+calcularTotalPrecios(obras: any[]): number {
+  return this.total = obras.reduce((total, obra) => total + obra.precio, 0);
+}
   countObrasOfArtista(id: number) {
     let i = 0;
     this.obras.forEach(obra => {
@@ -116,14 +191,12 @@ export class ShopComponent {
     }
   }
 
-  getArtistaById(id:number) {
-    this.artistas.forEach(artista => {
-      if (artista.id == id){
-        this.artista = artista;
-      }
-    });
+  getArtistaById(id: number | null): Artista | undefined {
+    if (id === null) {
+      return undefined; // O manejar el caso de manera apropiada
+    }
+    return this.artistas.find(artista => artista.id === id); 
   }
-
   loadAuxObras(category: string) {
     this.auxObras = this.obras.filter(obra => obra.categoria === category);
   }
@@ -174,6 +247,7 @@ export class ShopComponent {
     this.artistaMenu = false
   }
   showArtist(artistTrue: boolean) {
+    this.selectedCategory = '';
     this.all = false;
     this.flag = false;
     this.onClick = false;
@@ -243,11 +317,11 @@ export class ShopComponent {
     this.flag = false;
     this.onClick = false;
     this.artistaMenu = true;
-    // this.auxObras2 = this.auxObras;
+
   }
 
   updateUser() {
-    //this.userAux.id=this.user['iss'];
+  
     this.user.id=this.user.iss;
     console.log('User antes de ',this.user);
         this.userService.update(this.user).subscribe({
@@ -264,11 +338,9 @@ export class ShopComponent {
         // Proporcionar un objeto predeterminado en caso de que storedUserInfo sea null
         userInfo = {};
       }
-
       // Actualiza solo las propiedades necesarias
       userInfo.telefono = this.user.telefono;
       userInfo.nombre = this.user.nombre;
-
       // Guarda el objeto actualizado de nuevo en sessionStorage
       sessionStorage.setItem('identity', JSON.stringify(userInfo));
       location.reload();
@@ -296,4 +368,19 @@ export class ShopComponent {
           icon,
         })
       }
+      msgAlertGood = (title: any, text: any, icon: any, color: any, background:any) => {
+        Swal.fire({
+          toast: true,
+          position: "top-end",
+          title,
+          text,
+          icon, 
+          color,
+          timer: 2000,
+          showConfirmButton: false,
+          background,
+
+        })
+      }
+      
 }

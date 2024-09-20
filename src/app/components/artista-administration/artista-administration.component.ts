@@ -9,10 +9,7 @@ import { CommonModule } from '@angular/common';
 import { TagModule } from 'primeng/tag';
 import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule } from 'primeng/inputicon';
 import { ToolbarModule } from 'primeng/toolbar';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -25,12 +22,12 @@ import { Envio } from '../../models/Envio';
 import { Pedido } from '../../models/Pedido';
 import { EnvioService } from '../../services/envio.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { findIndex } from 'rxjs';
+import { RippleModule } from 'primeng/ripple';
 
 @Component({
   selector: 'app-artista-administration',
   standalone: true,
-  imports: [TableModule, ConfirmDialogModule, ToastModule, ToolbarModule, CommonModule, DialogModule, FormsModule, IconFieldModule, InputIconModule, TagModule, DropdownModule, ButtonModule, InputTextModule],
+  imports: [TableModule, ConfirmDialogModule, ToastModule, ToolbarModule, CommonModule, DialogModule, FormsModule, TagModule, DropdownModule, ButtonModule, RippleModule],
   templateUrl: './artista-administration.component.html',
   styleUrl: './artista-administration.component.css',
   providers: [MessageService, ObraService, ConfirmationService],

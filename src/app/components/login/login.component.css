@@ -58,7 +58,7 @@ label{
 .btn:hover {
     color: #ffffff;
 }
-
+/*
 .form-control {
     background: transparent;
     border: none;
@@ -70,5 +70,35 @@ label{
 .form-control:focus {
     box-shadow: none;
     border-color: #ffc107;
-}
+}*/
 
+
+.UserName {
+    --input-focus: #2d8cf0;
+    --font-color: #323232;
+    --font-color-sub: #666;
+    --bg-color: #fff;
+    --main-color: #000000;
+    width: 100%;
+    height: 40px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 2px solid var(--main-color);
+    background-color: var(--bg-color);
+    box-shadow: 4px 4px var(--main-color);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--font-color);
+    padding: 5px 10px;
+    outline: none;
+  }
+  
+  .UserName::placeholder {
+    color: var(--font-color-sub);
+    opacity: 0.8;
+  }
+  
+  .UserName:focus {
+    border: 2px solid var(--input-focus);
+  }

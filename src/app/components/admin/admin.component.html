@@ -49,34 +49,45 @@
           </div> 
        
        <div class="card">
-        <p-toast></p-toast>
-        <p-toolbar styleClass="mb-4 gap-2">
-            <ng-template pTemplate="left">
-                <p-button pRipple severity="success" label="New" icon="pi pi-plus" class="mr-2" data-bs-toggle="modal"
-                    data-bs-target="#newUserModal" styleClass="btn-rounded" (click)="openNewUser()">
-                </p-button>
-                <p-button type="button" class="asd" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                    styleClass="btn-rounded" [disabled]="!selectedUsers || !selectedUsers.length" severity="danger"
-                    label="Delete">
-                </p-button>
-                <p-button type="button" class="asd" data-bs-toggle="modal" data-bs-target="#updateModalUser" (onClick)="editUser(selectedUsers[0])"
-            styleClass="btn-rounded" [disabled]="!selectedUsers || selectedUsers.length !== 1" severity="warning"
-            label="Update">
-          </p-button>
-            </ng-template>
+        <p-toolbar class="tool" styleClass="gap-2" [style]="{background: 'linear-gradient(90deg, rgba(7,59,61,1) 0%, rgba(46,63,117,1) 100%)',border:'none', borderRadius:'10px 10px 0 0'}"> 
+          <div>
+            <button pButton
+            pRipple  label="+ New" class="aas" data-bs-toggle="modal" 
+              data-bs-target="#newUserModal" (click)="openNewUser()">
+            </button>
+            
+            <button  pButton class="aas" style="background: red; margin-left: 5px;"
+            pRipple data-bs-toggle="modal" data-bs-target="#exampleModal"
+              [disabled]="!selectedUsers ||!selectedUsers.length"
+              label="X Delete">
+            </button>
+          
+            <button pButton class="aas" style="background: rgb(236, 144, 32); margin-left: 5px;"
+            pRipple data-bs-toggle="modal" data-bs-target="#updateModalUser" 
+            [disabled]="!selectedUsers || selectedUsers.length !== 1"
+              (click)="editUser(selectedUsers[0])"    
+              label=" Ø Update"> 
+            </button>
+
+          </div>
+          <!--el buscar-->
+          <div class="align-items-center justify-content-between" style="display: flex;">
+            <h5 style="margin-right: 40px; color: rgb(255, 255, 255);">Manage User</h5>
+            <span style="margin-right: 10px;">
+              <input class="search__input" type="text" #input (input)="dt.filterGlobal(input.value, 'contains')"
+                placeholder="Search..." />
+                <svg class="search__icon" aria-hidden="true" viewBox="0 0 24 24">
+                  <g>
+                      <path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path>
+                  </g>
+              </svg>
+            </span>
+          </div>
         </p-toolbar>
         <p-table #dt [value]="users" [rows]="10" [totalRecords]="totalRecords" [paginator]="true"
             [(selection)]="selectedUsers" [selectAll]="selectAll" [tableStyle]="{ 'min-width': '75rem' }"
             [globalFilterFields]="['id', 'nombre', 'tipoUsuario', 'email', 'telefono', 'nombreUsuario']">
-            <ng-template pTemplate="caption">
-                <div class="flex align-items-center justify-content-between">
-                    <h5 class="mb-4">Manage Users</h5>
-                    <span class="p-input-icon-left">
-                        <input pInputText type="text" #input (input)="dt.filterGlobal(input.value, 'contains')"
-                            placeholder="Search..." />
-                    </span>
-                </div>
-            </ng-template>
+        
             <ng-template pTemplate="header">
                 <tr>
                     <th style="width: 4rem">
@@ -92,8 +103,8 @@
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-user let-ri="rowIndex">
-                <tr [pEditableRow]="user">
-                    <td>
+                <tr [pEditableRow]="user"style="background: linear-gradient(90deg, rgba(7,59,61,1) 0%, rgba(46,63,117,1) 100%); color: rgb(230, 230, 230);border-bottom: 2px solid white;">
+                  <td >
                         <p-tableCheckbox [value]="user"></p-tableCheckbox>
                     </td>
                     <td>
@@ -282,20 +293,12 @@
         
                 <div class="mb-3">
                   <label for="recipient-email" class="col-form-label">Email:</label>
-                  <input type="email" class="form-control" id="recipient-email" [(ngModel)]="userAux.email" name="email">
+                  <input type="email" class="form-control" id="recipient-email" [(ngModel)]="userAux.email" name="email" disabled="true">
                 </div>
         
                 <div class="mb-3">
                   <label for="recipient-password" class="col-form-label">Password:</label>
                   <input type="password" class="form-control" id="recipient-password" [(ngModel)]="userAux.password" name="password" required>
-                </div>
-        
-                <div class="mb-3">
-                  <label for="recipient-typeUser" class="col-form-label">UserType:</label>
-                  <select class="selector" id="recipient-typeUser" name="typeUser" [(ngModel)]="userAux.tipoUsuario">
-                    <option [value]="1">Admin</option>
-                    <option [value]="0">User</option>
-                  </select>
                 </div>
   
                   <div class="mb-3">
@@ -330,32 +333,45 @@
       
        <div class="card">
         <p-toast></p-toast>
-        <p-toolbar styleClass="mb-4 gap-2">
-          <ng-template pTemplate="left">
-            <p-button pRipple severity="success" label="New" icon="pi pi-plus" class="mr-2" data-bs-toggle="modal"
-              data-bs-target="#newArtistaModal" styleClass="btn-rounded" (click)="openNewArtista()">
-            </p-button>
-            <p-button type="button" class="asd" data-bs-toggle="modal" data-bs-target="#deleteArtistaModal"
-              styleClass="btn-rounded" [disabled]="!selectedArtistas || !selectedArtistas.length" severity="danger"
-              label="Delete">
-            </p-button>
-            <p-button type="button" class="asd" data-bs-toggle="modal" data-bs-target="#updateArtistaModal" (onClick)="editArtista(selectedArtistas[0])"
-              styleClass="btn-rounded" [disabled]="!selectedArtistas || selectedArtistas.length !== 1" severity="warning"
-              label="Update">
-            </p-button>
-          </ng-template>
+
+        <p-toolbar class="tool" styleClass="gap-2" [style]="{background: 'linear-gradient(90deg, rgba(7,59,61,1) 0%, rgba(46,63,117,1) 100%)',border:'none', borderRadius:'10px 10px 0 0'}"> 
+          <div>
+            <button pButton
+            pRipple  label="+ New" class="aas" data-bs-toggle="modal" 
+              data-bs-target="#newArtistaModal" (click)="openNewArtista()">
+            </button>
+            
+            <button  pButton class="aas" style="background: red; margin-left: 5px;"
+            pRipple data-bs-toggle="modal" data-bs-target="#deleteArtistaModal"
+            styleClass="btn-rounded" [disabled]="!selectedArtistas || !selectedArtistas.length"
+              label="X Delete">
+            </button>
+          
+            <button pButton class="aas" style="background: rgb(236, 144, 32); margin-left: 5px;"
+            pRipple data-bs-toggle="modal" data-bs-target="#updateArtistaModal" (onClick)="editArtista(selectedArtistas[0])"
+            styleClass="btn-rounded" [disabled]="!selectedArtistas || selectedArtistas.length !== 1"
+              (click)="editArtista(selectedArtistas[0])"    
+              label=" Ø Update"> 
+            </button>
+
+          </div>
+          <!--el buscar-->
+          <div class="align-items-center justify-content-between" style="display: flex;">
+            <h5 style="margin-right: 40px; color: rgb(255, 255, 255);">Manage Artist</h5>
+            <span style="margin-right: 10px;">
+              <input class="search__input" type="text" #input (input)="dt.filterGlobal(input.value, 'contains')"
+                placeholder="Search..." />
+                <svg class="search__icon" aria-hidden="true" viewBox="0 0 24 24">
+                  <g>
+                      <path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path>
+                  </g>
+              </svg>
+            </span>
+          </div>
         </p-toolbar>
         <p-table #dt [value]="artistas" [rows]="10" [totalRecords]="totalRecords" [paginator]="true"
           [(selection)]="selectedArtistas" [selectAll]="selectAll" [tableStyle]="{ 'min-width': '75rem' }"
           [globalFilterFields]="['id', 'nombre', 'correo', 'telefono', 'nombreArtista']">
-          <ng-template pTemplate="caption">
-            <div class="flex align-items-center justify-content-between">
-              <h5 class="mb-4">Manage Artistas</h5>
-              <span class="p-input-icon-left">
-                <input pInputText type="text" #input (input)="dt.filterGlobal(input.value, 'contains')" placeholder="Search..." />
-              </span>
-            </div>
-          </ng-template>
           <ng-template pTemplate="header">
             <tr>
               <th style="width: 4rem">
@@ -366,12 +382,11 @@
               <th pSortableColumn="correo" style="width:20%">Email <p-sortIcon field="correo"></p-sortIcon></th>
               <th pSortableColumn="telefono" style="width:15%">Phone <p-sortIcon field="telefono"></p-sortIcon></th>
               <th pSortableColumn="nombreArtista" style="width:20%">Artist Name <p-sortIcon field="nombreArtista"></p-sortIcon></th>
-              <th style="width:20%"></th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-artista let-ri="rowIndex">
-            <tr [pEditableRow]="artista">
-              <td>
+            <tr [pEditableRow]="user"style="background: linear-gradient(90deg, rgba(7,59,61,1) 0%, rgba(46,63,117,1) 100%); color: rgb(230, 230, 230);border-bottom: 2px solid white;">
+              <td >
                 <p-tableCheckbox [value]="artista"></p-tableCheckbox>
               </td>
               <td>
@@ -537,35 +552,42 @@
        </div>
       
        <div class="card">
-        <p-toast></p-toast>
-        <p-toolbar styleClass="mb-4 gap-2">
-          <ng-template pTemplate="left">
-            <p-button pRipple severity="success" label="New" icon="pi pi-plus" class="mr-2" data-bs-toggle="modal"
-              data-bs-target="#newObraModal" styleClass="btn-rounded" (click)="openNew()">
-            </p-button>
-            <p-button type="button" class="asd" data-bs-toggle="modal" data-bs-target="#exampleModal"
-              styleClass="btn-rounded" [disabled]="!selectedObras ||!selectedObras.length" severity="danger"
-              label="Delete">
-            </p-button>
-            <p-button type="button" class="asd" data-bs-toggle="modal" data-bs-target="#updateModal" (onClick)="editObra(selectedObras[0])"
-            styleClass="btn-rounded" [disabled]="!selectedObras || selectedObras.length !== 1" severity="warning"
-            label="Update">
-          </p-button>
-          </ng-template>
+        
+        <p-toolbar class="tool" styleClass="gap-2" [style]="{background: 'linear-gradient(90deg, rgba(7,59,61,1) 0%, rgba(46,63,117,1) 100%)',border:'none', borderRadius:'10px 10px 0 0'}"> 
+          <div>
+            <button pButton
+            pRipple  label="+ New" class="aas" data-bs-toggle="modal" 
+              data-bs-target="#newObraModal" (click)="openNew()">
+            </button>
+            
+            <button  pButton class="aas" style="background: red; margin-left: 5px;"
+            pRipple data-bs-toggle="modal" data-bs-target="#exampleModal"
+              [disabled]="!selectedObras ||!selectedObras.length"
+              label="X Delete">
+            </button>
+            <button pButton class="aas" style="background: rgb(236, 144, 32); margin-left: 5px;"
+            pRipple data-bs-toggle="modal" data-bs-target="#updateModal"
+              (onClick)="editObra(selectedObras[0])"
+              [disabled]="!selectedObras || selectedObras.length !== 1" label="Ø Update">
+            </button>
+          </div>
+          <!--el buscar-->
+          <div class="align-items-center justify-content-between" style="display: flex;">
+            <h5 style="margin-right: 40px; color: rgb(255, 255, 255);">Manage work</h5>
+            <span style="margin-right: 10px;">
+              <input class="search__input" type="text" #input (input)="dt.filterGlobal(input.value, 'contains')"
+                placeholder="Search..." />
+                <svg class="search__icon" aria-hidden="true" viewBox="0 0 24 24">
+                  <g>
+                      <path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path>
+                  </g>
+              </svg>
+            </span>
+          </div>
         </p-toolbar>
         <p-table #dt [value]="obras" [rows]="10" [totalRecords]="totalRecords" [paginator]="true"
           [(selection)]="selectedObras" [selectAll]="selectAll" [tableStyle]="{ 'min-width': '75rem' }"
           [globalFilterFields]="['id', 'nombre', 'categoria', 'tecnica', 'tamano', 'fechaCreacion', 'fechaRegistro', 'disponibilidad']">
-  
-          <ng-template pTemplate="caption">
-            <div class="flex align-items-center justify-content-between">
-              <h5 class="mb-4">Manage work</h5>
-              <span class="p-input-icon-left">
-                <input pInputText type="text" #input (input)="dt.filterGlobal(input.value, 'contains')"
-                  placeholder="Search..." />
-              </span>
-            </div>
-          </ng-template>
           <ng-template pTemplate="header">
             <tr>
               <th style="width: 4rem">
@@ -587,8 +609,9 @@
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-obra let-ri="rowIndex">
-            <tr [pEditableRow]="obra">
-              <td>
+            <tr [pEditableRow]="obra" style="background: linear-gradient(90deg, rgba(128,0,128,1) 0%, rgba(75,0,130,1) 100%); color: rgb(230, 230, 230);border-bottom: 2px solid white;">
+             
+            <td >
                 <p-tableCheckbox [value]="obra"></p-tableCheckbox>
               </td>
               <td>
