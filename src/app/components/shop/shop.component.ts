@@ -25,7 +25,7 @@ export class ShopComponent {
 
   public status: number;
   public obra: Obra;
-urlAPI: string;
+  urlAPI: string;
 
   public artista: Artista;
   constructor(
