@@ -9,11 +9,13 @@ import { LoginArtistComponent } from './components/login-artist/login-artist.com
 import { SignupArtistComponent } from './components/signup-artist/signup-artist.component';
 import { ArtistaAdministrationComponent } from './components/artista-administration/artista-administration.component';
 import { AdminComponent } from './components/admin/admin.component';
+import { CoursesComponent } from './components/courses/courses.component'
 
 
 
 export const routes: Routes = [
-    {path:'',component: HomeComponent},
+    {path:'',component: CoursesComponent},
+    {path:'home',component: HomeComponent},
     {path:'login',component: LoginComponent},
     {path:'login/signup', component: SignupComponent},
     {path:'shop/viewArtwork/:id', component: ViewArtworkComponent},
