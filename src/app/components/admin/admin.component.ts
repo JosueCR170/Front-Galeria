@@ -26,23 +26,23 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [RouterLink,TableModule, ConfirmDialogModule ,ToastModule,ToolbarModule, CommonModule,DialogModule  ,FormsModule, IconFieldModule, InputIconModule , TagModule, DropdownModule, ButtonModule, InputTextModule],
+  imports: [RouterLink, TableModule, ConfirmDialogModule, ToastModule, ToolbarModule, CommonModule, DialogModule, FormsModule, IconFieldModule, InputIconModule, TagModule, DropdownModule, ButtonModule, InputTextModule],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.css',
-  providers: [MessageService,ObraService, ConfirmationService],
+  providers: [MessageService, ObraService, ConfirmationService],
 })
 export class AdminComponent {
   public artistasList: { key: number, value: string }[] = [];
-  
+
   artStyles: string[] = [
-    'Cubism','Impressionism','Expressionism','Realism','Surrealism','Abstract','Renaissance',
-    'Baroque','Rococo','Romanticism','Neoclassicism','Modernism','Pop Art'
+    'Cubism', 'Impressionism', 'Expressionism', 'Realism', 'Surrealism', 'Abstract', 'Renaissance',
+    'Baroque', 'Rococo', 'Romanticism', 'Neoclassicism', 'Modernism', 'Pop Art'
   ]
 
-  tecnicas: string[]=[
-    'Oil on canvas','Watercolor','Watercolor on paper','Tempera','Pastel painting','Fresco painting',
-    'Digital painting','Wood carving','Marble sculpture','Engraving','Serigraphy','Art photography',
-    'Digital art','Collage','Pyrography','Bronze sculpture'
+  tecnicas: string[] = [
+    'Oil on canvas', 'Watercolor', 'Watercolor on paper', 'Tempera', 'Pastel painting', 'Fresco painting',
+    'Digital painting', 'Wood carving', 'Marble sculpture', 'Engraving', 'Serigraphy', 'Art photography',
+    'Digital art', 'Collage', 'Pyrography', 'Bronze sculpture'
   ]
 
   public status: number;
@@ -51,7 +51,7 @@ export class AdminComponent {
   public _artista: Artista;
   public currentDate = new Date();
   public formattedDate = this.formatDate(this.currentDate);
-  public errores:string[]=[];
+  public errores: string[] = [];
 
   constructor(
     private _obraService: ObraService,
@@ -63,17 +63,17 @@ export class AdminComponent {
   ) {
     this.status = -1;
     this.urlAPI = server.url + 'obra/getimage/';
-    this.obra = new Obra(1, 1,"","","",1,true,"",null,null,null);
-    this._user = new User(1,"",false,"","",null,"");
-    this._artista = new Artista(1,"","","","","");
+    this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, null);
+    this._user = new User(1, "", false, "", "", null, "");
+    this._artista = new Artista(1, "", "", "", "", "");
   }
 
   totalRecords!: number;
-  
+
   statuses!: any[];
   auxObras: Obra[] = [];
   categoryExists: string[] = [];
-  
+
   clonedProducts: { [s: string]: Obra } = {};
   selectedCategory: string = '';
   selectAll: boolean = false;
@@ -100,15 +100,15 @@ export class AdminComponent {
   selectedObra!: Obra[];
 
   /** Variables y Elementos para la tabla de Users **/
-  userAux = new User(1,"",false,"","",null,"");
+  userAux = new User(1, "", false, "", "", null, "");
   users: User[] = [];
   selectedUsers: User[] = [];
-  selectedUser: User[]=[];
+  selectedUser: User[] = [];
   /** Variables y Elementos para la tabla de Artists **/
-  artistaAux = new Artista(1,"","","","","");
+  artistaAux = new Artista(1, "", "", "", "", "");
   artistas: Artista[] = [];
   selectedArtistas: Artista[] = [];
-  selectedArtista: Artista[]=[];
+  selectedArtista: Artista[] = [];
 
   showHome(show: boolean) {
     this.flag = show;
@@ -164,33 +164,33 @@ export class AdminComponent {
     this.flag = false;
     this.delivry = false;
     this.administration = show;
-    
+
   }
 
   /*********************************************************************************************/
-  ngOnInit():void {
+  ngOnInit(): void {
     this.loadLoggedUser();
     this.index();
     this.indexUsers();
     this.indexArtista()
   }
 
-  loadLoggedUser(){
+  loadLoggedUser() {
     this.user = sessionStorage.getItem('identity');
     this.user = JSON.parse(this.user);
   }
 
-  authTokenUserAdmin(){
+  authTokenUserAdmin() {
     let aux = sessionStorage.getItem('identity');
-    if (aux == null){
+    if (aux == null) {
       return false;
     } else {
-    let jason= JSON.parse(aux);
-    return jason.tipoUsuario;
+      let jason = JSON.parse(aux);
+      return jason.tipoUsuario;
     }
   }
 
-  redirectToUserLogin(){
+  redirectToUserLogin() {
     this._router.navigate(['login'])
   }
 
@@ -198,14 +198,14 @@ export class AdminComponent {
     this.selectedCategory = category;
   }
 
-  loadAdmin(){
+  loadAdmin() {
     this._router.navigate(['/shop'])
-    }
-    
+  }
+
   redirectToLoginArtist() {
     this._router.navigate(['/loginArtist']);
   }
-  logOut(){
+  logOut() {
     sessionStorage.clear();
     this._router.navigate([''])
   }
@@ -214,7 +214,7 @@ export class AdminComponent {
     this.displayConfirmationDialog = true;
   }
 
-  
+
   getImage(obra: Obra): string | null {
     if (obra.imagen) {
       // Decodificar la imagen base64 y devolverla como una URL base64
@@ -232,24 +232,24 @@ export class AdminComponent {
   }
 
   openNewUser() {
-    this.userAux = new User(1, "", true,"","",null,"")
+    this.userAux = new User(1, "", true, "", "", null, "")
     this.submitted = false;
     this.productDialog = true;
   }
 
-  openNewArtista(){
-    this.artistaAux = new Artista(1,"","","","","")
+  openNewArtista() {
+    this.artistaAux = new Artista(1, "", "", "", "", "")
     this.submitted = false;
     this.productDialog = true;
   }
-  
+
   /********************************* INDEX  *********************************/
   index() {
     this._obraService.index().subscribe({
       next: (response: any) => {
         this.obras = response['data'];
 
-        this.artistasList=[];
+        this.artistasList = [];
         this.loadArtistaName();
 
         console.log();
@@ -263,7 +263,8 @@ export class AdminComponent {
   indexUsers() {
     this._userService.index().subscribe({
       next: (response: any) => {
-        this.users = response['data'].filter((user:any)=>user.id !==  this.user.iss);
+        console.log(response);
+        this.users = response['data'].filter((user: any) => user.id !== this.user.iss);
       },
       error: (err: Error) => {
         console.error('Error al cargar los users', err);
@@ -275,7 +276,7 @@ export class AdminComponent {
     this._artistaService.index().subscribe({
       next: (response: any) => {
         this.artistas = response['data'];
-        
+
       },
       error: (err: Error) => {
         console.error('Error al cargar los artistas', err);
@@ -284,30 +285,30 @@ export class AdminComponent {
   }
 
   /******************************** EDIT ********************************/
-    editObra(obra: Obra) {
-      this.obra = { ...obra };
-      this.productDialog = true;
-    }
-    
-    editUser(user: User) {
-      if(user.password==''){return}
-      this.userAux = { ...user };
-      this.productDialog = true;
-    }
+  editObra(obra: Obra) {
+    this.obra = { ...obra };
+    this.productDialog = true;
+  }
 
-    editArtista(_artista: Artista) {
-      if(_artista.password==''){return}
-      this.artistaAux = { ..._artista };
-      this.productDialog = true;
-    }
-  
-    selectCategoria(categoria: string) {
-      this.obra.categoria = categoria;
-    }
+  editUser(user: User) {
+    if (user.password == '') { return }
+    this.userAux = { ...user };
+    this.productDialog = true;
+  }
 
-    selectTecnica(tecnica: string) {
-      this.obra.tecnica = tecnica;
-    }
+  editArtista(_artista: Artista) {
+    if (_artista.password == '') { return }
+    this.artistaAux = { ..._artista };
+    this.productDialog = true;
+  }
+
+  selectCategoria(categoria: string) {
+    this.obra.categoria = categoria;
+  }
+
+  selectTecnica(tecnica: string) {
+    this.obra.tecnica = tecnica;
+  }
 
   onImageFileChange(event: any): void {
     this.selectedFile = event.target.files[0];
@@ -318,43 +319,43 @@ export class AdminComponent {
       this._obraService.updateImage(this.selectedFile, filename).subscribe({
         next: (response: any) => {
           console.log(response);
-          this.selectedObras=[];
-          this.msgAlert('updated artwork','','success')
+          this.selectedObras = [];
+          this.msgAlert('updated artwork', '', 'success')
         },
         error: (err: Error) => {
           console.log(err.message);
-          this.msgAlert('error updating artwork','','error')
+          this.msgAlert('error updating artwork', '', 'error')
         }
       });
     }
     this._obraService.update(this.obra).subscribe({
-      next:(response:any)=>{
+      next: (response: any) => {
         console.log(response);
         this.index()
       },
-      error:(err:Error)=>{
+      error: (err: Error) => {
         console.log(err);
       }
     });
   }
 
-updateUser() {
-if(this.userAux.password===''){
-  this.msgAlert('Error, empty password','','error')
-  return;
-}
+  updateUser() {
+    if (this.userAux.password === '') {
+      this.msgAlert('Error, empty password', '', 'error')
+      return;
+    }
 
     this._userService.update(this.userAux).subscribe({
       next: (response: any) => {
         console.log('Usuario actualizado', response);
-        this.msgAlert('updated user','','success');
+        this.msgAlert('updated user', '', 'success');
         // this.userAux = new User(1,"",false,"","",null,"");
-        this.selectedUsers=[];
+        this.selectedUsers = [];
         this.indexUsers();
       },
       error: (err: any) => {
         console.error('Error al actualizar el usuario', err);
-        this.msgAlert('error updating user','','error')
+        this.msgAlert('error updating user', '', 'error')
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
@@ -367,23 +368,23 @@ if(this.userAux.password===''){
 
   updateArtista() {
 
-    if(this.artistaAux.password==''){
-      this.msgAlert('Error, empty password','','error')
+    if (this.artistaAux.password == '') {
+      this.msgAlert('Error, empty password', '', 'error')
       return;
     }
 
     this._artistaService.update(this.artistaAux).subscribe({
       next: (response: any) => {
         console.log('Artista actualizado', response);
-        this.selectedArtistas=[];
-        this.msgAlert('Artist updated','','success')
-        this.artistasList=[];
+        this.selectedArtistas = [];
+        this.msgAlert('Artist updated', '', 'success')
+        this.artistasList = [];
         this.loadArtistaName();
         this.indexArtista()
       },
       error: (err: any) => {
         console.error('Error al actualizar el artista', err);
-        this.msgAlert('error updating artist','','error')
+        this.msgAlert('error updating artist', '', 'error')
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
@@ -392,164 +393,165 @@ if(this.userAux.password===''){
         });
       }
     });
-    
+
   }
 
   /********************************* STORE *********************************/
   storeObra(form: any): void {
     // if (form.valid) {
-      console.log('Obra:', this.obra);
-      if (this.selectedFile) {
-        console.log('Imagen:', this.selectedFile);
-        this._obraService.upLoadImage(this.selectedFile).subscribe({
-          next: (response: any) => {
-            console.log(response);
-            if (response.filename) {
-              this.obra.imagen = response.filename; 
-              this.obra.fechaCreacion = this.fechaSeleccionada;
-              this.obra.fechaRegistro = this.formattedDate;
-              this._obraService.create(this.obra).subscribe({
-                next: (response2: any) => {
-                  console.log(response2);
-                  this.index()
-                  this.msgAlert('saved artwork','','success')
-                },
-                error: (error: any) => {
-                  if (error.status === 406 && error.error && error.error.error) {
-                    this.errores = [];
-                    const errorObj = error.error.error;
-                    for (const key in errorObj) {
-                      if (errorObj.hasOwnProperty(key)) {
-                        this.errores.push(...errorObj[key]);
-                      }
+    console.log('Obra:', this.obra);
+    if (this.selectedFile) {
+      console.log('Imagen:', this.selectedFile);
+      this._obraService.upLoadImage(this.selectedFile).subscribe({
+        next: (response: any) => {
+          console.log(response);
+          if (response.filename) {
+            this.obra.imagen = response.filename;
+            this.obra.fechaCreacion = this.fechaSeleccionada;
+            this.obra.fechaRegistro = this.formattedDate;
+            this._obraService.create(this.obra).subscribe({
+              next: (response2: any) => {
+                console.log(response2);
+                this.index()
+                this.msgAlert('saved artwork', '', 'success')
+              },
+              error: (error: any) => {
+                if (error.status === 406 && error.error && error.error.error) {
+                  this.errores = [];
+                  const errorObj = error.error.error;
+                  for (const key in errorObj) {
+                    if (errorObj.hasOwnProperty(key)) {
+                      this.errores.push(...errorObj[key]);
                     }
-                    //console.error(this.errores);
-                    this.msgAlert('Error adding artwork',this.errores,'error');     
-      
-                  } else {
-                    console.error('Other type of error:', error);
-                    this.msgAlert('Error from the server, contact an administrator', '', 'error');
                   }
-                }
-              });
-            } else {
-              console.error('No se recibió el nombre del archivo.');
-            }
-          },
-          error: (error: any) => {
-            if (error.status === 406 && error.error && error.error.error) {
-              this.errores = [];
-              const errorObj = error.error.error;
-              for (const key in errorObj) {
-                if (errorObj.hasOwnProperty(key)) {
-                  this.errores.push(...errorObj[key]);
+                  //console.error(this.errores);
+                  this.msgAlert('Error adding artwork', this.errores, 'error');
+
+                } else {
+                  console.error('Other type of error:', error);
+                  this.msgAlert('Error from the server, contact an administrator', '', 'error');
                 }
               }
-              //console.error(this.errores);
-              this.msgAlert('Error adding artwork',this.errores,'error');     
-
-            } else {
-              console.error('Other type of error:', error);
-              this.msgAlert('Error from the server, contact an administrator', '', 'error');
-            }
-          
+            });
+          } else {
+            console.error('No se recibió el nombre del archivo.');
           }
-        });
-      }else{ this.msgAlert('Error you must choose an image for the artwork', '', 'error');}
+        },
+        error: (error: any) => {
+          if (error.status === 406 && error.error && error.error.error) {
+            this.errores = [];
+            const errorObj = error.error.error;
+            for (const key in errorObj) {
+              if (errorObj.hasOwnProperty(key)) {
+                this.errores.push(...errorObj[key]);
+              }
+            }
+            //console.error(this.errores);
+            this.msgAlert('Error adding artwork', this.errores, 'error');
+
+          } else {
+            console.error('Other type of error:', error);
+            this.msgAlert('Error from the server, contact an administrator', '', 'error');
+          }
+
+        }
+      });
+    } else { this.msgAlert('Error you must choose an image for the artwork', '', 'error'); }
     // }
   }
 
   storeUser(form: any): void {
     if (form.valid) {
+      console.log(this.userAux.tipoUsuario);
       this._userService.create(this.userAux).subscribe({
-      next:(response)=>{
-        
-        console.log(response);
-        if(response.status==201){
-          form.reset();   
-          this.msgAlert('User added successfully','','success');          
-            } else {
-              console.error('No se pudo ingresar el usuario');
-            }
-          },
-          error: (error: any) => {
-            if (error.status === 406 && error.error && error.error.error) {
-              this.errores = [];
-              const errorObj = error.error.error;
-              for (const key in errorObj) {
-                if (errorObj.hasOwnProperty(key)) {
-                  this.errores.push(...errorObj[key]);
-                }
-              }
-              //console.error(this.errores);
-              this.msgAlert('Error adding user',this.errores,'error');     
+        next: (response) => {
 
-            } else {
-              console.error('Other type of error:', error);
-              this.msgAlert('Error from the server, contact an administrator', '', 'error');
-            }
-          
+          console.log(response);
+          if (response.status == 201) {
+            form.reset();
+            this.msgAlert('User added successfully', '', 'success');
+          } else {
+            console.error('No se pudo ingresar el usuario');
           }
-        });
-        this.indexUsers();
+        },
+        error: (error: any) => {
+          if (error.status === 406 && error.error && error.error.error) {
+            this.errores = [];
+            const errorObj = error.error.error;
+            for (const key in errorObj) {
+              if (errorObj.hasOwnProperty(key)) {
+                this.errores.push(...errorObj[key]);
+              }
+            }
+            //console.error(this.errores);
+            this.msgAlert('Error adding user', this.errores, 'error');
+
+          } else {
+            console.error('Other type of error:', error);
+            this.msgAlert('Error from the server, contact an administrator', '', 'error');
+          }
+
+        }
+      });
+      this.indexUsers();
     }
   }
 
   storeArtista(form: any): void {
     if (form.valid) {
       this._artistaService.create(this.artistaAux).subscribe({
-      next:(response)=>{
-        
-        console.log(response);
-        if(response.status==201){
-          form.reset(); 
-          this.msgAlert('Artist added successfully','','success');
-          this.artistasList=[];
-          this.loadArtistaName();          
-            } else {
-              console.error('The artist could not be entered');
-            }
-          },
-          error: (error: any) => {
-            if (error.status === 406 && error.error && error.error.errors) {
-              this.errores = [];
-              const errorObj = error.error.errors;
-              for (const key in errorObj) {
-                if (errorObj.hasOwnProperty(key)) {
-                  this.errores.push(...errorObj[key]);
-                }
-              }
-              //console.error(this.errores);
-              this.msgAlert('Error adding artist',this.errores,'error');     
+        next: (response) => {
 
-            } else {
-              console.error('Other type of error:', error);
-              this.msgAlert('Error from the server, contact an administrator', '', 'error');
-            }
+          console.log(response);
+          if (response.status == 201) {
+            form.reset();
+            this.msgAlert('Artist added successfully', '', 'success');
+            this.artistasList = [];
+            this.loadArtistaName();
+          } else {
+            console.error('The artist could not be entered');
           }
-        });
-        this.indexArtista()
+        },
+        error: (error: any) => {
+          if (error.status === 406 && error.error && error.error.errors) {
+            this.errores = [];
+            const errorObj = error.error.errors;
+            for (const key in errorObj) {
+              if (errorObj.hasOwnProperty(key)) {
+                this.errores.push(...errorObj[key]);
+              }
+            }
+            //console.error(this.errores);
+            this.msgAlert('Error adding artist', this.errores, 'error');
+
+          } else {
+            console.error('Other type of error:', error);
+            this.msgAlert('Error from the server, contact an administrator', '', 'error');
+          }
+        }
+      });
+      this.indexArtista()
     }
   }
-  
+
   /********************************* DELETE *********************************/
 
 
-  deleteImage(filename:string|null){
+  deleteImage(filename: string | null) {
 
-    if(filename==null){
-      this.msgAlert('Imagen no eliminada, contiene null','','error');
+    if (filename == null) {
+      this.msgAlert('Imagen no eliminada, contiene null', '', 'error');
       return;
     }
 
     this._obraService.destroyImage(filename).subscribe({
-      next:(response:any)=>{
+      next: (response: any) => {
         console.log(response);
         //this.msgAlert('Imagen eliminada','','success');
       },
-      error:(error:any)=>{
+      error: (error: any) => {
         console.error(error);
-       // this.msgAlert('Imagen no eliminada','','error');
+        // this.msgAlert('Imagen no eliminada','','error');
       }
     });
   }
@@ -557,15 +559,15 @@ if(this.userAux.password===''){
     let allAvailable = true;
 
     this.selectedObras.forEach(obra => {
-        if (!obra.disponibilidad) {
-            allAvailable = false;
-        }
+      if (!obra.disponibilidad) {
+        allAvailable = false;
+      }
     });
 
     if (!allAvailable) {
       this.selectedObras = [];
-        this.msgAlert('Error when deleting artwork, check that they are not sold', '', 'error');
-        return;
+      this.msgAlert('Error when deleting artwork, check that they are not sold', '', 'error');
+      return;
     }
 
     this.selectedObras.forEach(obra => {
@@ -599,11 +601,11 @@ if(this.userAux.password===''){
         next: () => {
           this.users = this.users.filter(o => o.id !== _user.id);
           this.totalRecords--;
-          this.msgAlert('User Deleted','','error');
+          this.msgAlert('User Deleted', '', 'error');
         },
         error: (err: Error) => {
           console.error('Error al eliminar el usuario', err);
-          this.msgAlert('Error deleting user','','error');
+          this.msgAlert('Error deleting user', '', 'error');
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
@@ -623,35 +625,35 @@ if(this.userAux.password===''){
     //verifica si existen artistas con obras vendidas
     this.selectedArtistas.forEach(_artista => {
       this.obras.forEach(element => {
-        if(element.idArtista==_artista.id && !element.disponibilidad){
+        if (element.idArtista == _artista.id && !element.disponibilidad) {
           this.selectedArtistas = [];
           this.displayConfirmationDialog = false;
-          this.msgAlert('Error, verify that the artists do not have sold artwork','','error');
+          this.msgAlert('Error, verify that the artists do not have sold artwork', '', 'error');
           return;
         }
       });
     });
 
-      this.selectedArtistas.forEach(_artista => {
+    this.selectedArtistas.forEach(_artista => {
 
       this._artistaService.deleted(_artista.id).subscribe({
         next: () => {
           this.artistas = this.artistas.filter(o => o.id !== _artista.id);
           this.totalRecords--;
-          this.msgAlert('Artist successfully removed','','success');
-          this.artistasList=[];
+          this.msgAlert('Artist successfully removed', '', 'success');
+          this.artistasList = [];
           this.loadArtistaName();
-          
+
         },
         error: (err: Error) => {
           console.error('Error al eliminar el artista', err);
         }
       });
 
-    this.selectedArtistas = [];
-    this.displayConfirmationDialog = false;
-  } );
-}
+      this.selectedArtistas = [];
+      this.displayConfirmationDialog = false;
+    });
+  }
 
 
 
@@ -659,19 +661,19 @@ if(this.userAux.password===''){
     this.displayConfirmationDialog = false;
   }
 
-   /*****************************  Obtener nombre  *****************************/
+  /*****************************  Obtener nombre  *****************************/
 
-   loadArtistaName() {
+  loadArtistaName() {
     this._artistaService.index().subscribe({
       next: (response: any) => {
         //console.log(response)
         let artistas = response['data'];
-  artistas.forEach((e:any) => {
-    this.artistasList.push({
-          key: e.id,
-          value: e.nombre
+        artistas.forEach((e: any) => {
+          this.artistasList.push({
+            key: e.id,
+            value: e.nombre
+          });
         });
-  });
       },
       error: (err: Error) => {
         console.error('Error al buscar el artista', err);
@@ -686,8 +688,8 @@ if(this.userAux.password===''){
 
 
   /************************************************************************ */
-  
-  fechaSeleccionada: string ='';
+
+  fechaSeleccionada: string = '';
   ano: number | null = null;
   mes: string | null = null;
   dia: string | null = null;
@@ -703,7 +705,7 @@ if(this.userAux.password===''){
 
   private formatDate(date: Date): string {
     console.log(date);
-    
+
     const year = date.getFullYear();
     const month = date.getMonth() + 1; // Agrega un cero al mes si es necesario
     const day = date.getDate(); // Agrega un cero al día si es necesario
@@ -716,6 +718,10 @@ if(this.userAux.password===''){
       text,
       icon,
     })
+  }
+
+  public parseInt(value: string){
+    return parseInt(value, 10);
   }
 
 }
