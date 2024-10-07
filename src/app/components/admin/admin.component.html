@@ -133,7 +133,7 @@
                                 <input pInputText type="text" [(ngModel)]="user.tipoUsuario" required />
                             </ng-template>
                             <ng-template pTemplate="output">
-                                {{ user.tipoUsuario ? 'Admin' : 'User' }}
+                                {{ parseInt(user.tipoUsuario) ? 'Admin' : 'User' }}
                             </ng-template>
                         </p-cellEditor>
                     </td>
@@ -215,8 +215,8 @@
                   <div class="form-group"> 
                   <label for="typeUser">TypeUser</label>
                   <select class="selector" id="typeUser" name="typeUser" #typeUser="ngModel" [(ngModel)]="userAux.tipoUsuario" required>
-                    <option value="1">Admin</option>
-                    <option value="0">User</option>
+                    <option value=1>Admin</option>
+                    <option value=2>User</option>
                   </select>
                   </div> 
 

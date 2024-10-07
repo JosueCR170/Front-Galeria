@@ -1,4 +1,4 @@
-import { Component, OnInit,  ViewChild, ElementRef} from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -37,11 +37,11 @@ export class ShopComponent {
     private _obraService: ObraService,
     private _router: Router,
     private _artistas: ArtistService,
-    private userService:UserService,
+    private userService: UserService,
     private messageService: MessageService
   ) {
     this.status = -1;
-    this.urlAPI = server.url+'obra/getimage/';
+    this.urlAPI = server.url + 'obra/getimage/';
     this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, null);
     this.artista = new Artista(1, "", "", "", "", "");
   }
@@ -62,16 +62,16 @@ export class ShopComponent {
   onClick: boolean = false;
   all: boolean = false;
   artistaMenu: boolean = false;
-  total:number = 1;
+  total: number = 1;
   user: any;
   public acc: any[] = [];
-  userAux = new User(1,"",false,"","",null,"");
+  userAux = new User(1, "", false, "", "", null, "");
 
   ngOnInit(): void {
     this.index();
-    this.loadLoggedUser(); 
+    this.loadLoggedUser();
     this.indexCarrito();
-    
+
   }
 
   logOut() {
@@ -84,93 +84,93 @@ export class ShopComponent {
       next: (response: any) => {
         this.obras = response['data'];
         this.loadCategorysExists();
-         this.indexArtista();
+        this.indexArtista();
       },
       error: (err: Error) => {
 
       }
-    })  
-   
-   
+    })
+
+
   }
   indexArtista() {
     this._artistas.index().subscribe({
       next: (response: any) => {
         this.auxArtistas = this.artistas = response['data'];
         console.log(this.artistas)
-      
+
       },
       error: (err: Error) => {
 
       }
     });
- 
-    
+
+
   }
 
-  indexCarrito(){
+  indexCarrito() {
     const carrito = localStorage.getItem('obras');
     this.obrasCArrito = carrito ? JSON.parse(carrito) : [];
-    this.obrasCArrito = Array.isArray( this.obrasCArrito) ?  this.obrasCArrito : [];
+    this.obrasCArrito = Array.isArray(this.obrasCArrito) ? this.obrasCArrito : [];
     this.agrupamiento();
-   }
-
-addCarFuncion(id: number){
-  let obra = this.obras.find((o: any) => o.id === id);
-  console.log(obra)
-  if(obra){
-    const yaEnCarrito = this.obrasCArrito.some((item: any) => item.id === obra?.id);
-    if(!yaEnCarrito){
-       this.obrasCArrito.push(obra)
-     localStorage.setItem('obras', JSON.stringify( this.obrasCArrito));
-     this.msgAlertGood('added work','','success','#000','#ffffff');
-    }else{
-      this.msgAlertGood('You cannot add the same artwork to the cart','','error','#ffffff','#eb5151');
-    }
-  }
-  
   }
 
-/*ANIMACION DE DESAPARECER CARD DEL CARRITO*/
-startFadeOut(car: any) {
-  car.isFadingOut = true;
-  this.deleteItemCar(car.id);
-}
-
-deleteItemCar(id: number) {
-  const carrito = localStorage.getItem('obras');
-  this.obrasCArrito = carrito ? JSON.parse(carrito) : [];
-  this.obrasCArrito = Array.isArray(this.obrasCArrito) ? this.obrasCArrito : [];
-  this.obrasCArrito.forEach(obraSeleccionada =>{
-    if(obraSeleccionada.id === id){
-      this.total -= obraSeleccionada.precio;
-    }
-  })
-  this.obrasCArrito = this.obrasCArrito.filter(obra => obra.id != id);
-  localStorage.setItem('obras', JSON.stringify(this.obrasCArrito));
-  if(this.obrasCArrito.length!=0){
-    console.log(this.obrasCArrito.length)
-  }else{this.indexCarrito()}
-}
-agrupamiento(){
-  const groupedObras =  this.obrasCArrito.reduce((acc, obra) => {
-    const idArtista = obra.idArtista;
-    if (typeof idArtista === 'number') {
-      if (!acc[idArtista]) {
-        acc[idArtista] = [];
+  addCarFuncion(id: number) {
+    let obra = this.obras.find((o: any) => o.id === id);
+    console.log(obra)
+    if (obra) {
+      const yaEnCarrito = this.obrasCArrito.some((item: any) => item.id === obra?.id);
+      if (!yaEnCarrito) {
+        this.obrasCArrito.push(obra)
+        localStorage.setItem('obras', JSON.stringify(this.obrasCArrito));
+        this.msgAlertGood('added work', '', 'success', '#000', '#ffffff');
+      } else {
+        this.msgAlertGood('You cannot add the same artwork to the cart', '', 'error', '#ffffff', '#eb5151');
       }
-      acc[idArtista].push(obra);
     }
-    return acc;
-  }, {} as { [key: number]: any[] });
-  this.obrasAgrupadasPorArtista = Object.entries(groupedObras);
-  this.obrasAgrupadasPorArtista.forEach(grupo => {
-  grupo.total = this.calcularTotalPrecios(grupo[1]);
-  });
-}
-calcularTotalPrecios(obras: any[]): number {
-  return this.total = obras.reduce((total, obra) => total + obra.precio, 0);
-}
+
+  }
+
+  /*ANIMACION DE DESAPARECER CARD DEL CARRITO*/
+  startFadeOut(car: any) {
+    car.isFadingOut = true;
+    this.deleteItemCar(car.id);
+  }
+
+  deleteItemCar(id: number) {
+    const carrito = localStorage.getItem('obras');
+    this.obrasCArrito = carrito ? JSON.parse(carrito) : [];
+    this.obrasCArrito = Array.isArray(this.obrasCArrito) ? this.obrasCArrito : [];
+    this.obrasCArrito.forEach(obraSeleccionada => {
+      if (obraSeleccionada.id === id) {
+        this.total -= obraSeleccionada.precio;
+      }
+    })
+    this.obrasCArrito = this.obrasCArrito.filter(obra => obra.id != id);
+    localStorage.setItem('obras', JSON.stringify(this.obrasCArrito));
+    if (this.obrasCArrito.length != 0) {
+      console.log(this.obrasCArrito.length)
+    } else { this.indexCarrito() }
+  }
+  agrupamiento() {
+    const groupedObras = this.obrasCArrito.reduce((acc, obra) => {
+      const idArtista = obra.idArtista;
+      if (typeof idArtista === 'number') {
+        if (!acc[idArtista]) {
+          acc[idArtista] = [];
+        }
+        acc[idArtista].push(obra);
+      }
+      return acc;
+    }, {} as { [key: number]: any[] });
+    this.obrasAgrupadasPorArtista = Object.entries(groupedObras);
+    this.obrasAgrupadasPorArtista.forEach(grupo => {
+      grupo.total = this.calcularTotalPrecios(grupo[1]);
+    });
+  }
+  calcularTotalPrecios(obras: any[]): number {
+    return this.total = obras.reduce((total, obra) => total + obra.precio, 0);
+  }
   countObrasOfArtista(id: number) {
     let i = 0;
     this.obras.forEach(obra => {
@@ -195,7 +195,7 @@ calcularTotalPrecios(obras: any[]): number {
     if (id === null) {
       return undefined; // O manejar el caso de manera apropiada
     }
-    return this.artistas.find(artista => artista.id === id); 
+    return this.artistas.find(artista => artista.id === id);
   }
   loadAuxObras(category: string) {
     this.auxObras = this.obras.filter(obra => obra.categoria === category);
@@ -213,10 +213,10 @@ calcularTotalPrecios(obras: any[]): number {
 
   loadLoggedUser() {
     this.user = sessionStorage.getItem('identity');
-    console.log('User',this.user);
+    console.log('User', this.user);
     this.user = JSON.parse(this.user);
     //console.log('User',this.user);
-    this.userAux={...this.user};
+    this.userAux = { ...this.user };
   }
 
   getNumeroDeObras(categoria: { nombre: string, obras: any[] }): number {
@@ -321,66 +321,66 @@ calcularTotalPrecios(obras: any[]): number {
   }
 
   updateUser() {
-  
-    this.user.id=this.user.iss;
-    console.log('User antes de ',this.user);
-        this.userService.update(this.user).subscribe({
-          next: (response: any) => {
-            console.log('Usuario actualizado', response);
-            this.msgAlert('updated user','','success');
-            //this.loadLoggedUser();
-          
-           let storedUserInfo = sessionStorage.getItem('identity');
-           let userInfo;
-           if (storedUserInfo) {
-            userInfo = JSON.parse(storedUserInfo);
-          } else {
-        // Proporcionar un objeto predeterminado en caso de que storedUserInfo sea null
-        userInfo = {};
-      }
-      // Actualiza solo las propiedades necesarias
-      userInfo.telefono = this.user.telefono;
-      userInfo.nombre = this.user.nombre;
-      // Guarda el objeto actualizado de nuevo en sessionStorage
-      sessionStorage.setItem('identity', JSON.stringify(userInfo));
-      location.reload();
-           this._router.navigate(['/shop']);
-           console.log('User',this.user);
-          // console.log('UserAUX',this.userAux);
-          },
-          error: (err: any) => {
-            console.error('Error al actualizar el usuario', err.error.message);
-              this.msgAlert('error updating user','','error');
-            
-            
-          }
-        });
-      }
 
-      resetUserData() {
-        this.user = { ...this.userAux }; 
-      }
+    this.user.id = this.user.iss;
+    console.log('User antes de ', this.user);
+    this.userService.update(this.user).subscribe({
+      next: (response: any) => {
+        console.log('Usuario actualizado', response);
+        this.msgAlert('updated user', '', 'success');
+        //this.loadLoggedUser();
 
-      msgAlert = (title: any, text: any, icon: any) => {
-        Swal.fire({
-          title,
-          text,
-          icon,
-        })
-      }
-      msgAlertGood = (title: any, text: any, icon: any, color: any, background:any) => {
-        Swal.fire({
-          toast: true,
-          position: "top-end",
-          title,
-          text,
-          icon, 
-          color,
-          timer: 2000,
-          showConfirmButton: false,
-          background,
+        let storedUserInfo = sessionStorage.getItem('identity');
+        let userInfo;
+        if (storedUserInfo) {
+          userInfo = JSON.parse(storedUserInfo);
+        } else {
+          // Proporcionar un objeto predeterminado en caso de que storedUserInfo sea null
+          userInfo = {};
+        }
+        // Actualiza solo las propiedades necesarias
+        userInfo.telefono = this.user.telefono;
+        userInfo.nombre = this.user.nombre;
+        // Guarda el objeto actualizado de nuevo en sessionStorage
+        sessionStorage.setItem('identity', JSON.stringify(userInfo));
+        location.reload();
+        this._router.navigate(['/shop']);
+        console.log('User', this.user);
+        // console.log('UserAUX',this.userAux);
+      },
+      error: (err: any) => {
+        console.error('Error al actualizar el usuario', err.error.message);
+        this.msgAlert('error updating user', '', 'error');
 
-        })
+
       }
-      
+    });
+  }
+
+  resetUserData() {
+    this.user = { ...this.userAux };
+  }
+
+  msgAlert = (title: any, text: any, icon: any) => {
+    Swal.fire({
+      title,
+      text,
+      icon,
+    })
+  }
+  msgAlertGood = (title: any, text: any, icon: any, color: any, background: any) => {
+    Swal.fire({
+      toast: true,
+      position: "top-end",
+      title,
+      text,
+      icon,
+      color,
+      timer: 2000,
+      showConfirmButton: false,
+      background,
+
+    })
+  }
+
 }
