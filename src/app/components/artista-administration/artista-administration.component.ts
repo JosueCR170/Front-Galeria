@@ -23,6 +23,7 @@ import { Pedido } from '../../models/Pedido';
 import { EnvioService } from '../../services/envio.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RippleModule } from 'primeng/ripple';
+import { DetalleFacturaService } from '../../services/detalleFactura.service';
 
 @Component({
   selector: 'app-artista-administration',
@@ -85,6 +86,7 @@ export class ArtistaAdministrationComponent {
     private obraService: ObraService,
     private messageService: MessageService,
     private facturaService: FacturaService,
+    private detalleFacturaService:DetalleFacturaService,
     private envioService: EnvioService,
     private _router: Router,
   ) {
@@ -92,7 +94,7 @@ export class ArtistaAdministrationComponent {
     this.urlAPI = server.url + 'obra/getimage/';
 
     this.pedido = new Pedido(new Envio(1, 0, "Espera", "", "", "", "", "", ""),
-      new Factura(0, null, null, "", null, null, null));
+      new Factura(0,null,"",0));
     this.obra = new Obra(1, 1, "", "", "", 0 , true, "", null, null, "");
   }
 
@@ -234,38 +236,38 @@ export class ArtistaAdministrationComponent {
   }
 
   storePedido(form: any): void {
-    if (form.valid) {
-      let obrita = this.obras.find(o => o.id == this.pedido.factura.idObra);
-      if (obrita?.disponibilidad) {
-        this.facturaService.create(this.pedido.factura).subscribe({
-          next: (response: any) => {
-            if (response['Factura'].id) {
-              this.pedido.envio.idFactura = response['Factura'].id;
-              this.envioService.create(this.pedido.envio).subscribe({
-                next: (response2: any) => {
-                  console.log(response2);
-                  this.updateDisponibilidadObra(obrita,false);
-                  this.msgAlert('Order saved successfully','','success');
-                  //location.reload();
+    // if (form.valid) {
+    //   let obrita = this.obras.find(o => o.id == this.pedido.factura.idObra);
+    //   if (obrita?.disponibilidad) {
+    //     this.facturaService.create(this.pedido.factura).subscribe({
+    //       next: (response: any) => {
+    //         if (response['Factura'].id) {
+    //           this.pedido.envio.idFactura = response['Factura'].id;
+    //           this.envioService.create(this.pedido.envio).subscribe({
+    //             next: (response2: any) => {
+    //               console.log(response2);
+    //               this.updateDisponibilidadObra(obrita,false);
+    //               this.msgAlert('Order saved successfully','','success');
+    //               //location.reload();
 
-                },
-                error: (err: any) => {
-                  console.error(err);
-                }
-              });
-            } else {
-              console.error('No se recibió el id de la factura');
-            }
-          },
-          error: (err: any) => {
-            console.error(err);
-          }
-        });
-      } else {
-        this.msgAlert('Order not save successfully','','error');
+    //             },
+    //             error: (err: any) => {
+    //               console.error(err);
+    //             }
+    //           });
+    //         } else {
+    //           console.error('No se recibió el id de la factura');
+    //         }
+    //       },
+    //       error: (err: any) => {
+    //         console.error(err);
+    //       }
+    //     });
+    //   } else {
+    //     this.msgAlert('Order not save successfully','','error');
 
-      }
-    }
+    //   }
+    // }
   }
 
   updatePedido(envio: Envio) {
@@ -471,7 +473,7 @@ export class ArtistaAdministrationComponent {
 
   openNewPedido() {
     this.pedido = new Pedido(new Envio(1, 0, "Espera", "", "", "", "", "", ""),
-    new Factura(0, null, null, "", null, null, null));
+    new Factura(0,null,"",0));
     this.submitted = false;
     this.productDialog = true;
 

@@ -264,7 +264,7 @@
             <button class="accordion-button collapsed show" type="button" data-bs-toggle="collapse" 
                     [attr.data-bs-target]="'#collapse' + grupo[0]" aria-controls="flush-collapseOne"
                     aria-expanded="true" [attr.aria-controls]="'collapse' + grupo[0]">
-              {{getArtistaById(+grupo[0])?.nombre || 'Artista desconocido'}}
+              {{getArtistaById(+grupo[0])?.nombreArtista || 'Artista desconocido'}}
             </button>
           </h2>
           <div [id]="'collapse' + grupo[0]" class="accordion-collapse collapse" 
@@ -280,7 +280,7 @@
                     <p>$ {{car.precio}}</p>
                   </div>
                   <div style="display: flex; justify-content: space-between;">
-                    <p>Artist: {{getArtistaById(car.idArtista)?.nombre}}</p>
+                    <p>Artist: {{getArtistaById(car.idArtista)?.nombreArtista}}</p>
                     <button class="BtnDelete">
                       <div class="deleIcon">
                         <i class="fa-solid fa-trash" (click)="startFadeOut(car)"></i>
@@ -290,7 +290,7 @@
                 </div> 
               </div>
               <div style="display: flex; justify-content: center;">
-                <button class="cart-btn" [routerLink]="['/shop/viewArtwork', obra.id, 'sale', obra.id]">Buy
+                <button class="cart-btn" [routerLink]="['/sale',grupo[0]]">Buy
                 <div class="arrow-wrapper">
                 <div class="arrow"></div>
                 </div>

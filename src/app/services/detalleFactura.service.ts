@@ -2,13 +2,14 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { server } from "./global";
 import { BehaviorSubject, Observable, tap } from "rxjs";
-import { Factura } from "../models/Factura";
+import { DetalleFactura } from "../models/DetalleFactura";
+
 
 @Injectable({
     providedIn: 'root'
 })
 
-export class FacturaService{
+export class DetalleFacturaService{
     private urlAPI:string;
     constructor(
         private _http:HttpClient
@@ -16,11 +17,11 @@ export class FacturaService{
         this.urlAPI = server.url;
     }
 
-    create(factura:Factura):Observable<any>{
+    create(detalleFactura:DetalleFactura):Observable<any>{
         let headers;
         let bearertoken = sessionStorage.getItem('token');
-        let facturaJson=JSON.stringify(factura);
-        let params='data='+facturaJson;
+        let detalleFacturaJson=JSON.stringify(detalleFactura);
+        let params='data='+detalleFacturaJson;
 
         if (bearertoken){
             headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded').set('bearertoken', bearertoken);
@@ -30,7 +31,7 @@ export class FacturaService{
         let options = {
             headers
         };
-        return this._http.post(this.urlAPI+'factura/store',params,options);
+        return this._http.post(this.urlAPI+'detalleFactura/store',params,options);
     }
 
     index():Observable<any>{
@@ -44,15 +45,9 @@ export class FacturaService{
         let options = {
             headers
         };
-        return this._http.get(this.urlAPI+'factura', options);
+        return this._http.get(this.urlAPI+'detalleFactura', options);
     }
 
-    indexByArtistId(artistId: number): Observable<any> {
-        let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-        let options = { headers };
-    
-        return this._http.get(this.urlAPI+`factura/artist/${artistId}`, options);
-      }
 
       delete(id:number):Observable<any>{
         let headers;
@@ -65,6 +60,6 @@ export class FacturaService{
         let options = {
             headers
         };
-        return this._http.delete(`${this.urlAPI}factura/${id}`, options);
+        return this._http.delete(`${this.urlAPI}detalleFactura/${id}`, options);
     }
 }
