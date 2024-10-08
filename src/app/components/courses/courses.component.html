@@ -1,36 +1,277 @@
 <div class="cuerpo">
-<nav class="navbar navbar-expand-lg">
+  <nav class="navbar navbar-expand-lg">
     <div class="container-md">
       <a class="navbar-brand text-light" href="#">Courses</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <a
+              class="nav-link dropdown-toggle text-light"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
               Categories
             </a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="#">Action</a></li>
               <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><hr class="dropdown-divider"></li>
+              <li><hr class="dropdown-divider" /></li>
               <li><a class="dropdown-item" href="#">Something else here</a></li>
             </ul>
           </li>
         </ul>
         <div class="container">
-            <input type="text" name="text" class="input" placeholder="Search">
-            <button class="search__btn">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22">
-                <path d="M18.031 16.6168L22.3137 20.8995L20.8995 22.3137L16.6168 18.031C15.0769 19.263 13.124 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20 13.124 19.263 15.0769 18.031 16.6168ZM16.0247 15.8748C17.2475 14.6146 18 12.8956 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18C12.8956 18 14.6146 17.2475 15.8748 16.0247L16.0247 15.8748Z" fill="#efeff1"></path>
-              </svg>
-            </button>
-          </div>
+          <input type="text" name="text" class="input" placeholder="Search" />
+          <button class="search__btn">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="22"
+              height="22"
+            >
+              <path
+                d="M18.031 16.6168L22.3137 20.8995L20.8995 22.3137L16.6168 18.031C15.0769 19.263 13.124 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20 13.124 19.263 15.0769 18.031 16.6168ZM16.0247 15.8748C17.2475 14.6146 18 12.8956 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18C12.8956 18 14.6146 17.2475 15.8748 16.0247L16.0247 15.8748Z"
+                fill="#efeff1"
+              ></path>
+            </svg>
+          </button>
+        </div>
         <div class="CourseUserName">
-            <a>User name</a>
-        </div>   
+          <a>User name</a>
+        </div>
       </div>
     </div>
   </nav>
+  <!-- Imagenes -->
+  <div class="Torso">
+    <div id="carouselExampleCaptions" style="padding: 0;" class="carousel slide medio" data-bs-ride="carousel">
+      <div class="carousel-indicators">
+        <button
+          type="button"
+          data-bs-target="#carouselExampleCaptions"
+          data-bs-slide-to="0"
+          class="active"
+          aria-current="true"
+          aria-label="Slide 1"
+        ></button>
+        <button
+          type="button"
+          data-bs-target="#carouselExampleCaptions"
+          data-bs-slide-to="1"
+          aria-label="Slide 2"
+        ></button>
+        <button
+          type="button"
+          data-bs-target="#carouselExampleCaptions"
+          data-bs-slide-to="2"
+          aria-label="Slide 3"
+        ></button>
+      </div>
+
+      <div class="carousel-inner ts">
+        <div class="carousel-item active">
+          <img
+            src="../assets/img/renderizar.jpg"
+            class="d-block w-100 ima1"
+            alt="..."
+          />
+          <div class="carousel-caption d-md-block bg-dark texto-img">
+            <h5>Realiza diseño en 3D</h5>
+            <p class="m-0">
+              Some representative placeholder content for the first slide.
+            </p>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <img
+            src="../assets/img/fotografia.jpg"
+            class="d-block w-100 ima2"
+            alt="..."
+          />
+          <div class="carousel-caption d-md-block bg-dark texto-img">
+            <h5>Aprende sobre fotografia</h5>
+            <p class="m-0">
+              Some representative placeholder content for the second slide.
+            </p>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <img
+            src="../assets/img/moda.jpg"
+            class="d-block w-100 ima3"
+            alt="..."
+          />
+          <div class="carousel-caption d-md-block bg-dark texto-img">
+            <h5>Aprende sobre moda</h5>
+            <p class="m-0">
+              Some representative placeholder content for the third slide.
+            </p>
+          </div>
+        </div>
+      </div>
+      <button
+        class="carousel-control-prev"
+        type="button"
+        data-bs-target="#carouselExampleCaptions"
+        data-bs-slide="prev"
+      >
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button
+        class="carousel-control-next"
+        type="button"
+        data-bs-target="#carouselExampleCaptions"
+        data-bs-slide="next"
+      >
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+    <div class="Text-Introduction medio">
+      <h1 class="subtitle">Take your creativity to the limit</h1>
+      <p style="color: gray">
+        Art is not just painting or imagining, you need to polish those skills
+        and with us you will achieve those results you so much expect.
+      </p>
+    </div>
+    <div class="Torso" style="background-color: rgba(250, 235, 215, 0.57); margin-bottom: 30px;">
+      <div class="instituciones">
+        <h1 class="subtitle" style="text-align: end;">Institutions that recommend us</h1>
+        <div>
+          <div class="row">
+            <div class="col">
+              <img src="../assets/img/LogoUCR.png" alt="UCR"/>
+            </div>
+            <div class="col">
+              <img src="../assets/img/una-logo.png" alt="UNA"/>
+            </div>
+            <div class="col">
+              <img src="../assets/img/udemylogo.png" alt="UDEMY"/>
+            </div>
+            <div class="col">
+              <img src="../assets/img/meta-logo.png" alt="META"/>
+            </div>
+            <div class="col">
+              <img src="../assets/img/googlelogo.png" alt="GOOGLE"/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="Introduccion-curso medio" style="padding: 0 40px 0 40px;">
+      <div style="margin-bottom: 10px;">
+        <a class="text-link" href="#" >See all <span>-></span></a>
+      </div>
+      <div id="cardCarousel" class="carousel slide" style="padding: 10px;">
+        <div class="carousel-inner">
+            <!-- Slide 1 -->
+            <div class="carousel-item active" style="height: auto;">
+              <div class="row" style="justify-content: center;">
+                <!-- Card 1 -->
+                <div class="col-6 col-md-3">
+                  <div class="card">
+                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Card 1">
+                    <div class="card-body">
+                      <h5 class="card-title">Card Title 1</h5>
+                      <p class="card-text">Description for card 1.</p>
+                      <a href="#" class="btn btn-primary">Learn more</a>
+                    </div>
+                  </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="col-6 col-md-3">
+                  <div class="card">
+                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Card 2">
+                    <div class="card-body">
+                      <h5 class="card-title">Card Title 2</h5>
+                      <p class="card-text">Description for card 2.</p>
+                      <a href="#" class="btn btn-primary">Learn more</a>
+                    </div>
+                  </div>
+                </div>
+                <!-- Card 3 (Hidden on mobile, visible on desktop) -->
+                <div class="col-md-3 d-none d-md-block">
+                  <div class="card">
+                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Card 3">
+                    <div class="card-body">
+                      <h5 class="card-title">Card Title 3</h5>
+                      <p class="card-text">Description for card 3.</p>
+                      <a href="#" class="btn btn-primary">Learn more</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        
+            <!-- Slide 2 -->
+            <div class="carousel-item" style="height: auto;">
+              <div class="row" style="justify-content: center;">
+                <!-- Card 4 -->
+                <div class="col-6 col-md-3">
+                  <div class="card">
+                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Card 4">
+                    <div class="card-body">
+                      <h5 class="card-title">Card Title 4</h5>
+                      <p class="card-text">Description for card 4.</p>
+                      <a href="#" class="btn btn-primary">Learn more</a>
+                    </div>
+                  </div>
+                </div>
+                <!-- Card 5 -->
+                <div class="col-6 col-md-3">
+                  <div class="card">
+                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Card 5">
+                    <div class="card-body">
+                      <h5 class="card-title">Card Title 5</h5>
+                      <p class="card-text">Description for card 5.</p>
+                      <a href="#" class="btn btn-primary">Learn more</a>
+                    </div>
+                  </div>
+                </div>
+                <!-- Card 6 (Hidden on mobile, visible on desktop) -->
+                <div class="col-md-3 d-none d-md-block">
+                  <div class="card">
+                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Card 6">
+                    <div class="card-body">
+                      <h5 class="card-title">Card Title 6</h5>
+                      <p class="card-text">Description for card 6.</p>
+                      <a href="#" class="btn btn-primary">Learn more</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+     
+    
+        <!-- Carousel controls -->
+        <button class="carousel-control-prev button" type="button"
+        style="left: -20px;" data-bs-target="#cardCarousel" data-bs-slide="prev">
+          <
+        </button>
+        <button class="carousel-control-next button" 
+        style="right: -20px;" type="button" data-bs-target="#cardCarousel" data-bs-slide="next">
+          >
+        </button>
+      </div>
+    </div>
+    <div>
+
+      
+    </div>
+  </div>
 </div>
