@@ -64,8 +64,6 @@
   .search__btn:hover {
     background-color: rgba(54, 54, 56, 1);
   }
-
-
   .Torso{
     display: flex;
     align-items: center;
@@ -131,12 +129,11 @@
   padding: 10px;
 }
 
-
 .instituciones img {
   width: 100%;
   height: auto; /* Mantiene la proporción de la imagen */
 }
-.col{
+.recomendation .col-md{
   display: flex;
   align-items: center;
 }
@@ -162,7 +159,6 @@
   --main-color: #000000;
   position: absolute;
   top: 50%;
-
   width: 40px;
   height: 40px;
   border-radius: 100%;
@@ -188,9 +184,73 @@
   width: 100%;
 }
 
+.categories{
+  display: flex;
+  width: 100%;
+  max-width: 1000px;
+  align-items: center;
+  padding: 10px;
+  font-size: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.imagen-categorie{
+  max-width: 25%; /* La imagen no será más grande que su contenedor */
+  height: auto; /* La altura se ajustará automáticamente para mantener la proporción */
+  display: block; /
+}
+
+.subcategorie{
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-radius: 10px;
+  width: 300px;
+  box-shadow:  14px 14px 28px #e6e6e6,
+  -14px -14px 28px #ffffff;
+  transition: 400ms;
+  justify-content: space-evenly;
+}
+
+.categories .subcategorie:hover {
+  transform: scale(1.1, 1.1);
+}
+
+.categories:hover > .subcategorie:not(:hover) {
+  filter: blur(10px);
+  transform: scale(0.9, 0.9);
+}
+.img-student{
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+align-items: center;
+}
+
+.content-extra{
+  flex-direction: row; justify-content: space-around;
+}
+.img-student img{
+  box-shadow: 14px 14px 1px #8f88ed, -14px -14px 1px #000000;
+}
+.texto-student{
+display: flex;
+justify-content: center;
+align-items: start;
+width: 50%;
+flex-direction: column;
+
+}
+.texto-student span{
+  font-size: 23px;
+}
 
 
-/* Ajuste para pantallas pequeñas */
 @media (max-width: 768px) {
   .instituciones{
     grid-template-columns: repeat(2, 2fr); /* Cambia a 2 columnas en pantallas pequeñas */
@@ -202,6 +262,19 @@
   .instituciones .grid {
     grid-template-columns: 1fr; /* Una sola columna en pantallas muy pequeñas */
   }
+  .card-title{
+    font-size: 14px;
+  }
+.categories{
+  gap:20px;
+}
+  .subcategorie{
+    font-size: 16px;
+    width: 165px;
+    text-align: center;
+  }
+
+  
 }
   @media (max-width: 992px) {
     .container{
@@ -214,6 +287,22 @@
     .medio {
       width: 100%; /* Ocupa todo el ancho disponible en pantallas pequeñas */
      /* Deja que el contenedor del carrusel se ajuste automáticamente */
+    }
+    .content-extra{
+      flex-direction: column;
+    }
+    .content-extra .img-student{
+      width: 100%;
+      margin-bottom: 40px;
+    }
+    .img-student img{
+      width: auto !important;
+    }
+    .content-extra .texto-student{
+      width: 100%;
+    }
+    .texto-student span{
+      font-size: 16px;
     }
   }
 
