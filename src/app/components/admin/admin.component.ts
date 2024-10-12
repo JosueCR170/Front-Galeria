@@ -59,7 +59,8 @@ export class AdminComponent {
     private _artistaService: ArtistService,
     private _router: Router,
     private _routes: ActivatedRoute,
-    private messageService: MessageService
+    private messageService: MessageService,
+    
   ) {
     this.status = -1;
     this.urlAPI = server.url + 'obra/getimage/';
@@ -247,7 +248,12 @@ export class AdminComponent {
   index() {
     this._obraService.index().subscribe({
       next: (response: any) => {
-        this.obras = response['data'];
+       this.obras = response['data'];
+       this.obras.forEach(o => {
+         if (typeof o.disponibilidad === 'string')
+          {o.disponibilidad = o.disponibilidad === '1';} 
+       });
+       
 
         this.artistasList = [];
         this.loadArtistaName();

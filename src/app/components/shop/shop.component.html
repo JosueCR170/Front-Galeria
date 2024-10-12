@@ -127,6 +127,7 @@
             <div class="card" style="height: 100%;">
               <div class="image-container">
                 <img src="{{urlAPI}}{{obra.imagen}}" [routerLink]="['viewArtwork', obra.id]" class="card-img-top" alt="...">
+                
                 @if(obra.disponibilidad){    
                   <button class="botonVenta" (click)="addCarFuncion(obra.id)"
                   type="button" 

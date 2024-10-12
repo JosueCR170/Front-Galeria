@@ -1,5 +1,3 @@
-
-
 export class Obra{
     constructor(
         public id:number,

@@ -50,8 +50,12 @@ export class ViewArtworkComponent {
   getObra(id: string): void {
     this._obraService.getArtworkById(id).subscribe(
       data => {
-        //console.log('Obra obtenida:', data); // Verificar los datos obtenidos
+        console.log('Obra obtenida:', data); // Verificar los datos obtenidos
         this.obra = data['obra'];
+
+        if (typeof this.obra.disponibilidad === 'string')
+          {this.obra.disponibilidad = this.obra.disponibilidad === '1';} 
+        
         this.artistName=data['obra'].artista.nombreArtista;
         this.status = 1;
       },

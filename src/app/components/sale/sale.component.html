@@ -88,11 +88,12 @@
               <input type="number" name="postalCode" class="form-control" id="inputZip" [(ngModel)]="envio.codigoPostal" required> 
             </div>
           </div>
-          <select class="form-select form-select-lg mb-5" aria-label="Large select example" (change)="updateShippingMethod($event)" name="methodReceiving" [(ngModel)]="selectedOption" required>
-            <option selected disabled hidden value="{{selectedOption}}">Select the method of receiving the product</option>
+          <select class="form-select form-select-lg mb-5" (change)="updateShippingMethod($event)" name="methodReceiving" [(ngModel)]="selectedOption" required>
+            <option value="" disabled hidden>Select the method of receiving the product</option>
             <option value="Home delivery">Home delivery</option>
             <option value="Product recall">Product recall</option>
           </select>
+          
           <div style="width: 100%; display: flex; justify-content: center;">
             <input type="submit"  [disabled]="!isOptionSelected() || saleForm.invalid" style="background-color: rgb(120, 37, 37);" 
             class="btn btn-primary compra"  value=" Pick up!">
@@ -156,7 +157,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <p>Contact the author of <strong>{{obra.nombre}}</strong> to make the payment</p>
+            <p>Contact the author <strong>{{artista['nombreArtista']}}</strong> to make the payment</p>
             <p>Artist phone: <strong>{{artista['telefono']}}</strong> </p>
             <p>Artist email: <strong>{{artista['correo']}}</strong></p>
           </div>

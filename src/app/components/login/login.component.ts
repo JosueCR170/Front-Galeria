@@ -68,9 +68,6 @@ export class LoginComponent {
     })
   }
 
-  backLogin(){
-    
-  }
 
   msgAlert= (title:any, icon:any) =>{
     Swal.fire({

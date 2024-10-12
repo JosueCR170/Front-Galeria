@@ -3,7 +3,7 @@
         @switch (status) {
 
             @case (1) {
-                <div class="alert alert-warning"><p>No se pudo agregar el usuario!</p></div>
+                <div class="alert alert-warning"><p>Failed to add user!</p></div>
             }
             @case (2) {
                 <div *ngFor="let error of errors" class="alert alert-danger">
@@ -14,21 +14,21 @@
         }
         </span>
     <div class="col-md-4 mx-auto signup-container">
-    <h3>Sign-<span class="colored-text">In</span></h3>
+    <h3>Sign-<span class="colored-text">Up</span></h3>
     <form class="col-md-8 mx-auto" #signupForm="ngForm" (ngSubmit)="onSubmit(signupForm)">
         <div class="form-group">            
             <label for="name">Name</label>
             <input id="name" type="text"  #name="ngModel" class="form-control" name="name" 
                 pattern="^(?=.*[a-z])(?=.*[A-Z]).{1,}$" [(ngModel)]="user.nombre" required/>
                 @if(!name.valid && name.touched){
-                    <small class="invalid-feedback d-block">Formato invalido</small>
+                    <small class="invalid-feedback d-block">Invalid format</small>
                 }   
 
             <label for="email">Email</label>
             <input id="email" type="email" #email="ngModel" class="form-control" name="email" 
                 pattern="\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b" [(ngModel)]="user.email" required/>
                 @if(!email.valid && email.touched){
-                    <small class="invalid-feedback d-block">Formato invalido</small>
+                    <small class="invalid-feedback d-block">Invalid format</small>
                 }
 
 
@@ -41,7 +41,7 @@
             <input id="userName" type="text" #userName="ngModel" class="form-control" name="userName" 
                  pattern="^(?=.*[a-zA-Z0-9_-])[a-zA-Z0-9_-]{4,}$" [(ngModel)]="user.nombreUsuario" required/>
                 @if(!userName.valid && userName.touched){
-                    <small class="invalid-feedback d-block">Formato invalido</small> 
+                    <small class="invalid-feedback d-block">Invalid format</small> 
                 }   
 
 
@@ -56,7 +56,7 @@
 
         <div class="buttom-btn">
             <div class="btn-div">      
-                <input type="submit" class="btn mt-2" value="Sign-In"   [disabled]="signupForm.invalid">
+                <input type="submit" class="btn mt-2" value="Sign-Up"   [disabled]="signupForm.invalid">
             </div>
     
                 <div class="btn-div">      

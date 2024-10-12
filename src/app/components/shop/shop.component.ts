@@ -28,7 +28,7 @@ export class ShopComponent {
   @ViewChild('liveToast', { static: true }) liveToast: ElementRef | undefined
   artistName: string = '';
   public status: number;
-  public obra: Obra;
+  //public obra: Obra;
   urlAPI: string;
 
   public artista: Artista;
@@ -42,7 +42,7 @@ export class ShopComponent {
   ) {
     this.status = -1;
     this.urlAPI = server.url + 'obra/getimage/';
-    this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, null);
+   // this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, null);
     this.artista = new Artista(1, "", "", "", "", "");
   }
 
@@ -71,7 +71,6 @@ export class ShopComponent {
     this.index();
     this.loadLoggedUser();
     this.indexCarrito();
-
   }
 
   logOut() {
@@ -82,9 +81,20 @@ export class ShopComponent {
   index() {
     this._obraService.index().subscribe({
       next: (response: any) => {
-        this.obras = response['data'];
+        // this.obras = response['data'];
+        this.obras = response['data'].map((obra: any) => {
+          obra.disponibilidad = obra.disponibilidad === '1' || obra.disponibilidad === 1;
+          return obra;
+        });
+        // this.obras.forEach(obra => {
+        //   console.log(`Disponibilidad: ${obra.disponibilidad}, Tipo: ${typeof obra.disponibilidad}`);
+        //   console.log(`ID: ${obra.id}, Tipo: ${typeof obra.id}`);
+        //   console.log(`IDArtista: ${obra.idArtista}, Tipo: ${typeof obra.idArtista}`);
+        // });
         this.loadCategorysExists();
         this.indexArtista();
+        console.log("Obras: ",this.obras);
+        console.log("AuxObras: ",this.auxObras);
       },
       error: (err: Error) => {
 
@@ -383,4 +393,7 @@ export class ShopComponent {
     })
   }
 
+  public parseBool(value: string):boolean{
+    return value==='1';
+  }
 }
