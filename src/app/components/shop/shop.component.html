@@ -35,6 +35,7 @@
               </ul>
             </li>
             <li><a href="/shop" (click)="showHome(true)">Home</a></li>
+            <li><a href="/courses" (click)="navigateToCourses()" target="_blank">Couses</a></li>
             <li class="logout"><a (click)="logOut()">Log out</a></li>
           </ul>
         </nav>
@@ -44,8 +45,8 @@
         </div>
         <div  class="btn-primary position-relative">
           <i class="fa-solid fa-cart-shopping iconCar" data-bs-toggle="offcanvas"  
-        data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" (click)="this.indexCarrito()"></i>
-        @if(this.obrasCArrito.length){
+        data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" (click)="indexCarrito()"></i>
+        @if(this.obrasCarrito.length){
         <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
           <span class="visually-hidden">New alerts</span>
         </span>

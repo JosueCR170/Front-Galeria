@@ -50,7 +50,7 @@ export class ShopComponent {
   items: any[] | undefined;
   selectedItem: any;
   suggestions: any[] = [];
-  obrasCArrito: Obra[] = [];
+  obrasCarrito: Obra[] = [];
   artistas: Artista[] = [];
   obras: Obra[] = [];
   auxObras: Obra[] = [];
@@ -119,9 +119,9 @@ export class ShopComponent {
   }
 
   indexCarrito() {
-    const carrito = localStorage.getItem('obras');
-    this.obrasCArrito = carrito ? JSON.parse(carrito) : [];
-    this.obrasCArrito = Array.isArray(this.obrasCArrito) ? this.obrasCArrito : [];
+    const carrito = sessionStorage.getItem('obras');
+    this.obrasCarrito = carrito ? JSON.parse(carrito) : [];
+    this.obrasCarrito = Array.isArray(this.obrasCarrito) ? this.obrasCarrito : [];
     this.agrupamiento();
   }
 
@@ -129,10 +129,10 @@ export class ShopComponent {
     let obra = this.obras.find((o: any) => o.id === id);
     console.log(obra)
     if (obra) {
-      const yaEnCarrito = this.obrasCArrito.some((item: any) => item.id === obra?.id);
+      const yaEnCarrito = this.obrasCarrito.some((item: any) => item.id === obra?.id);
       if (!yaEnCarrito) {
-        this.obrasCArrito.push(obra)
-        localStorage.setItem('obras', JSON.stringify(this.obrasCArrito));
+        this.obrasCarrito.push(obra)
+        sessionStorage.setItem('obras', JSON.stringify(this.obrasCarrito));
         this.msgAlertGood('added work', '', 'success', '#000', '#ffffff');
       } else {
         this.msgAlertGood('You cannot add the same artwork to the cart', '', 'error', '#ffffff', '#eb5151');
@@ -149,22 +149,28 @@ export class ShopComponent {
 
   deleteItemCar(id: number) {
     const carrito = localStorage.getItem('obras');
-    this.obrasCArrito = carrito ? JSON.parse(carrito) : [];
-    this.obrasCArrito = Array.isArray(this.obrasCArrito) ? this.obrasCArrito : [];
-    this.obrasCArrito.forEach(obraSeleccionada => {
+    this.obrasCarrito = carrito ? JSON.parse(carrito) : [];
+    this.obrasCarrito = Array.isArray(this.obrasCarrito) ? this.obrasCarrito : [];
+    this.obrasCarrito.forEach(obraSeleccionada => {
       if (obraSeleccionada.id === id) {
         this.total -= obraSeleccionada.precio;
       }
     })
-    this.obrasCArrito = this.obrasCArrito.filter(obra => obra.id != id);
-    localStorage.setItem('obras', JSON.stringify(this.obrasCArrito));
-    if (this.obrasCArrito.length != 0) {
-      console.log(this.obrasCArrito.length)
+    this.obrasCarrito = this.obrasCarrito.filter(obra => obra.id != id);
+    localStorage.setItem('obras', JSON.stringify(this.obrasCarrito));
+    if (this.obrasCarrito.length != 0) {
+      console.log(this.obrasCarrito.length)
     } else { this.indexCarrito() }
   }
   agrupamiento() {
-    const groupedObras = this.obrasCArrito.reduce((acc, obra) => {
-      const idArtista = obra.idArtista;
+    let idArtista:any;
+    const groupedObras = this.obrasCarrito.reduce((acc, obra) => {
+      if(typeof obra.idArtista==='string'){
+        idArtista= parseInt(obra.idArtista);
+      }else{ idArtista = obra.idArtista;}
+
+      //console.log("idArtista tipo: ",typeof idArtista)
+
       if (typeof idArtista === 'number') {
         if (!acc[idArtista]) {
           acc[idArtista] = [];
@@ -179,7 +185,7 @@ export class ShopComponent {
     });
   }
   calcularTotalPrecios(obras: any[]): number {
-    return this.total = obras.reduce((total, obra) => total + obra.precio, 0);
+    return this.total = obras.reduce((total, obra) => total + parseInt(obra.precio), 0);
   }
   countObrasOfArtista(id: number) {
     let i = 0;
@@ -262,6 +268,9 @@ export class ShopComponent {
     this.flag = false;
     this.onClick = false;
     this.artistaMenu = artistTrue
+  }
+  navigateToCourses() {
+    window.open('/courses', '_blank');
   }
 
   loadAdmin() {

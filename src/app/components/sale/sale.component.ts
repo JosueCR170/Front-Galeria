@@ -90,7 +90,7 @@ public formattedDate = this.formatDate(this.currentDate);
 
 getObrasCarrito(artistId:any):void
 {
-  const carrito= localStorage.getItem('obras');
+  const carrito= sessionStorage.getItem('obras');
   this.obras=carrito? JSON.parse(carrito):[];
   this.obras = Array.isArray( this.obras) ?  this.obras : [];
   this.obras = this.obras.filter(obra => obra.idArtista == artistId);
