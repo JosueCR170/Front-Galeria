@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ObraService } from '../../services/obra.service';
-
+import { TallerService} from '../../services/taller.service';
 import { Obra } from '../../models/Obra';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
@@ -23,6 +23,8 @@ import { Pedido } from '../../models/Pedido';
 import { EnvioService } from '../../services/envio.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RippleModule } from 'primeng/ripple';
+import { Taller } from '../../models/Taller';
+
 
 @Component({
   selector: 'app-artista-administration',
@@ -48,6 +50,16 @@ export class ArtistaAdministrationComponent {
   /*-------*/
   displayConfirmationDialog: boolean = false;
 
+  /*----------
+  
+  Talleres
+
+  selectedTalleres!: Taller[];
+  talleres: Taller[] = [];
+  talleresPorArtista: Taller[] = [];
+  public taller: Taller;
+
+ */
   delivry: boolean = false;
   administration: boolean = true;
   obras: Obra[] = [];
@@ -86,14 +98,16 @@ export class ArtistaAdministrationComponent {
     private messageService: MessageService,
     private facturaService: FacturaService,
     private envioService: EnvioService,
+    //private tallerService: TallerService,
     private _router: Router,
   ) {
     this.status = -1;
     this.urlAPI = server.url + 'obra/getimage/';
 
     this.pedido = new Pedido(new Envio(1, 0, "Espera", "", "", "", "", "", ""),
-      new Factura(0, null, null, "", null, null, null));
+    new Factura(0, null, null, "", null, null, null));
     this.obra = new Obra(1, 1, "", "", "", 0 , true, "", null, null, "");
+    //this.taller = new Taller(1,"","",1,1);
   }
 
   ngOnInit(): void {
@@ -101,6 +115,7 @@ export class ArtistaAdministrationComponent {
     this.index();
     this.getFacturasByArtist();
     this.indexEnvioByArtist();
+
   }
 
   logOut() {
@@ -148,8 +163,6 @@ export class ArtistaAdministrationComponent {
       }
     });
   }
-
-
 
   filterObrasByArtista(idArtista: number) {
     this.obrasPorArtista = this.obras.filter(obra => obra.idArtista === idArtista);
@@ -476,7 +489,6 @@ export class ArtistaAdministrationComponent {
     this.productDialog = true;
 
   }
-
 
 
   updateDisponibilidadObra(obrita:Obra,disponibilidad:boolean){
