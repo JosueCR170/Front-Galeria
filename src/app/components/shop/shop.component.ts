@@ -253,6 +253,9 @@ export class ShopComponent {
     this.onClick = false;
     this.artistaMenu = artistTrue
   }
+  navigateToCourses() {
+    window.open('/courses', '_blank');
+  }
 
   loadAdmin() {
     this._router.navigate(['/admin'])
