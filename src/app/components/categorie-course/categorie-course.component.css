@@ -1,0 +1,159 @@
+.cuerpo{
+
+    font-family: "Poppins", system-ui;
+  font-weight: 400;
+  font-style: normal;
+  margin: 0;
+  padding: 0;
+  background-image: linear-gradient(23deg, rgba(202, 202, 202,0.02) 0%, rgba(202, 202, 202,0.02) 13%,transparent 13%, transparent 80%,rgba(11, 11, 11,0.02) 80%, rgba(11, 11, 11,0.02) 100%),linear-gradient(42deg, rgba(98, 98, 98,0.02) 0%, rgba(98, 98, 98,0.02) 36%,transparent 36%, transparent 77%,rgba(252, 252, 252,0.02) 77%, rgba(252, 252, 252,0.02) 100%),linear-gradient(286deg, rgba(173, 173, 173,0.02) 0%, rgba(173, 173, 173,0.02) 2%,transparent 2%, transparent 12%,rgba(59, 59, 59,0.02) 12%, rgba(59, 59, 59,0.02) 100%),linear-gradient(77deg, rgba(87, 87, 87,0.02) 0%, rgba(87, 87, 87,0.02) 18%,transparent 18%, transparent 55%,rgba(247, 247, 247,0.02) 55%, rgba(247, 247, 247,0.02) 100%),linear-gradient(90deg, rgb(255,255,255),rgb(255,255,255));
+  min-height: 100vh;
+  background-attachment: fixed;
+}
+.Torso{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+  }
+  .container-cards{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px; 
+    width: 100%; 
+    max-width: 1300px;
+    margin-bottom: 20px;
+    padding: 20px;
+    
+  }
+ 
+    .card {
+        width: 100%;
+        max-width: 290px;
+        height: auto;
+        background-image: linear-gradient(78deg, transparent 0%, transparent 36%,rgba(17,17,17, 0.06) 36%, rgba(17,17,17, 0.06) 56%,transparent 56%, transparent 100%),linear-gradient(30deg, transparent 0%, transparent 2%,rgba(105,105,105, 0.03) 2%, rgba(105,105,105, 0.03) 75%,transparent 75%, transparent 100%),linear-gradient(206deg, transparent 0%, transparent 68%,rgba(3,3,3, 0.04) 68%, rgba(3,3,3, 0.04) 99%,transparent 99%, transparent 100%),linear-gradient(90deg, rgb(255,255,255),rgb(255,255,255));        align-items: center;
+        justify-content: left;
+        transition: 0.5s ease-in-out;
+        flex-direction: row;
+        padding: 10px 0;
+        border-radius: 0px;
+        box-shadow: 7px 7px 1px #8f88ed, -7px -7px 1px #000000;
+      }
+      
+      .card:hover {
+        cursor: pointer;
+        transform: scale(1.05);
+      }
+      
+      .textBox {
+        width: calc(100% - 90px);
+        margin-left: 10px;
+        color: rgb(0, 0, 0);
+        font-family: 'Poppins' sans-serif;
+      }
+      
+      .text-inf{
+        display: flex; justify-content: space-between;
+        color: rgb(238, 238, 238);
+      }
+      
+      .span {
+        font-size: 10px;
+      }
+      
+      .h1 {
+        font-size: 16px;
+        font-weight: bold;
+      }
+      
+      .p {
+        font-size: 12px;
+        font-weight:300;
+        margin-bottom: 0;
+        color: black;
+      }
+      .material-symbols-outlined {
+        color:#8f88ed;
+       font-variation-settings:
+       'FILL' 0,
+       'wght' 400,
+       'GRAD' 0,
+       'opsz' 24;
+       font-size: 50px;
+       margin-left: 10px;
+       filter: drop-shadow(3px 3px 1px rgba(0, 0, 0, 0.25));
+       }
+
+       .cta {
+        position: relative;
+        margin: auto;
+        padding: 9px 18px;
+        transition: all 0.2s ease;
+        border: none;
+        background: none;
+        cursor: pointer;
+      }
+      
+      .cta:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: block;
+        border-radius: 50px;
+        background: #cac8f0;;
+        width: 45px;
+        height: 45px;
+        transition: all 0.3s ease;
+      }
+      
+      .cta span {
+        position: relative;
+        font-family: "Ubuntu", sans-serif;
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        color: #000000;
+        transition: 0.3s;
+      }
+
+      .cta:hover span{
+        color: white;
+      }
+      .cta svg {
+        position: relative;
+        top: 0;
+        margin-left: 10px;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke: #000000;
+        stroke-width: 2;
+        transform: translateX(-5px);
+        transition: all 0.3s ease;
+      }
+      
+      .cta:hover:before {
+        width: 100%;
+        background: #a49fe6;
+      }
+      
+      .cta:hover svg {
+        transform: translateX(0);
+        stroke: white;
+      }
+      
+      .cta:active {
+        transform: scale(0.95);
+      }
+      
+       @media (max-width: 992px){
+        .container-cards{
+          grid-template-columns: repeat(2, 1fr);
+        }
+       }
+       @media (max-width: 576px) {
+        .container-cards{
+          grid-template-columns: repeat(1, 1fr);
+        }
+       }

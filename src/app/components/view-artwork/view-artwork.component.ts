@@ -18,6 +18,7 @@ import { server } from '../../services/global';
 export class ViewArtworkComponent {
   public obra: Obra;
   public status: number;
+  public isLoading: boolean = false; 
   urlAPI: string;
   
   constructor(
@@ -57,11 +58,15 @@ export class ViewArtworkComponent {
           {this.obra.disponibilidad = this.obra.disponibilidad === '1';} 
         
         this.artistName=data['obra'].artista.nombreArtista;
+        this.isLoading = true;
         this.status = 1;
+        
       },
       error => {
         console.error('Error al obtener la obra:', error);
+         this.isLoading = false;
         this.status = 0;
+       
       }
     );
   }

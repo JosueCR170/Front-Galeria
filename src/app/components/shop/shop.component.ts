@@ -67,7 +67,7 @@ export class ShopComponent {
   public acc: any[] = [];
   userAux = new User(1, "", false, "", "", null, "");
 
-  ngOnInit(): void {
+  ngOnInit(): void { 
     this.index();
     this.loadLoggedUser();
     this.indexCarrito();
@@ -79,6 +79,7 @@ export class ShopComponent {
   }
 
   index() {
+    
     this._obraService.index().subscribe({
       next: (response: any) => {
         // this.obras = response['data'];
