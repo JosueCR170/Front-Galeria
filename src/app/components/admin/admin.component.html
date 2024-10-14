@@ -973,7 +973,7 @@
         
         <p-table #dt [value]="talleres" [rows]="10" [totalRecords]="totalRecords" [paginator]="true"
           [(selection)]="selectedTalleres" [selectAll]="selectAll" [tableStyle]="{ 'min-width': '75rem' }"
-          [globalFilterFields]="['id', 'nombre', 'descripcion', 'duracion', 'costo']">
+          [globalFilterFields]="['id','idArtista', 'nombre', 'descripcion', 'duracion', 'costo', 'categoria']">
           
           <ng-template pTemplate="header">
             <tr>
@@ -981,10 +981,12 @@
                 <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
               </th>
               <th pSortableColumn="id" style="width:15%">ID <p-sortIcon field="id"></p-sortIcon></th>
+              <th pSortableColumn="idArtista" style="width:15%">idArtist <p-sortIcon field="idArtista"></p-sortIcon></th>
               <th pSortableColumn="nombre" style="width:20%">Name <p-sortIcon field="nombre"></p-sortIcon></th>
               <th pSortableColumn="descripcion" style="width:20%">Description <p-sortIcon field="descripcion"></p-sortIcon></th>
               <th pSortableColumn="duracion" style="width:15%">Duration <p-sortIcon field="duracion"></p-sortIcon></th>
               <th pSortableColumn="costo" style="width:20%">Cost<p-sortIcon field="costo"></p-sortIcon></th>
+              <th pSortableColumn="categoria" style="width:20%">Category<p-sortIcon field="categoria"></p-sortIcon></th>
             </tr>
           </ng-template>
           
@@ -1000,6 +1002,16 @@
                   </ng-template>
                   <ng-template pTemplate="output">
                     {{ taller.id }}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input pInputText type="text" [(ngModel)]="taller.idArtist" />
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ taller.idArtist }}
                   </ng-template>
                 </p-cellEditor>
               </td>
@@ -1040,6 +1052,16 @@
                   </ng-template>
                   <ng-template pTemplate="output">
                     {{ taller.costo }}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input pInputText type="text" [(ngModel)]="taller.categoria" />
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ taller.categoria }}
                   </ng-template>
                 </p-cellEditor>
               </td>
