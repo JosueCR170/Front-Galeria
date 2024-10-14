@@ -9,7 +9,7 @@ import { BehaviorSubject, Observable, tap } from "rxjs";
     providedIn: 'root'
 })
 
-export class MatriculaService{
+export class ofertaService{
     private urlAPI:string;
     private matriSubject = new BehaviorSubject<any>(null);
     public matri$ = this.matriSubject.asObservable();

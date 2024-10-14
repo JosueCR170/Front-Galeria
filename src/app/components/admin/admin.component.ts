@@ -71,7 +71,7 @@ export class AdminComponent {
     this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, null);
     this._user = new User(1, "", false, "", "", null, "");
     this._artista = new Artista(1, "", "", "", "", "");
-    this._taller = new Taller(1,"","",1,1);
+    this._taller = new Taller(1,1,"","",1,1);
   }
 
   totalRecords!: number;
@@ -118,7 +118,7 @@ export class AdminComponent {
   selectedArtista: Artista[] = [];
 
   taller : any;
-  tallerAux = new Taller (1, "", "", 1, 1);
+  tallerAux = new Taller(1,1,"","",1,1);
   talleres: Taller[] = [];
   selectedTalleres!: Taller[];
   selectedTaller!: Taller[];
@@ -273,7 +273,7 @@ export class AdminComponent {
   }
 
   openNewTaller() {
-    this.tallerAux = new Taller(1, "", "", 1, 1)
+    this.tallerAux = new Taller(1,1,"","",1,1);
     this.submitted = false;
     this.productDialog = true;
   }

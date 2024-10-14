@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import { TallerService } from '../../services/taller.service';
+import { ofertaService } from '../../services/oferta.service';
+import { Taller } from '../../models/Taller';
+import { Oferta } from '../../models/Oferta';
 
 @Component({
   selector: 'app-categorie-course',
@@ -15,5 +19,13 @@ export class CategorieCourseComponent {
 <span class="material-symbols-outlined"> deployed_code </span> <-- 3D
 <span class="material-symbols-outlined">person_check</span> <-- UX
 */
- 
+constructor(
+  private _talleresService:TallerService,
+  private _ofertaService:ofertaService
+){}
+courses: Taller[] = []
+oferta: Oferta[] =[]
+
+ngOnInit(): void { }
+
 }
