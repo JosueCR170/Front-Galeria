@@ -739,9 +739,6 @@
                           <option [value]="item.key">{{ item.key }} - {{ item.value }}</option>
                       }
                   </select>
-
-                  <!-- <input id="idArtist" class="form-control" name="idArtist" type="text" #name="ngModel" [(ngModel)]="obra.idArtista"
-                    required> -->
                 </div>
                 <div style="margin-bottom: 10px;" class="form-group">
                   <label  for="Name">Name</label>
@@ -1084,6 +1081,15 @@
                     <label for="nombreTaller">Name</label>
                     <input id="nombreTaller" class="form-control" name="nombre" type="text" [(ngModel)]="tallerAux.nombre" required>
                   </div>
+                  <div class="form-group" style="margin-bottom: 10px;" >
+                    <label  for="idArtist">idArtist</label>
+                    <select id="idArtist" required class="form-select input" [(ngModel)]="tallerAux.idArtista" name="idArtist">
+                      <option disabled selected value="">Selecciona un artista</option>
+                        @for (item of artistasList; track $index) {
+                            <option [value]="item.key">{{ item.key }} - {{ item.value }}</option>
+                        }
+                    </select>
+                  </div>
                   <div class="form-group" style="margin-bottom: 10px;">
                     <label for="descripcionTaller">Description</label>
                     <input id="descripcionTaller" class="form-control" name="descripcion" type="text" [(ngModel)]="tallerAux.descripcion" required>
@@ -1095,6 +1101,16 @@
                   <div class="form-group" style="margin-bottom: 10px;">
                     <label for="costoTaller">Cost</label>
                     <input id="costoTaller" class="form-control" name="costo" type="number" [(ngModel)]="tallerAux.costo" required>
+                  </div>
+                  <div class="form-group ">
+                    <label style="margin-right: 20px;" for="Category">Category</label>
+                    <select class="selector" id="Category" name="category" #category="ngModel" [(ngModel)]="tallerAux.categoria" required>
+                      <option value="3D">3D</option>
+                      <option value="Photograph">Photograph</option>
+                      <option value="Fashion">Fashion</option>
+                      <option value="Art">Art</option>
+                      <option value="UI-UX">UI-UX</option>
+                    </select>
                   </div>
                 </div>
                 <div class="modal-footer">
@@ -1152,6 +1168,20 @@
                 <div class="form-group" style="margin-bottom: 10px;">
                   <label for="costoTallerUpdate">Cost</label>
                   <input id="costoTallerUpdate" class="form-control" [(ngModel)]="tallerAux.costo" name="costo">
+                </div>
+              </div>
+              <div class="form-group" style="margin-bottom: 10px;">
+                <label for="categoriaTallerUpdate">Category</label>
+                <div class="dropdown">
+                  <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    {{tallerAux.categoria}}
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li *ngFor="let categoria of categorias" (click)="selectTecnica(categoria)">
+                      <a class="dropdown-item cambio-color">{{ categoria }}</a>
+                    </li>
+                  </ul>
                 </div>
               </div>
               <div class="modal-footer">
