@@ -1,7 +1,7 @@
 <div class="cuerpo">
   <nav class="navbar navbar-expand-lg">
     <div class="container-md">
-      <a class="navbar-brand text-light" href="#">Courses</a>
+      <a class="navbar-brand text-light" [routerLink]="['/courses']">Courses</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -26,11 +26,11 @@
               Categories
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" (click)="navigateTo('course1')">Photograph</a></li>
-              <li><a class="dropdown-item" [routerLink]="['category','arte']">fashion design</a></li>
-              <li><a class="dropdown-item" href="#">3D dising</a></li>
-              <li><a class="dropdown-item" href="#">Principles of art</a></li>
-              <li><a class="dropdown-item" href="#">User experience</a></li>
+              <li><a class="dropdown-item" [routerLink]="['category','Photograph']"><span class="material-symbols-outlined">photo_camera</span>Photograph</a></li>
+              <li><a class="dropdown-item" [routerLink]="['category','fashion']"><span class="material-symbols-outlined"> apparel</span>fashion design</a></li>
+              <li><a class="dropdown-item" [routerLink]="['category','3D']"><span class="material-symbols-outlined">deployed_code</span>3D dising</a></li>
+              <li><a class="dropdown-item" [routerLink]="['category','art']"><span class="material-symbols-outlined"> brush </span> Principles of art</a></li>
+              <li><a class="dropdown-item" [routerLink]="['category','UX']"><span class="material-symbols-outlined">person_check</span>UX/UI</a></li>
             </ul>
           </li>
         </ul>

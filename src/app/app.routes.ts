@@ -22,11 +22,9 @@ export const routes: Routes = [
     {path:'login',component: LoginComponent},
     {path:'login/signup', component: SignupComponent},
     {path:'shop/viewArtwork/:id', component: ViewArtworkComponent},
-    {path:'shop',component:ShopComponent},
-    
-    { path: 'shop/viewArtwork/:id/sale/:saleId', component: SaleComponent},
+    {path:'shop',component:ShopComponent}, 
+    {path:'shop/viewArtwork/:id/sale/:saleId', component: SaleComponent},
     {path:'sale/:artistId',component:SaleComponent},
-
     {path:'loginArtist', component:LoginArtistComponent},
     {path:'signupArtist', component:SignupArtistComponent},
     {path:'artistaAdministration', component:ArtistaAdministrationComponent},
