@@ -22,6 +22,8 @@ import { Artista } from '../../models/Artista';
 import { ArtistService } from '../../services/artist.service';
 import { server } from '../../services/global';
 import Swal from 'sweetalert2';
+import { Taller } from '../../models/Taller';
+import { TallerService } from '../../services/taller.service';
 
 @Component({
   selector: 'app-admin',
@@ -49,6 +51,7 @@ export class AdminComponent {
   public obra: Obra;
   public _user: User;
   public _artista: Artista;
+  public _taller: Taller;
   public currentDate = new Date();
   public formattedDate = this.formatDate(this.currentDate);
   public errores: string[] = [];
@@ -57,6 +60,7 @@ export class AdminComponent {
     private _obraService: ObraService,
     private _userService: UserService,
     private _artistaService: ArtistService,
+    private _tallerService: TallerService,
     private _router: Router,
     private _routes: ActivatedRoute,
     private messageService: MessageService,
@@ -67,6 +71,7 @@ export class AdminComponent {
     this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, null);
     this._user = new User(1, "", false, "", "", null, "");
     this._artista = new Artista(1, "", "", "", "", "");
+    this._taller = new Taller(1,"","",1,1);
   }
 
   totalRecords!: number;
@@ -90,6 +95,7 @@ export class AdminComponent {
   invoiceClick: boolean = false;
   shippingClick: boolean = false;
   workClick: boolean = false;
+  tallerClick: boolean = false;
   user: any;
   artist: any;
   urlAPI: string;
@@ -111,6 +117,12 @@ export class AdminComponent {
   selectedArtistas: Artista[] = [];
   selectedArtista: Artista[] = [];
 
+  taller : any;
+  tallerAux = new Taller (1, "", "", 1, 1);
+  talleres: Taller[] = [];
+  selectedTalleres!: Taller[];
+  selectedTaller!: Taller[];
+
   showHome(show: boolean) {
     this.flag = show;
     this.userClick = false;
@@ -118,6 +130,7 @@ export class AdminComponent {
     this.invoiceClick = false;
     this.shippingClick = false;
     this.workClick = false;
+    this.tallerClick = false; 
   }
 
   showUser(all: boolean) {
@@ -127,6 +140,7 @@ export class AdminComponent {
     this.invoiceClick = false;
     this.shippingClick = false;
     this.workClick = false;
+    this.tallerClick = false; 
   }
 
   showArtist(all: boolean) {
@@ -136,6 +150,7 @@ export class AdminComponent {
     this.invoiceClick = false;
     this.shippingClick = false;
     this.workClick = false;
+    this.tallerClick = false; 
   }
   showWork(all: boolean) {
     this.flag = false;
@@ -144,6 +159,16 @@ export class AdminComponent {
     this.invoiceClick = false;
     this.shippingClick = false;
     this.workClick = true;
+    this.tallerClick = false; 
+  }
+  showTaller(all: boolean) {
+    this.flag = false;
+    this.userClick = false;
+    this.artistClick = false;
+    this.invoiceClick = false;
+    this.shippingClick = false;
+    this.workClick = false;
+    this.tallerClick = true; 
   }
   showInvoice(all: boolean) {
     this.flag = false;
@@ -152,6 +177,7 @@ export class AdminComponent {
     this.invoiceClick = true;
     this.shippingClick = false;
     this.workClick = false;
+    this.tallerClick = false; 
   }
   showShipping(all: boolean) {
     this.flag = false;
@@ -160,6 +186,7 @@ export class AdminComponent {
     this.invoiceClick = false;
     this.shippingClick = true;
     this.workClick = false;
+    this.tallerClick = false; 
   }
   adminObras(show: boolean) {
     this.flag = false;
@@ -173,7 +200,8 @@ export class AdminComponent {
     this.loadLoggedUser();
     this.index();
     this.indexUsers();
-    this.indexArtista()
+    this.indexArtista();
+    this.indexTalleres();
   }
 
   loadLoggedUser() {
@@ -244,6 +272,12 @@ export class AdminComponent {
     this.productDialog = true;
   }
 
+  openNewTaller() {
+    this.tallerAux = new Taller(1, "", "", 1, 1)
+    this.submitted = false;
+    this.productDialog = true;
+  }
+
   /********************************* INDEX  *********************************/
   index() {
     this._obraService.index().subscribe({
@@ -290,6 +324,18 @@ export class AdminComponent {
     });
   }
 
+  indexTalleres() {
+    this._tallerService.index().subscribe({
+      next: (response: any) => {
+        console.log('Respuesta del servicio:', response); 
+        this.talleres = response['data']; 
+      },
+      error: (err: Error) => {
+        console.error('Error al cargar los talleres', err);
+      }
+    });
+  }    
+
   /******************************** EDIT ********************************/
   editObra(obra: Obra) {
     this.obra = { ...obra };
@@ -305,6 +351,11 @@ export class AdminComponent {
   editArtista(_artista: Artista) {
     if (_artista.password == '') { return }
     this.artistaAux = { ..._artista };
+    this.productDialog = true;
+  }
+
+  editTaller(taller: Taller) {
+    this.tallerAux = { ...taller };
     this.productDialog = true;
   }
 
@@ -399,8 +450,22 @@ export class AdminComponent {
         });
       }
     });
-
   }
+
+  updateTaller(): void {
+    this._tallerService.update(this.tallerAux).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.msgAlert('Taller actualizado exitosamente', '', 'success');
+        this.indexTalleres();
+      },
+      error: (err: Error) => {
+        console.error('Error al actualizar el taller', err);
+        this.msgAlert('Error al actualizar taller', '', 'error');
+      }
+    });
+  }
+  
 
   /********************************* STORE *********************************/
   storeObra(form: any): void {
@@ -540,6 +605,39 @@ export class AdminComponent {
     }
   }
 
+  storeTaller(form: any): void {
+    if (form.valid) {
+      this._tallerService.create(this.tallerAux).subscribe({
+        next: (response) => {
+          console.log(response);
+          if (response.status === 201) {
+            form.reset();
+            this.msgAlert('Taller agregado exitosamente', '', 'success');
+            this.indexTalleres();
+          } else {
+            console.error('No se pudo ingresar el taller');
+          }
+        },
+        error: (error: any) => {
+          if (error.status === 406 && error.error && error.error.errors) {
+            this.errores = [];
+            const errorObj = error.error.errors;
+            for (const key in errorObj) {
+              if (errorObj.hasOwnProperty(key)) {
+                this.errores.push(...errorObj[key]);
+              }
+            }
+            this.msgAlert('Error al agregar taller', this.errores, 'error');
+          } else {
+            console.error('Otro tipo de error:', error);
+            this.msgAlert('Error del servidor, contacta al administrador', '', 'error');
+          }
+        }
+      });
+    }
+  }
+  
+
   /********************************* DELETE *********************************/
 
 
@@ -660,12 +758,31 @@ export class AdminComponent {
       this.displayConfirmationDialog = false;
     });
   }
-
-
-
   hideConfirmationDialog() {
     this.displayConfirmationDialog = false;
   }
+
+  /** */
+  deleteSelectedTalleres(): void {
+    this.selectedTalleres.forEach(taller => {
+      this._tallerService.deleted(taller.id).subscribe({
+        next: () => {
+          this.talleres = this.talleres.filter(t => t.id !== taller.id);
+          this.totalRecords--;
+          this.msgAlert('Taller eliminado', '', 'success');
+          this.indexTalleres();
+        },
+        error: (err: Error) => {
+          console.error('Error al eliminar el taller', err);
+          this.msgAlert('Error al eliminar taller', '', 'error');
+        }
+      });
+    });
+  
+    this.selectedTalleres = [];
+    this.displayConfirmationDialog = false;
+  }
+  
 
   /*****************************  Obtener nombre  *****************************/
 

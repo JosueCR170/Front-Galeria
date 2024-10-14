@@ -119,7 +119,7 @@ export class ShopComponent {
   }
 
   indexCarrito() {
-    const carrito = sessionStorage.getItem('obras');
+    const carrito = sessionStorage.getItem('obrasCarrito');
     this.obrasCarrito = carrito ? JSON.parse(carrito) : [];
     this.obrasCarrito = Array.isArray(this.obrasCarrito) ? this.obrasCarrito : [];
     this.agrupamiento();
@@ -132,7 +132,7 @@ export class ShopComponent {
       const yaEnCarrito = this.obrasCarrito.some((item: any) => item.id === obra?.id);
       if (!yaEnCarrito) {
         this.obrasCarrito.push(obra)
-        sessionStorage.setItem('obras', JSON.stringify(this.obrasCarrito));
+        sessionStorage.setItem('obrasCarrito', JSON.stringify(this.obrasCarrito));
         this.msgAlertGood('added work', '', 'success', '#000', '#ffffff');
       } else {
         this.msgAlertGood('You cannot add the same artwork to the cart', '', 'error', '#ffffff', '#eb5151');
@@ -148,17 +148,20 @@ export class ShopComponent {
   }
 
   deleteItemCar(id: number) {
-    const carrito = localStorage.getItem('obras');
+    const carrito = sessionStorage.getItem('obrasCarrito');
     this.obrasCarrito = carrito ? JSON.parse(carrito) : [];
     this.obrasCarrito = Array.isArray(this.obrasCarrito) ? this.obrasCarrito : [];
-    this.obrasCarrito.forEach(obraSeleccionada => {
-      if (obraSeleccionada.id === id) {
-        this.total -= obraSeleccionada.precio;
-      }
-    })
+
+    // this.obrasCarrito.forEach(obraSeleccionada => {
+    //   if (obraSeleccionada.id === id) {
+    //     this.total -= obraSeleccionada.precio;
+    //   }
+    // })
+
     this.obrasCarrito = this.obrasCarrito.filter(obra => obra.id != id);
-    localStorage.setItem('obras', JSON.stringify(this.obrasCarrito));
+    sessionStorage.setItem('obrasCarrito', JSON.stringify(this.obrasCarrito));
     if (this.obrasCarrito.length != 0) {
+      this.agrupamiento();
       console.log(this.obrasCarrito.length)
     } else { this.indexCarrito() }
   }
@@ -179,14 +182,25 @@ export class ShopComponent {
       }
       return acc;
     }, {} as { [key: number]: any[] });
+
+    //console.log("Obras agrupadas", groupedObras);
+
     this.obrasAgrupadasPorArtista = Object.entries(groupedObras);
     this.obrasAgrupadasPorArtista.forEach(grupo => {
       grupo.total = this.calcularTotalPrecios(grupo[1]);
+
+      //console.log("Total", grupo.total)
+      console.log("Grupo", grupo)
     });
   }
   calcularTotalPrecios(obras: any[]): number {
     return this.total = obras.reduce((total, obra) => total + parseInt(obra.precio), 0);
   }
+
+  comprarObras(obras:any[]){
+    sessionStorage.setItem('comprarObras', JSON.stringify(obras));
+  }
+
   countObrasOfArtista(id: number) {
     let i = 0;
     this.obras.forEach(obra => {

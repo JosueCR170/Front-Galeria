@@ -14,6 +14,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { server } from '../../services/global';
 import { DetalleFactura } from '../../models/DetalleFactura';
 import { DetalleFacturaService } from '../../services/detalleFactura.service';
+import { ArtistService } from '../../services/artist.service';
 
 @Component({
   selector: 'app-sale',
@@ -45,7 +46,8 @@ public formattedDate = this.formatDate(this.currentDate);
     private _userService: UserService,
     private _facturaService: FacturaService,
     private _envioService: EnvioService,
-    private _detallesFacturaService:DetalleFacturaService
+    private _detallesFacturaService:DetalleFacturaService,
+    private _artistService:ArtistService
     
 
   ) {
@@ -83,20 +85,43 @@ public formattedDate = this.formatDate(this.currentDate);
       this.getObra(id);
     }else{
       this.getObrasCarrito(artistId)
+      if (artistId !== null) {
+        this.getArtist(this.parseInt(artistId));
+      }
+      
     }
     this.loadLoggedUser();
   }
 
+  getArtist(artistId: number) {
+    // console.log('idArtista: ', artistId);
+    this._artistService.showArtist(artistId).subscribe({
+      next:(response)=>{
+        this.artista = response.Artista;
+        // console.log('Artista:', this.artista);
+        
+      },
+      error:(error)=>{
+        console.log('Error al obtener el artista:', error);
+      }
+    });
+      
+  }
 
 getObrasCarrito(artistId:any):void
 {
-  const carrito= sessionStorage.getItem('obras');
+  const carrito= sessionStorage.getItem('obrasCarrito');
   this.obras=carrito? JSON.parse(carrito):[];
   this.obras = Array.isArray( this.obras) ?  this.obras : [];
+ 
+  this.obras.forEach(o => {if(typeof o.idArtista==='string'){o.idArtista=this.parseInt(o.idArtista)}
+  });
+
   this.obras = this.obras.filter(obra => obra.idArtista == artistId);
   console.log('Obras',this.obras);
-  this.obras.forEach(o => {console.log('Cada obra',o)
-  });
+
+  // this.obras.forEach(o => {console.log('Cada obra',o)
+  // });
 }
 
 //METODO PARA CREAR LAS FACTURAS DE LAS OBRAS
@@ -168,9 +193,20 @@ getObrasCarrito(artistId:any):void
 
   }
   
+   eliminarObrasCompradasCarrito() {
+    let obrasCarrito = JSON.parse(sessionStorage.getItem('obrasCarrito') || '[]');
+    let obrasRestantes = obrasCarrito.filter((obra: any) => 
+      !this.obras.some((comprada: any) => comprada.id === obra.id)
+    );
+    sessionStorage.setItem('obrasCarrito', JSON.stringify(obrasRestantes));
+  }
+
   onSubmit(form: any) {
     let flag = true;
     this.obras.forEach(o => {
+      if(typeof o.disponibilidad==='string'){o.disponibilidad = o.disponibilidad === '1' || o.disponibilidad === 1;}
+      console.log("tipo dato",typeof o.disponibilidad)
+      console.log("valor",o.disponibilidad)
 
       if (!o.disponibilidad) {
         flag = false;
@@ -210,7 +246,13 @@ getObrasCarrito(artistId:any):void
             } catch (err) {
               console.log(err);
             }
+
+            this.eliminarObrasCompradasCarrito()
+            sessionStorage.removeItem("comprarObras");
+            this.obras=[];
             form.reset();
+            this._router.navigate(['/shop'])
+
             this.msgAlert('Factura registrada con éxito', '', 'success');
           }
         },

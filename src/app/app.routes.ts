@@ -25,7 +25,7 @@ export const routes: Routes = [
     {path:'shop',component:ShopComponent},
     
     { path: 'shop/viewArtwork/:id/sale/:saleId', component: SaleComponent},
-    // {path:'sale/:artistId',component:SaleComponent},
+    {path:'sale/:artistId',component:SaleComponent},
 
     {path:'loginArtist', component:LoginArtistComponent},
     {path:'signupArtist', component:SignupArtistComponent},

@@ -17,6 +17,7 @@
                 <li><a style="cursor: pointer;" (click)="showUser(true)">Users</a></li> <!--Cambie acá-->
                 <li><a style="cursor: pointer;" (click)="showArtist(true)">Artist</a></li> <!--Cambie acá-->
                 <li><a style="cursor: pointer;" (click)="showWork(true)">Art Work</a></li> <!--Cambie acá-->
+                <li><a style="cursor: pointer;" (click)="showTaller(true)">Taller</a></li> <!--Cambie acá-->
                 <li class="logout"><a (click)="logOut()">Log out</a></li>
               </ul>
             </nav>
@@ -926,7 +927,225 @@
         </div>
       </div>
       <!--Cierre tabla-->
+    }
+    @if(tallerClick){
+      <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
+        <p class="work"><span class="workGradient">Taller</span> </p>
+      </div>
+      
+      <div class="card">
+        <p-toast></p-toast>
+  
+        <p-toolbar class="tool" styleClass="gap-2" [style]="{background: 'linear-gradient(90deg, rgba(7,59,61,1) 0%, rgba(46,63,117,1) 100%)',border:'none', borderRadius:'10px 10px 0 0'}"> 
+          <div>
+            <button pButton
+            pRipple label="+ New" class="aas" data-bs-toggle="modal" 
+            data-bs-target="#newTallerModal" (click)="openNewTaller()">
+            </button>
+            
+            <button pButton class="aas" style="background: red; margin-left: 5px;"
+            pRipple data-bs-toggle="modal" data-bs-target="#deleteTallerModal"
+            styleClass="btn-rounded" [disabled]="!selectedTalleres || !selectedTalleres.length"
+            label="X Delete">
+            </button>
+          
+            <button pButton class="aas" style="background: rgb(236, 144, 32); margin-left: 5px;"
+            pRipple data-bs-toggle="modal" data-bs-target="#updateTallerModal" (click)="editTaller(selectedTalleres[0])"
+            styleClass="btn-rounded" [disabled]="!selectedTalleres || selectedTalleres.length !== 1"
+            label=" Ø Update"> 
+            </button>
+          </div>
+          
+          <!--el buscar-->
+          <div class="align-items-center justify-content-between" style="display: flex;">
+            <h5 style="margin-right: 40px; color: rgb(255, 255, 255);">Manage Talleres</h5>
+            <span style="margin-right: 10px;">
+              <input class="search__input" type="text" #input (input)="dt.filterGlobal(input.value, 'contains')"
+                placeholder="Search..." />
+              <svg class="search__icon" aria-hidden="true" viewBox="0 0 24 24">
+                <g>
+                  <path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path>
+                </g>
+              </svg>
+            </span>
+          </div>
+        </p-toolbar>
+        
+        <p-table #dt [value]="talleres" [rows]="10" [totalRecords]="totalRecords" [paginator]="true"
+          [(selection)]="selectedTalleres" [selectAll]="selectAll" [tableStyle]="{ 'min-width': '75rem' }"
+          [globalFilterFields]="['id', 'nombre', 'descripcion', 'duracion', 'costo']">
+          
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="width: 4rem">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+              </th>
+              <th pSortableColumn="id" style="width:15%">ID <p-sortIcon field="id"></p-sortIcon></th>
+              <th pSortableColumn="nombre" style="width:20%">Name <p-sortIcon field="nombre"></p-sortIcon></th>
+              <th pSortableColumn="descripcion" style="width:20%">Description <p-sortIcon field="descripcion"></p-sortIcon></th>
+              <th pSortableColumn="duracion" style="width:15%">Duration <p-sortIcon field="duracion"></p-sortIcon></th>
+              <th pSortableColumn="costo" style="width:20%">Cost<p-sortIcon field="costo"></p-sortIcon></th>
+            </tr>
+          </ng-template>
+          
+          <ng-template pTemplate="body" let-taller let-ri="rowIndex">
+            <tr [pEditableRow]="taller" style="background: linear-gradient(90deg, rgba(7,59,61,1) 0%, rgba(46,63,117,1) 100%); color: rgb(230, 230, 230);border-bottom: 2px solid white;">
+              <td>
+                <p-tableCheckbox [value]="taller"></p-tableCheckbox>
+              </td>
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input pInputText type="text" [(ngModel)]="taller.id" />
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ taller.id }}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input pInputText type="text" [(ngModel)]="taller.nombre" required />
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ taller.nombre }}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input pInputText type="text" [(ngModel)]="taller.descripcion" required />
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ taller.descripcion }}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input pInputText type="text" [(ngModel)]="taller.duracion" />
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ taller.duracion }}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input pInputText type="text" [(ngModel)]="taller.costo" required />
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ taller.costo }}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
 
-      }
+        <!-- Dialogo New -->
+        <div class="modal fade" id="newTallerModal" tabindex="-1" aria-labelledby="newTallerModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="newTallerModalLabel">New WorckShop</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <form #newTallerForm="ngForm" (ngSubmit)="storeTaller(newTallerForm)">
+                <div class="modal-body">
+                  <div class="form-group" style="margin-bottom: 10px;">
+                    <label for="nombreTaller">Name</label>
+                    <input id="nombreTaller" class="form-control" name="nombre" type="text" [(ngModel)]="tallerAux.nombre" required>
+                  </div>
+                  <div class="form-group" style="margin-bottom: 10px;">
+                    <label for="descripcionTaller">Description</label>
+                    <input id="descripcionTaller" class="form-control" name="descripcion" type="text" [(ngModel)]="tallerAux.descripcion" required>
+                  </div>
+                  <div class="form-group" style="margin-bottom: 10px;">
+                    <label for="duracionTaller">Duration</label>
+                    <input id="duracionTaller" class="form-control" name="duracion" type="text" [(ngModel)]="tallerAux.duracion" required>
+                  </div>
+                  <div class="form-group" style="margin-bottom: 10px;">
+                    <label for="costoTaller">Cost</label>
+                    <input id="costoTaller" class="form-control" name="costo" type="number" [(ngModel)]="tallerAux.costo" required>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <input type="submit" class="btn btn-primary" style="background-color: rgb(124, 10, 10); border: none;" value="Add" data-bs-dismiss="modal">
+                </div>
+              </form>
+              </div>
+            </div>
+          </div>
+        <!-- Final diálogo New Taller -->
+
+        <!-- Inicio diálogo Delete Taller -->
+        <div class="modal fade" id="deleteTallerModal" tabindex="-1" aria-labelledby="deleteTallerLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteTallerLabel">DELETE</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p>Are you sure you want to delete the selected workshop?</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" style="background-color: rgb(124, 10, 10); border: none;" data-bs-dismiss="modal" (click)="deleteSelectedTalleres()">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Final diálogo Delete Taller -->
+
+        <!-- Inicio diálogo Update Taller -->
+      <div class="modal fade" id="updateTallerModal" tabindex="-1" aria-labelledby="updateTallerLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="updateTallerLabel">UPDATE</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form #updateTallerForm="ngForm">
+              <div class="modal-body">
+                <div class="form-group" style="margin-bottom: 10px;">
+                  <label for="nombreTallerUpdate">Name</label>
+                  <input id="nombreTallerUpdate" class="form-control" [(ngModel)]="tallerAux.nombre" name="nombre">
+                </div>
+                <div class="form-group" style="margin-bottom: 10px;">
+                  <label for="descripcionTallerUpdate">Description</label>
+                  <input id="descripcionTallerUpdate" class="form-control" [(ngModel)]="tallerAux.descripcion" name="descripcion">
+                </div>
+                <div class="form-group" style="margin-bottom: 10px;">
+                  <label for="duracionTallerUpdate">Duration</label>
+                  <input id="duracionTallerUpdate" class="form-control" [(ngModel)]="tallerAux.duracion" name="duracion">
+                </div>
+                <div class="form-group" style="margin-bottom: 10px;">
+                  <label for="costoTallerUpdate">Cost</label>
+                  <input id="costoTallerUpdate" class="form-control" [(ngModel)]="tallerAux.costo" name="costo">
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" style="background-color: rgb(124, 10, 10);" data-bs-dismiss="modal" (click)="updateTaller()">Update</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <!-- Final diálogo Update Taller -->
+
+
+
+
+    }
   </div>
-</div>}
+</div>
+}

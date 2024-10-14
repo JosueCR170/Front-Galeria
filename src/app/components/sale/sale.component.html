@@ -95,7 +95,7 @@
           </select>
           
           <div style="width: 100%; display: flex; justify-content: center;">
-            <input type="submit"  [disabled]="!isOptionSelected() || saleForm.invalid" style="background-color: rgb(120, 37, 37);" 
+            <input type="submit"  [disabled]="!isOptionSelected() || saleForm.invalid || obras.length===0" style="background-color: rgb(120, 37, 37);" 
             class="btn btn-primary compra"  value=" Pick up!">
             <!-- data-bs-toggle="modal" data-bs-target="#exampleModal" -->
             <!-- Modal -->

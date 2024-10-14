@@ -63,8 +63,7 @@ export class ArtistService{
     showArtist(artistId: number): Observable<any> {
         let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
         let options = { headers };
-    
-        return this._http.get(`artista/${artistId}`, options);
+        return this._http.get(`${this.urlAPI}artista/${artistId}`, options);
       }
 
     deleted(id:number):Observable<any>{
