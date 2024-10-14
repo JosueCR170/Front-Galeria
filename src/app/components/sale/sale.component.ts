@@ -251,9 +251,8 @@ getObrasCarrito(artistId:any):void
             sessionStorage.removeItem("comprarObras");
             this.obras=[];
             form.reset();
-            this._router.navigate(['/shop'])
-
-            this.msgAlert('Factura registrada con éxito', '', 'success');
+           // this._router.navigate(['/shop'])
+            //this.msgAlert('Factura registrada con éxito', '', 'success');
           }
         },
         error: (error: HttpErrorResponse) => {
@@ -319,6 +318,7 @@ getObrasCarrito(artistId:any):void
         if(detallesResponse.status==201){
 
           this.msgAlert('detalles factura registered successfully','', 'success');
+          this._router.navigate(['/shop'])
         }else{
           //this.changeStatus(1);
         }
