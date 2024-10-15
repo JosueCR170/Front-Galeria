@@ -52,11 +52,12 @@ selectedOffer: Oferta | any;
 user:any;
 facturaResponse: any;
 respuesta: any;
+category: string | null = null;
 
 ngOnInit(): void {
   this._routes.paramMap.subscribe(params => {
-    const Tcategory = params.get('category');
-    this.indexCategory(Tcategory);
+    this.category = params.get('category');
+    this.indexCategory( this.category);
     this.loadArtistas();
     this.loadOferta();
     this.loadLoggedUser();
@@ -173,7 +174,7 @@ createPay(): void {
   this.router.navigate([`courses`]);
 }
 
-getArtistaById(artistaId: number | null): string | undefined {
+getArtistaName(artistaId: number | null): string | undefined {
   if (artistaId === null) {
     console.log('eeee')
     return undefined; // O manejar el caso de manera apropiada

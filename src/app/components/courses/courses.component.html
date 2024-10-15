@@ -35,7 +35,11 @@
             </ul>
           </li>
           <li>
-            <a> Enrolled </a>
+            <a class="nav-link text-light" style="cursor: pointer;" data-bs-toggle="offcanvas" 
+            data-bs-target="#offcanvasWithBothOptions" 
+            aria-controls="offcanvasWithBothOptions" (click)="filterCourses()"
+            [class.disabled]="isLoading" 
+            [attr.aria-disabled]="isLoading ? true : null"> Enrolled </a>
           </li>
         </ul>
         <div class="container">
@@ -61,6 +65,7 @@
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <li><a class="dropdown-item" [routerLink]="['/loginArtist']" style="cursor: pointer;">Be artist</a></li>
               <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#updateAcount">Modify account</a></li>
+              <li><a class="dropdown-item" [routerLink]="['/shop']" style="cursor: pointer;">Gallery</a></li>
               @if(user.tipoUsuario){
                 <li><a class="dropdown-item" style="cursor: pointer;" (click)="loadAdmin()">Admin</a></li>
                 }
@@ -99,6 +104,32 @@
           </form>
         </div>
       </div>
+    </div>
+  </div>
+  <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Enrolled courses</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body" >
+      <div class="card" *ngFor="let item of filteredCourses">
+      <span class="material-symbols-outlined" style="font-size: 40px; color: rgb(20, 136, 16);">{{
+        getIconForCategory(item.taller.categoria)
+      }}
+      </span>
+      <div class="textBox">
+        <div class="textContent">
+          <p class="h5">{{item.taller?.nombre}}</p>
+        </div>
+        <div class="text-inf">
+          <p class="p" style="font-weight: 500">$ {{ item.taller.costo }}</p>
+        </div>
+        <p class="p" style="margin-top: 5px; font-weight: 500">
+          {{ getLongerNameCategory(item.taller?.categoria) }}
+        </p>
+        <div></div>
+      </div>
+    </div>
     </div>
   </div>
   <router-outlet></router-outlet>

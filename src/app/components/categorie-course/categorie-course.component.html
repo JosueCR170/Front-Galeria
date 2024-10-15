@@ -9,7 +9,7 @@
         padding-left: 20px;
       "
     >
-      <h1 style="text-align: start">Categoria</h1>
+      <h1 style="text-align: start">Courses </h1>
     </div>
 
     <div class="container-cards">
@@ -30,7 +30,7 @@
           </div>
           <div class="text-inf">
             <p class="p" style="color: black">
-              {{ getArtistaById(course.idArtista) }}
+              {{ getArtistaName(course.idArtista) }}
             </p>
             <p class="p" style="font-weight: 500">$ {{ course.costo }}</p>
           </div>
@@ -102,10 +102,15 @@
                 End: {{ selectedOffer.fechaFinal }}
               </p>
             </div>
-
-            <p>
+            <div class="w-100 d-flex justify-content-between">
+              <p>
               Mode: <strong>{{ selectedOffer.modalidad }}</strong>
             </p>
+            <p>
+              Quotas: <strong>{{selectedOffer.cupos}}</strong>
+            </p>
+            </div>
+            
             @if(selectedOffer.modalidad == "Presential"){
             <p>
               <span style="font-weight: 600">ubicacion:</span>
