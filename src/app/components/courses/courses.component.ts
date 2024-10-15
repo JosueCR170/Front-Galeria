@@ -7,7 +7,7 @@ import { UserService } from '../../services/user.service';
 import { FormsModule } from '@angular/forms';
 import { Taller } from '../../models/Taller';
 import { TallerService } from '../../services/taller.service';
-import { ofertaService } from '../../services/oferta.service';
+import { OfertaService } from '../../services/oferta.service';
 import { Oferta } from '../../models/Oferta';
 import { MatriculaService } from '../../services/matricula.service';
 import { Matricula } from '../../models/Matricula';
@@ -26,7 +26,7 @@ export class CoursesComponent {
   constructor(private router: Router,
     private userService: UserService,
     private _talleresService: TallerService,
-    private _ofertaService: ofertaService,
+    private _ofertaService: OfertaService,
     private _matricula: MatriculaService) {}
   user: any;
   userAux = new User(1, "", false, "", "", null, "");

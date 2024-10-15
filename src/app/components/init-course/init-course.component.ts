@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TallerService } from '../../services/taller.service';
-import { ofertaService } from '../../services/oferta.service';
+import { OfertaService } from '../../services/oferta.service';
 import { ArtistService } from '../../services/artist.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatriculaService } from '../../services/matricula.service';
@@ -25,7 +25,7 @@ export class InitCourseComponent {
   public matricula: Matricula;
   constructor(
     private _talleresService:TallerService,
-    private _ofertaService:ofertaService,
+    private _ofertaService:OfertaService,
     private _artistaService: ArtistService,
     private router: Router,
     private _artistService: ArtistService,

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TallerService } from '../../services/taller.service';
-import { ofertaService } from '../../services/oferta.service';
+import { OfertaService } from '../../services/oferta.service';
 import { Taller } from '../../models/Taller';
 import { Oferta } from '../../models/Oferta';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -32,7 +32,7 @@ public artista: Artista;
 public matricula: Matricula;
 constructor(
   private _talleresService:TallerService,
-  private _ofertaService:ofertaService,
+  private _ofertaService:OfertaService,
   private _artistaService: ArtistService,
   private router: Router,
   private _routes: ActivatedRoute,
@@ -99,10 +99,11 @@ loadLoggedUser() {
     this._ofertaService.index().subscribe({
       next: (response: any) =>{
         this.ofertas = response['data'];
-      },error: (err) => {
-        console.error('Error al cargar artistas:', err);
+      },
+      error: (err) => {
+        console.error('Error al cargar las ofertas:', err);
       }
-    })
+    });
   }
 
  filterCourses(category: string) {
