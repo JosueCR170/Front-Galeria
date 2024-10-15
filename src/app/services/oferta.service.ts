@@ -10,6 +10,7 @@ import { BehaviorSubject, Observable, tap } from "rxjs";
 })
 
 export class OfertaService{
+
     private urlAPI:string;
     private OfferSubject = new BehaviorSubject<any>(null);
     public matri$ = this.OfferSubject.asObservable();

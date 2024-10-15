@@ -79,19 +79,12 @@ export class ShopComponent {
   }
 
   index() {
-    
     this._obraService.index().subscribe({
       next: (response: any) => {
-        // this.obras = response['data'];
         this.obras = response['data'].map((obra: any) => {
           obra.disponibilidad = obra.disponibilidad === '1' || obra.disponibilidad === 1;
           return obra;
         });
-        // this.obras.forEach(obra => {
-        //   console.log(`Disponibilidad: ${obra.disponibilidad}, Tipo: ${typeof obra.disponibilidad}`);
-        //   console.log(`ID: ${obra.id}, Tipo: ${typeof obra.id}`);
-        //   console.log(`IDArtista: ${obra.idArtista}, Tipo: ${typeof obra.idArtista}`);
-        // });
         this.loadCategorysExists();
         this.indexArtista();
         console.log("Obras: ",this.obras);
