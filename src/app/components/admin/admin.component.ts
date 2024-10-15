@@ -24,6 +24,7 @@ import { server } from '../../services/global';
 import Swal from 'sweetalert2';
 import { Taller } from '../../models/Taller';
 import { TallerService } from '../../services/taller.service';
+import { Oferta } from '../../models/Oferta';
 
 @Component({
   selector: 'app-admin',
@@ -120,12 +121,16 @@ export class AdminComponent {
   artistas: Artista[] = [];
   selectedArtistas: Artista[] = [];
   selectedArtista: Artista[] = [];
-
+  /** Valriables y elementos de Talleres  */
   taller : any;
   tallerAux = new Taller (1,1, "", "", 1, 1,"");
   talleres: Taller[] = [];
   selectedTalleres!: Taller[];
   selectedTaller!: Taller[];
+
+  ofertas: Oferta[] = [];
+  selectedOfertas: Oferta[] = [];
+  ofertaAux: Oferta = new Oferta(0, 0, '', '', '', '', '', '', 0);
 
   showHome(show: boolean) {
     this.flag = show;
@@ -462,6 +467,7 @@ export class AdminComponent {
         console.log(response);
         this.msgAlert('Taller actualizado exitosamente', '', 'success');
         this.indexTalleres();
+        this.selectedTalleres = [];
       },
       error: (err: Error) => {
         console.error('Error al actualizar el taller', err);
