@@ -8,6 +8,6 @@ export class Oferta{
         public horaFinal:string,
         public ubicacion:string,
         public modalidad:string,
-        public costo:number
+        public cupos: number
     ){}
 }

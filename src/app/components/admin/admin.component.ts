@@ -25,6 +25,7 @@ import Swal from 'sweetalert2';
 import { Taller } from '../../models/Taller';
 import { TallerService } from '../../services/taller.service';
 import { Oferta } from '../../models/Oferta';
+import { OfertaService } from '../../services/oferta.service';
 
 @Component({
   selector: 'app-admin',
@@ -36,6 +37,7 @@ import { Oferta } from '../../models/Oferta';
 })
 export class AdminComponent {
   public artistasList: { key: number, value: string }[] = [];
+  public talleresList: { key: number, value: string }[] = [];
 
   artStyles: string[] = [
     'Cubism', 'Impressionism', 'Expressionism', 'Realism', 'Surrealism', 'Abstract', 'Renaissance',
@@ -55,6 +57,7 @@ export class AdminComponent {
   public _user: User;
   public _artista: Artista;
   public _taller: Taller;
+  public _oferta: Oferta;
   public currentDate = new Date();
   public formattedDate = this.formatDate(this.currentDate);
   public errores: string[] = [];
@@ -64,6 +67,7 @@ export class AdminComponent {
     private _userService: UserService,
     private _artistaService: ArtistService,
     private _tallerService: TallerService,
+    private _ofertaService: OfertaService,
     private _router: Router,
     private _routes: ActivatedRoute,
     private messageService: MessageService,
@@ -74,9 +78,8 @@ export class AdminComponent {
     this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, null);
     this._user = new User(1, "", false, "", "", null, "");
     this._artista = new Artista(1, "", "", "", "", "");
-
-    this._taller = new Taller(1,1,"","",1,1,"");
-
+    this._taller = new Taller(1,1,"","",1,1, "");
+    this._oferta = new Oferta(1,1,"","","","","","",1);
   }
 
   totalRecords!: number;
@@ -101,6 +104,7 @@ export class AdminComponent {
   shippingClick: boolean = false;
   workClick: boolean = false;
   tallerClick: boolean = false;
+  offerClick: boolean = false;
   user: any;
   artist: any;
   urlAPI: string;
@@ -128,6 +132,8 @@ export class AdminComponent {
   selectedTalleres!: Taller[];
   selectedTaller!: Taller[];
 
+  /** Valriables y elementos de Ofertas  */
+  oferta : any;
   ofertas: Oferta[] = [];
   selectedOfertas: Oferta[] = [];
   ofertaAux: Oferta = new Oferta(0, 0, '', '', '', '', '', '', 0);
@@ -140,6 +146,7 @@ export class AdminComponent {
     this.shippingClick = false;
     this.workClick = false;
     this.tallerClick = false; 
+    this.offerClick = false;
   }
 
   showUser(all: boolean) {
@@ -150,6 +157,7 @@ export class AdminComponent {
     this.shippingClick = false;
     this.workClick = false;
     this.tallerClick = false; 
+    this.offerClick = false;
   }
 
   showArtist(all: boolean) {
@@ -160,6 +168,7 @@ export class AdminComponent {
     this.shippingClick = false;
     this.workClick = false;
     this.tallerClick = false; 
+    this.offerClick = false;
   }
   showWork(all: boolean) {
     this.flag = false;
@@ -169,6 +178,7 @@ export class AdminComponent {
     this.shippingClick = false;
     this.workClick = true;
     this.tallerClick = false; 
+    this.offerClick = false;
   }
   showTaller(all: boolean) {
     this.flag = false;
@@ -178,6 +188,17 @@ export class AdminComponent {
     this.shippingClick = false;
     this.workClick = false;
     this.tallerClick = true; 
+    this.offerClick = false;
+  }
+  showOferta(all: boolean) {
+    this.flag = false;
+    this.userClick = false;
+    this.artistClick = false;
+    this.invoiceClick = false;
+    this.shippingClick = false;
+    this.workClick = false;
+    this.tallerClick = false; 
+    this.offerClick = true;
   }
   showInvoice(all: boolean) {
     this.flag = false;
@@ -187,6 +208,7 @@ export class AdminComponent {
     this.shippingClick = false;
     this.workClick = false;
     this.tallerClick = false; 
+    this.offerClick = false;
   }
   showShipping(all: boolean) {
     this.flag = false;
@@ -196,6 +218,7 @@ export class AdminComponent {
     this.shippingClick = true;
     this.workClick = false;
     this.tallerClick = false; 
+    this.offerClick = false;
   }
   adminObras(show: boolean) {
     this.flag = false;
@@ -211,6 +234,7 @@ export class AdminComponent {
     this.indexUsers();
     this.indexArtista();
     this.indexTalleres();
+    this.loadTallerName();
   }
 
   loadLoggedUser() {
@@ -286,6 +310,11 @@ export class AdminComponent {
     this.submitted = false;
     this.productDialog = true;
   }
+  openNewOferta() {
+    this.ofertaAux = new Oferta(1,1,"","","","","","",1)
+    this.submitted = false;
+    this.productDialog = true;
+  }
 
   /********************************* INDEX  *********************************/
   index() {
@@ -345,6 +374,18 @@ export class AdminComponent {
     });
   }    
 
+  indexOfertas() {
+    this._ofertaService.index().subscribe({
+      next: (response: any) => {
+        console.log('Respuesta del servicio:', response); 
+        this.ofertas = response['data']; 
+      },
+      error: (err: Error) => {
+        console.error('Error al cargar los ofertas', err);
+      }
+    });
+  }    
+
   /******************************** EDIT ********************************/
   editObra(obra: Obra) {
     this.obra = { ...obra };
@@ -365,6 +406,11 @@ export class AdminComponent {
 
   editTaller(taller: Taller) {
     this.tallerAux = { ...taller };
+    this.productDialog = true;
+  }
+
+  editOferta(oferta: Oferta) {
+    this.ofertaAux = { ...oferta };
     this.productDialog = true;
   }
 
@@ -472,6 +518,21 @@ export class AdminComponent {
       error: (err: Error) => {
         console.error('Error al actualizar el taller', err);
         this.msgAlert('Error al actualizar taller', '', 'error');
+      }
+    });
+  }
+
+  updateOffer(): void {
+    this._ofertaService.update(this.ofertaAux).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.msgAlert('Oferta actualizada exitosamente', '', 'success');
+        this.indexOfertas();
+        this.selectedOfertas = [];
+      },
+      error: (err: Error) => {
+        console.error('Error al actualizar el oferta', err);
+        this.msgAlert('Error al actualizar oferta', '', 'error');
       }
     });
   }
@@ -648,6 +709,38 @@ export class AdminComponent {
   }
   
 
+  storeOferta(form: any): void {
+    if (form.valid) {
+      this._ofertaService.create(this.ofertaAux).subscribe({
+        next: (response) => {
+          console.log(response);
+          if (response.status === 201) {
+            form.reset();
+            this.msgAlert('Oferta agregada exitosamente', '', 'success');
+            this.indexOfertas();
+          } else {
+            console.error('No se pudo ingresar el oferta');
+          }
+        },
+        error: (error: any) => {
+          if (error.status === 406 && error.error && error.error.errors) {
+            this.errores = [];
+            const errorObj = error.error.errors;
+            for (const key in errorObj) {
+              if (errorObj.hasOwnProperty(key)) {
+                this.errores.push(...errorObj[key]);
+              }
+            }
+            this.msgAlert('Error al agregar oferta', this.errores, 'error');
+          } else {
+            console.error('Otro tipo de error:', error);
+            this.msgAlert('Error del servidor, contacta al administrador', '', 'error');
+          }
+        }
+      });
+    }
+  }
+
   /********************************* DELETE *********************************/
 
 
@@ -793,6 +886,25 @@ export class AdminComponent {
     this.displayConfirmationDialog = false;
   }
   
+  deleteSelectedOfertas(): void {
+    this.selectedOfertas.forEach(oferta => {
+      this._ofertaService.deleted(oferta.id).subscribe({
+        next: () => {
+          this.ofertas = this.ofertas.filter(o => o.id !== oferta.id);
+          this.totalRecords--;
+          this.msgAlert('Oferta eliminada', '', 'success');
+          this.indexOfertas();
+        },
+        error: (err: Error) => {
+          console.error('Error al eliminar la oferta', err);
+          this.msgAlert('Error al eliminar oferta', '', 'error');
+        }
+      });
+    });
+  
+    this.selectedOfertas = [];
+    this.displayConfirmationDialog = false;
+  }
 
   /*****************************  Obtener nombre  *****************************/
 
@@ -819,6 +931,29 @@ export class AdminComponent {
     return artista ? artista.value : 'Desconocido';
   }
 
+
+  loadTallerName() {
+    this._tallerService.index().subscribe({
+      next: (response: any) => {
+        //console.log(response)
+        let talleres = response['data'];
+        talleres.forEach((e: any) => {
+          this.talleresList.push({
+            key: e.id,
+            value: e.nombre
+          });
+        });
+      },
+      error: (err: Error) => {
+        console.error('Error al buscar el taller', err);
+      }
+    });
+  }
+
+  getTallerNameById(id: number): string {
+    const taller = this.talleresList.find(p => p.key === id);
+    return taller ? taller.value : 'Desconocido';
+  }
 
   /************************************************************************ */
 
