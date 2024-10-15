@@ -29,6 +29,7 @@ export class SignupArtistComponent {
   }
 
   onSubmit(form:any){
+    console.log("Artista", this.artista);
     this.artistaService.create(this.artista).subscribe({
       next:(response)=>{
         console.log(response);
