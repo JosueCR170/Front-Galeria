@@ -5,6 +5,7 @@ export class Taller{
         public nombre:string,
         public descripcion:string,
         public duracion:number,
-        public costo:number
+        public costo:number,
+        public categoria:string,
     ){}
 }
