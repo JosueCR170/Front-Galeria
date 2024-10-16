@@ -54,7 +54,21 @@ facturaResponse: any;
 respuesta: any;
 category: string | null = null;
 
-ngOnInit(): void {
+ngOnInit(): void {  
+  this._routes.queryParams.subscribe(params => {
+    const searchQuery = params['search'] || '';
+
+    if (searchQuery) {
+      // Filtra los cursos que coincidan con el término de búsqueda
+      this.filteredCourses = this.courses.filter(course =>
+        course.nombre.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    } else {
+      // Si no hay búsqueda, muestra todos los cursos
+      this.filteredCourses = [...this.courses];
+    }
+  });
+
   this._routes.paramMap.subscribe(params => {
     this.category = params.get('category');
     this.indexCategory( this.category);

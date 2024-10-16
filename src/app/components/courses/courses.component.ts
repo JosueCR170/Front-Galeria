@@ -22,7 +22,6 @@ import { CommonModule } from '@angular/common';
   styleUrl: './courses.component.css'
 })
 export class CoursesComponent {
-
   constructor(private router: Router,
     private userService: UserService,
     private _talleresService: TallerService,
@@ -48,10 +47,12 @@ export class CoursesComponent {
 
   loadLoggedUser() {
     this.user = sessionStorage.getItem('identity');
-    console.log('User', this.user);
+    if (!this.user){
+      this.router.navigate(['/login']);
+    }else{
+     console.log('User', this.user);
     this.user = JSON.parse(this.user);
-    //console.log('User',this.user);
-    this.userAux = { ...this.user };
+    }
   }
   
   loadAdmin() {
@@ -110,6 +111,7 @@ export class CoursesComponent {
   }
 
 
+
   indexCategory(){
     this._talleresService.index().subscribe({
       next: (response: any) =>{
@@ -159,6 +161,20 @@ export class CoursesComponent {
     }
   });
   this.isLoading = false; 
+  }
+
+
+  searchCourses(event: any) {
+      console.log("aa")
+    const query = event.target.value.trim().toLowerCase();
+  
+    if (query === '') {
+      // Si el input está vacío, redirige al inicio.
+      this.router.navigate(['/courses']);
+    } else {
+      // Redirige a la ruta de /category/all y pasa el término de búsqueda como parámetro
+      this.router.navigate(['courses/category/all'], { queryParams: { search: query } });
+    }
   }
 
   getIconForCategory(category: string): string {
