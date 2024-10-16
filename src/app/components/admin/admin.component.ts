@@ -235,6 +235,8 @@ export class AdminComponent {
     this.indexArtista();
     this.indexTalleres();
     this.loadTallerName();
+    this.indexOfertas();
+    //this.loadArtistaName();
   }
 
   loadLoggedUser() {
@@ -641,6 +643,7 @@ export class AdminComponent {
 
   storeArtista(form: any): void {
     if (form.valid) {
+      console.log("Artistia", this.artistaAux)
       this._artistaService.create(this.artistaAux).subscribe({
         next: (response) => {
 
@@ -711,6 +714,9 @@ export class AdminComponent {
 
   storeOferta(form: any): void {
     if (form.valid) {
+      this.ofertaAux.fechaInicio = this.formatDate(new Date(this.ofertaAux.fechaInicio));
+      this.ofertaAux.fechaFinal = this.formatDate(new Date(this.ofertaAux.fechaFinal));
+      
       this._ofertaService.create(this.ofertaAux).subscribe({
         next: (response) => {
           console.log(response);
@@ -719,7 +725,7 @@ export class AdminComponent {
             this.msgAlert('Oferta agregada exitosamente', '', 'success');
             this.indexOfertas();
           } else {
-            console.error('No se pudo ingresar el oferta');
+            console.error('No se pudo ingresar la oferta');
           }
         },
         error: (error: any) => {
@@ -739,7 +745,8 @@ export class AdminComponent {
         }
       });
     }
-  }
+}
+
 
   /********************************* DELETE *********************************/
 
