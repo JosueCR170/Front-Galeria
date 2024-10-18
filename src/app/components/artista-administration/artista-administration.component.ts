@@ -114,7 +114,9 @@ export class ArtistaAdministrationComponent {
   ngOnInit(): void {
     this.loadLoggedArtist();
     this.index();
+    
     this.getFacturasByArtist();
+
     this.indexEnvioByArtist();
 
   }
@@ -152,21 +154,15 @@ export class ArtistaAdministrationComponent {
   }
 
   index() {
-    this.obraService.index().subscribe({
+    this.obraService.getArtworkByArtistId(this.artist['iss']).subscribe({
       next: (response: any) => {
         this.obras = response['data'];
-        this.filterObrasByArtista(this.artist.iss);
-        //console.log(this.obrasPorArtista);
-        this.obras = this.obrasPorArtista;
+        console.log("Obras de artista: ",this.obras)
       },
       error: (err: Error) => {
         console.error('Error al cargar las obras', err);
       }
     });
-  }
-
-  filterObrasByArtista(idArtista: number) {
-    this.obrasPorArtista = this.obras.filter(obra => obra.idArtista === idArtista);
   }
 
   showHome(show: boolean) {
@@ -429,7 +425,7 @@ export class ArtistaAdministrationComponent {
     this.envioService.indexByArtist().subscribe({
       next: (response: any) => {
         this.enviosArtist = response['data'];
-        //console.log(this.enviosArtist);
+        console.log("Envios: ",this.enviosArtist);
         this.fillPedidos();
       },
       error: (err: Error) => {
@@ -440,10 +436,12 @@ export class ArtistaAdministrationComponent {
 
 
   getFacturasByArtist() {
-    this.facturaService.indexByArtistId(this.artist['iss']).subscribe({
+   // console.log("idArtista: ", this.artist['iss'])
+
+    this.obraService.getArtworkByArtistId(this.artist['iss']).subscribe({
       next: (response: any) => {
         this.facturasArtist = response['data'];
-       //console.log(this.facturasArtist);
+       console.log("data: ",this.facturasArtist);
         // this.fillPedidos();
       },
       error: (err: Error) => {
