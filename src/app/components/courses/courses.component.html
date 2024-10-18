@@ -27,16 +27,24 @@
             </a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" [routerLink]="['category','Photograph']"><span class="material-symbols-outlined">photo_camera</span>Photograph</a></li>
-              <li><a class="dropdown-item" [routerLink]="['category','fashion']"><span class="material-symbols-outlined"> apparel</span>fashion design</a></li>
+              <li><a class="dropdown-item" [routerLink]="['category','Fashion']"><span class="material-symbols-outlined"> apparel</span>fashion design</a></li>
               <li><a class="dropdown-item" [routerLink]="['category','3D']"><span class="material-symbols-outlined">deployed_code</span>3D dising</a></li>
-              <li><a class="dropdown-item" [routerLink]="['category','art']"><span class="material-symbols-outlined"> brush </span> Principles of art</a></li>
-              <li><a class="dropdown-item" [routerLink]="['category','UX']"><span class="material-symbols-outlined">person_check</span>UX/UI</a></li>
+              <li><a class="dropdown-item" [routerLink]="['category','Art']"><span class="material-symbols-outlined"> brush </span> Principles of art</a></li>
+              <li><a class="dropdown-item" [routerLink]="['category','UI-UX']"><span class="material-symbols-outlined">person_check</span>UX/UI</a></li>
+              <li><a class="dropdown-item" [routerLink]="['category','all']">--Se all</a></li>
             </ul>
+          </li>
+          <li>
+            <a class="nav-link text-light" style="cursor: pointer;" data-bs-toggle="offcanvas" 
+            data-bs-target="#offcanvasWithBothOptions" 
+            aria-controls="offcanvasWithBothOptions" (click)="filterCourses()"
+            [class.disabled]="isLoading" 
+            [attr.aria-disabled]="isLoading ? true : null"> Enrolled </a>
           </li>
         </ul>
         <div class="container">
-          <input type="text" name="text" class="input" placeholder="Search" />
-          <button class="search__btn">
+          <input type="text" name="text" class="input" placeholder="Search"  (input)="searchCourses($event)"/>
+          <button class="search__btn" >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -50,11 +58,79 @@
             </svg>
           </button>
         </div>
-        <div class="CourseUserName">
-          <a>User name</a>
-        </div>
+        <div class="dropdown">
+          <div class="CourseUserName dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+              <a>{{ user.nombreUsuario }}</a>
+          </div>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <li><a class="dropdown-item" [routerLink]="['/loginArtist']" style="cursor: pointer;">Be artist</a></li>
+              <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#updateAcount">Modify account</a></li>
+              <li><a class="dropdown-item" [routerLink]="['/shop']" style="cursor: pointer;">Gallery</a></li>
+              @if(user.tipoUsuario){
+                <li><a class="dropdown-item" style="cursor: pointer;" (click)="loadAdmin()">Admin</a></li>
+                }
+              <li><a class="dropdown-item text-danger" (click)="logOut()">Log Out</a></li>
+          </ul>
+      </div>
       </div>
     </div>
   </nav>
+
+  <div class="modal fade" id="updateAcount" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">UPDATE ACCOUNT</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="resetUserData()"></button>
+        </div>
+        <div class="modal-body">
+          <form #updateUserForm="ngForm" (ngSubmit)="updateUser()">
+            <div class="mb-3">
+              <label for="recipient-name" class="col-form-label">Name:</label>
+              <input type="text" class="form-control" id="recipient-name" [(ngModel)]="user.nombre" name="nombre" required>
+            </div>
+            <div class="mb-3">
+              <label for="recipient-password" class="col-form-label">Password:</label>
+              <input type="password" class="form-control" id="recipient-password" [(ngModel)]="user.password" name="password" required>
+            </div>
+            <div class="mb-3">
+              <label for="recipient-telefono" class="col-form-label">Phone:</label>
+              <input type="number" class="form-control" id="recipient-telefono" [(ngModel)]="user.telefono" name="telefono" required>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="resetUserData()">Close</button>
+              <button type="submit" class="btn btn-primary" style="color: white; background-color: rgb(124, 10, 10);">Update</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Enrolled courses</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body" >
+      <div class="card" *ngFor="let item of filteredCourses">
+      <span class="material-symbols-outlined" style="font-size: 40px; color: rgb(20, 136, 16);">{{
+        getIconForCategory(item.taller.categoria)
+      }}
+      </span>
+      <div class="textBox">
+        <div class="textContent">
+          <p class="h5">{{item.taller?.nombre}}</p>
+        </div>
+        <div class="text-inf">
+          <p class="p" style="font-weight: 500">$ {{ item.taller.costo }}</p>
+        </div>
+        <p class="p" style="margin-top: 5px; font-weight: 500">
+          {{ getLongerNameCategory(item.taller?.categoria) }}
+        </p>
+        <div></div>
+      </div>
+    </div>
+    </div>
+  </div>
   <router-outlet></router-outlet>
 </div>
