@@ -436,13 +436,13 @@ export class ArtistaAdministrationComponent {
 
 
   getFacturasByArtist() {
-   // console.log("idArtista: ", this.artist['iss'])
+    console.log("idArtista: ", this.artist['iss'])
 
-    this.obraService.getArtworkByArtistId(this.artist['iss']).subscribe({
+    this.facturaService.indexByArtistId(this.artist['iss']).subscribe({
       next: (response: any) => {
         this.facturasArtist = response['data'];
        console.log("data: ",this.facturasArtist);
-        // this.fillPedidos();
+        this.fillPedidos();
       },
       error: (err: Error) => {
         console.error('Error al cargar las facturas', err);
@@ -453,15 +453,26 @@ export class ArtistaAdministrationComponent {
   fillPedidos() {
     this.pedidosArtist = [];
     for (let envio of this.enviosArtist) {
+      if(typeof envio.idFactura ==='string'){envio.idFactura=parseInt(envio.idFactura)}
+
+      // this.facturasArtist.forEach(e => {
+      //   console.log("fact: ",e.id)
+      //   console.log("usr: ",e.idUsuario)
+      // });console.log("env: ",envio.id)
+      
+
       let factura = this.facturasArtist.find(f => f.id === envio.idFactura);
+
+      console.log("Factura",factura)
       if (factura) {
+        if(typeof factura.idUsuario ==='string'){factura.idUsuario=parseInt(factura.idUsuario)}
         let direccionCompleta = `${envio.direccion}, ${envio.provincia}, ${envio.ciudad}, Postal code: ${envio.codigoPostal}`;
         envio.direccion = direccionCompleta; // Agregar el atributo direcciónCompleta al envío
         let pedido = new Pedido(envio, factura);
         this.pedidosArtist.push(pedido);
       }
     }
-    //console.log("Pedidos: ", this.pedidosArtist);
+    console.log("Pedidos: ", this.pedidosArtist);
   }
 
   dateToString(date: Date): string {
