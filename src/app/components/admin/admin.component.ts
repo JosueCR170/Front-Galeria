@@ -9,7 +9,7 @@ import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { CommonModule } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { TagModule } from 'primeng/tag';
@@ -136,7 +136,7 @@ export class AdminComponent {
   oferta : any;
   ofertas: Oferta[] = [];
   selectedOfertas: Oferta[] = [];
-  ofertaAux: Oferta = new Oferta(0, 0, '', '', '', '', '', '', 0);
+  ofertaAux: Oferta = new Oferta(0, 0, "", "", "", "", "", "", 0);
 
   showHome(show: boolean) {
     this.flag = show;
@@ -234,7 +234,6 @@ export class AdminComponent {
     this.indexUsers();
     this.indexArtista();
     this.indexTalleres();
-    this.loadTallerName();
     this.indexOfertas();
     //this.loadArtistaName();
   }
@@ -381,6 +380,7 @@ export class AdminComponent {
       next: (response: any) => {
         console.log('Respuesta del servicio:', response); 
         this.ofertas = response['data']; 
+        this.loadTallerName();
       },
       error: (err: Error) => {
         console.error('Error al cargar los ofertas', err);
@@ -524,7 +524,7 @@ export class AdminComponent {
     });
   }
 
-  updateOffer(): void {
+  updateOferta(): void {
     this._ofertaService.update(this.ofertaAux).subscribe({
       next: (response) => {
         console.log(response);
@@ -716,7 +716,26 @@ export class AdminComponent {
     if (form.valid) {
       this.ofertaAux.fechaInicio = this.formatDate(new Date(this.ofertaAux.fechaInicio));
       this.ofertaAux.fechaFinal = this.formatDate(new Date(this.ofertaAux.fechaFinal));
-      
+
+    // Validar horas
+    const [horaInicioHours, horaInicioMinutes] = this.ofertaAux.horaInicio.split(':').map(Number);
+    const [horaFinalHours, horaFinalMinutes] = this.ofertaAux.horaFinal.split(':').map(Number);
+
+    // Crear objetos Date para comparar
+    const fechaInicioDate = new Date(this.ofertaAux.fechaInicio + 'T' + this.ofertaAux.horaInicio);
+    const fechaFinalDate = new Date(this.ofertaAux.fechaFinal + 'T' + this.ofertaAux.horaFinal);
+
+    if (this.ofertaAux.horaFinal  < this.ofertaAux.horaInicio) {
+        this.msgAlert('The end time must be after to the start time.', '', 'error');
+        return;
+    }
+
+      if (this.ofertaAux.fechaFinal < this.ofertaAux.fechaInicio) {
+        this.msgAlert('The end date must be after or equal to the start date.', '', 'error');
+        return;
+      }
+  
+      console.log("Oferta", this.ofertaAux);
       this._ofertaService.create(this.ofertaAux).subscribe({
         next: (response) => {
           console.log(response);
@@ -745,7 +764,7 @@ export class AdminComponent {
         }
       });
     }
-}
+  }
 
 
   /********************************* DELETE *********************************/
@@ -938,7 +957,6 @@ export class AdminComponent {
     return artista ? artista.value : 'Desconocido';
   }
 
-
   loadTallerName() {
     this._tallerService.index().subscribe({
       next: (response: any) => {
@@ -964,6 +982,17 @@ export class AdminComponent {
 
   /************************************************************************ */
 
+  isVirtual = false;  
+  onModalidadChange(modalidad: string): void {
+    this.isVirtual = modalidad === 'Online';
+    if (this.isVirtual) {
+      this.ofertaAux.ubicacion = '';
+    }
+    console.log(this.ofertaAux);  // Verificar si se actualizan los datos correctamente
+  }
+  
+  // PARA LAS FECHAS 
+
   fechaSeleccionada: string = '';
   ano: number | null = null;
   mes: string | null = null;
@@ -986,6 +1015,31 @@ export class AdminComponent {
     const day = date.getDate(); // Agrega un cero al día si es necesario
     return `${year}-${month}-${day}`;
   }
+
+  // PARA LAS HORAS 
+
+  onHoraChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const horaCompleta = input.value; // Ejemplo: "03:42:00.0000000"
+
+    // Obtener solo la parte de horas y minutos
+    const [horaInput, minutoInput] = horaCompleta.split(':');
+    this.hora = horaInput.padStart(2, '0'); // Asegura que la hora tenga 2 dígitos
+    this.minuto = minutoInput.padStart(2, '0'); // Asegura que el minuto tenga 2 dígitos
+    
+    this.horaSeleccionada = `${this.hora}:${this.minuto}`; // Almacenar en el formato deseado
+}
+  horaSeleccionada: string = '';
+  hora: string | null = null;
+  minuto: string | null = null;
+  
+  private formatTime(hour: string, minute: string): string {
+    // Asegúrate de que la hora y los minutos tengan dos dígitos
+    const formattedHour = ('0' + hour).slice(-2);
+    const formattedMinute = ('0' + minute).slice(-2);
+    return `${formattedHour}:${formattedMinute}`; // Devuelve el formato HH:mm
+  }
+  
 
   msgAlert = (title: any, text: any, icon: any) => {
     Swal.fire({

@@ -1394,16 +1394,17 @@
                   <input id="horaFinal" class="form-control" name="horaFinal" type="time" [(ngModel)]="ofertaAux.horaFinal" required>
                 </div>
                 <div class="form-group" style="margin-bottom: 10px;">
-                  <label for="ubicacionOferta">Location</label>
-                  <input id="ubicacionOferta" class="form-control" name="ubicacion" type="text" [(ngModel)]="ofertaAux.ubicacion" required>
-                </div>
-                <div class="form-group" style="margin-bottom: 10px;">
                   <label for="modalidadOferta">Modality</label>
-                  <select id="modalidadOferta" class="form-select" name="modalidad" [(ngModel)]="ofertaAux.modalidad" required>
+                  <select id="modalidadOferta" class="form-select" name="modalidad" [(ngModel)]="ofertaAux.modalidad" (ngModelChange)="onModalidadChange($event)" required>
                     <option value="Online">Online</option>
                     <option value="In-person">In-person</option>
-                  </select>
+                  </select>                  
                 </div>
+                <div class="form-group" style="margin-bottom: 10px;">
+                  <label for="ubicacionOferta">Location</label>
+                  <input id="ubicacionOferta" class="form-control" name="ubicacion" type="text" [(ngModel)]="ofertaAux.ubicacion" [disabled]="isVirtual" required>
+                </div>
+                
                 <div class="form-group" style="margin-bottom: 10px;">
                   <label for="cuposOferta">Cupos</label>
                   <input id="cuposOferta" class="form-control" name="cupos" type="number" [(ngModel)]="ofertaAux.cupos" required>
@@ -1418,8 +1419,91 @@
         </div>
       </div>
       <!-- Final diálogo New Oferta -->
+
+            <!-- Inicio diálogo Delete Oferta -->
+      <div class="modal fade" id="deleteOfertaModal" tabindex="-1" aria-labelledby="deleteOfertaLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="deleteOfertaLabel">DELETE</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>Are you sure you want to delete the selected offer?</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" style="background-color: rgb(124, 10, 10); border: none;" data-bs-dismiss="modal" (click)="deleteSelectedOfertas()">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Final diálogo Delete Oferta -->
+
+
+      <!-- Inicio diálogo Update Oferta -->
+      <div class="modal fade" id="updateOfertaModal" tabindex="-1" aria-labelledby="updateOfertaLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="updateOfertaLabel">UPDATE</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form #updateOfertaForm="ngForm">
+              <div class="modal-body">
+                <div class="form-group" style="margin-bottom: 10px;">
+                  <label for="idTallerUpdate">Workshop</label>
+                  <select id="idTallerUpdate" class="form-select" [(ngModel)]="ofertaAux.idTaller" name="idTaller" required>
+                    <option disabled value="">Select a Workshop</option>
+                    <option *ngFor="let taller of talleresList" [value]="taller.key">{{ taller.value }}</option>
+                  </select>
+                </div>
+                <div class="form-group" style="margin-bottom: 10px;">
+                  <label for="fechaInicioUpdate">Start Date</label>
+                  <input id="fechaInicioUpdate" class="form-control" name="fechaInicio" type="date" [(ngModel)]="ofertaAux.fechaInicio" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 10px;">
+                  <label for="fechaFinalUpdate">End Date</label>
+                  <input id="fechaFinalUpdate" class="form-control" name="fechaFinal" type="date" [(ngModel)]="ofertaAux.fechaFinal" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 10px;">
+                  <label for="horaInicioUpdate">Start Time</label>
+                  <input id="horaInicioUpdate" class="form-control" name="horaInicio" type="time" [(ngModel)]="ofertaAux.horaInicio" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 10px;">
+                  <label for="horaFinalUpdate">End Time</label>
+                  <input id="horaFinalUpdate" class="form-control" name="horaFinal" type="time" [(ngModel)]="ofertaAux.horaFinal" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 10px;">
+                  <label for="ubicacionUpdate">Location</label>
+                  <input id="ubicacionUpdate" class="form-control" name="ubicacion" type="text" [(ngModel)]="ofertaAux.ubicacion" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 10px;">
+                  <label for="modalidadUpdate">Modality</label>
+                  <select id="modalidadUpdate" class="form-select" name="modalidad" [(ngModel)]="ofertaAux.modalidad" required>
+                    <option value="Online">Online</option>
+                    <option value="In-person">In-person</option>
+                  </select>
+                </div>
+                <div class="form-group" style="margin-bottom: 10px;">
+                  <label for="cuposUpdate">Cupos</label>
+                  <input id="cuposUpdate" class="form-control" name="cupos" type="number" [(ngModel)]="ofertaAux.cupos" required>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" style="background-color: rgb(124, 10, 10);" data-bs-dismiss="modal" (click)="updateOferta()">Update</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <!-- Final diálogo Update Oferta -->
+
+
+
+
       }
-      
     
   </div>
 </div>
