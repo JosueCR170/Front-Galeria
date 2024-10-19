@@ -17,7 +17,7 @@
                 <li><a style="cursor: pointer;" (click)="showUser(true)">Users</a></li> <!--Cambie acá-->
                 <li><a style="cursor: pointer;" (click)="showArtist(true)">Artist</a></li> <!--Cambie acá-->
                 <li><a style="cursor: pointer;" (click)="showWork(true)">Art Work</a></li> <!--Cambie acá-->
-                <li><a style="cursor: pointer;" (click)="showTaller(true)">Taller</a></li> <!--Cambie acá-->
+                <li><a style="cursor: pointer;" (click)="showTaller(true)">Course</a></li> <!--Cambie acá-->
                 <li><a style="cursor: pointer;" (click)="showOferta(true)">Offer</a></li> <!--Cambie acá-->
                 <li class="logout"><a (click)="logOut()">Log out</a></li>
               </ul>
@@ -928,7 +928,7 @@
     }
     @if(tallerClick){
       <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
-        <p class="work"><span class="workGradient">Taller</span> </p>
+        <p class="work"><span class="workGradient">Courses</span> </p>
       </div>
       
       <div class="card">
@@ -1199,7 +1199,7 @@
 
       @if(offerClick){
         <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
-          <p class="work"><span class="workGradient">Offer</span> </p>
+          <p class="work"><span class="workGradient">Offers</span> </p>
         </div>
         
         <div class="card">
