@@ -64,12 +64,12 @@
           </div>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <li><a class="dropdown-item" [routerLink]="['/loginArtist']" style="cursor: pointer;">Be artist</a></li>
-              <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#updateAcount">Modify account</a></li>
+              <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#updateAcount"  style="cursor: pointer;">Modify account</a></li>
               <li><a class="dropdown-item" [routerLink]="['/shop']" style="cursor: pointer;">Gallery</a></li>
               @if(user.tipoUsuario){
-                <li><a class="dropdown-item" style="cursor: pointer;" (click)="loadAdmin()">Admin</a></li>
+                <li><a class="dropdown-item" (click)="loadAdmin()"  style="cursor: pointer;">Admin</a></li>
                 }
-              <li><a class="dropdown-item text-danger" (click)="logOut()">Log Out</a></li>
+              <li><a class="dropdown-item text-danger" (click)="logOut()"  style="cursor: pointer;">Log Out</a></li>
           </ul>
       </div>
       </div>

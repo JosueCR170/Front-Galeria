@@ -52,7 +52,8 @@ ngOnInit(): void {
 indexCourses(){
   this._talleresService.index().subscribe({
     next: (response: any) =>{
-      this.courses = response['data'];
+      this.courses = response['data']; 
+      console.log(this.courses)
     },
     error: (err) => {
       console.error('Error al cargar los talleres:', err);
@@ -61,6 +62,7 @@ indexCourses(){
  }
 
  getGroupedCourses(courses: any[]): any[][] {
+ 
   const groupedCourses = [];
   const numberOfCoursesToShow = 6; // Mostrar solo los primeros 6 cursos
   const coursesToShow = courses.slice(0, numberOfCoursesToShow); // Limitar los cursos a 6
@@ -157,8 +159,6 @@ loadOferta():void{
         this.user = JSON.parse(this.user);
       }
     }
-  
-    // Verificar si el usuario y 'iss' están disponibles y son válidos
     if (!this.user || isNaN(this.user['iss']) || !this.user['iss']|| !tokene ) {
       const mensaje = `
         <p>Error when making purchase</p>

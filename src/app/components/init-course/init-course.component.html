@@ -122,12 +122,10 @@
       </div>
       <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner" style="height: 100%;">
-          <!-- Recorre los cursos en grupos de 3 -->
-          <div *ngFor="let courseGroup of getGroupedCourses(courses); let i = index" class="carousel-item" [ngClass]="{'active': i === 0}">
+          <div *ngFor="let courseGroup of getGroupedCourses(courses); let i = index" class="carousel-item" [ngClass]="{'active': i === 0}" >
             <div class="row" style="justify-content: center; height: 100%;">
-              <!-- Recorre cada curso en el grupo -->
               <div *ngFor="let course of courseGroup" class="col-6 col-md-3">
-                <div class="card " (click)="getCourse(course)" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                <div class="card " (click)="getCourse(course)" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"  style="cursor: pointer;"> 
                   <div class="d-flex justify-content-center pt-3 pb-3" style="background: #c6c4e57a;" >
                    <span class="material-symbols-outlined" style="font-size: 90px">{{getIconForCategory(course.categoria) }}</span>
                   </div>
@@ -257,7 +255,8 @@
             aria-label="Default select example"
             (change)="onSelect($event)"
           >
-            <option selected>Seleccione una oferta</option>
+            <option selected>select an offer
+            </option>
             <option *ngFor="let oferta of filteredOfertas" [value]="oferta.id">
               Start {{ oferta.fechaInicio }}
             </option>
@@ -275,6 +274,9 @@
 
             <p>
               Mode: <strong>{{ selectedOffer.modalidad }}</strong>
+            </p>
+            <p>
+              Quotas: <strong>{{selectedOffer.cupos}}</strong>
             </p>
             @if(selectedOffer.modalidad == "Presential"){
             <p>
