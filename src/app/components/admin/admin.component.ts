@@ -717,18 +717,15 @@ export class AdminComponent {
       this.ofertaAux.fechaInicio = this.formatDate(new Date(this.ofertaAux.fechaInicio));
       this.ofertaAux.fechaFinal = this.formatDate(new Date(this.ofertaAux.fechaFinal));
 
-    // Validar horas
-    const [horaInicioHours, horaInicioMinutes] = this.ofertaAux.horaInicio.split(':').map(Number);
-    const [horaFinalHours, horaFinalMinutes] = this.ofertaAux.horaFinal.split(':').map(Number);
+    // const [horaInicioHours, horaInicioMinutes] = this.ofertaAux.horaInicio.split(':').map(Number);
+    // const [horaFinalHours, horaFinalMinutes] = this.ofertaAux.horaFinal.split(':').map(Number);
+    // const fechaInicioDate = new Date(this.ofertaAux.fechaInicio + 'T' + this.ofertaAux.horaInicio);
+    // const fechaFinalDate = new Date(this.ofertaAux.fechaFinal + 'T' + this.ofertaAux.horaFinal);
 
-    // Crear objetos Date para comparar
-    const fechaInicioDate = new Date(this.ofertaAux.fechaInicio + 'T' + this.ofertaAux.horaInicio);
-    const fechaFinalDate = new Date(this.ofertaAux.fechaFinal + 'T' + this.ofertaAux.horaFinal);
-
-    if (this.ofertaAux.horaFinal  < this.ofertaAux.horaInicio) {
-        this.msgAlert('The end time must be after to the start time.', '', 'error');
-        return;
-    }
+      if (this.ofertaAux.horaFinal  < this.ofertaAux.horaInicio) {
+          this.msgAlert('The end time must be after to the start time.', '', 'error');
+          return;
+      }
 
       if (this.ofertaAux.fechaFinal < this.ofertaAux.fechaInicio) {
         this.msgAlert('The end date must be after or equal to the start date.', '', 'error');
@@ -765,7 +762,6 @@ export class AdminComponent {
       });
     }
   }
-
 
   /********************************* DELETE *********************************/
 
