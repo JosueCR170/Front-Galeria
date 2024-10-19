@@ -45,10 +45,10 @@
       <p-toast></p-toast>
       <p-toolbar styleClass="gap-2"  [style]="{background: 'linear-gradient(90deg, rgba(7,59,61,1) 0%, rgba(46,63,117,1) 100%)',border:'none', borderRadius:'10px 10px 0 0'}">
       <div>
-      <button pButton 
+      <!-- <button pButton 
       pRipple  label="+ New" class="aas" data-bs-toggle="modal" 
         data-bs-target="#newPedidoModal"  (click)="openNewPedido()">
-      </button>
+      </button> -->
       <button pButton style="background: rgb(236, 144, 32); margin-left: 5px;"
       pRipple  label="Update" class="aas" data-bs-toggle="modal" 
         data-bs-target="#updateModal"(onClick)="editPedido(selectedPedidos[0])"
@@ -72,7 +72,7 @@
       </p-toolbar>
       <p-table #dts [value]="pedidosArtist" [rows]="10" [totalRecords]="totalRecords" [paginator]="true"
         [(selection)]="selectedPedidos" [selectAll]="selectAll" [tableStyle]="{ 'min-width': '75rem' }"
-        [globalFilterFields]="['factura.idUsuario', 'factura.idObra', 'factura.fecha', 'factura.total', 'envio.direccion', 
+        [globalFilterFields]="['factura.idUsuario', 'envio.estado', 'factura.fecha', 'factura.total', 'envio.direccion', 
     'envio.estado', 'envio.fechaEnviado', 'envio.fechaRecibido']">
 
         <ng-template pTemplate="header">
@@ -82,7 +82,7 @@
             </th>
             <th pSortableColumn="factura.idUsuario" style="width:9%">User<p-sortIcon
                 field="factura.idUsuario"></p-sortIcon></th>
-            <th pSortableColumn="factura.idObra" style="width:7%">Artwork<p-sortIcon field="factura.idObra"></p-sortIcon>
+            <th pSortableColumn="envio.estado" style="width:7%">Artwork<p-sortIcon field="envio.estado"></p-sortIcon>
             </th>
             <th pSortableColumn="factura.fecha" style="width:10%">Date<p-sortIcon field="factura.fecha"></p-sortIcon>
             </th>
@@ -114,14 +114,20 @@
               </p-cellEditor>
             </td>
             <td>
+
               <p-cellEditor>
                 <ng-template pTemplate="input">
-                  <input pInputText type="text" [(ngModel)]="pedido.factura.idObra" required />
+                  <div *ngFor="let obra of pedido.obras">
+                    <input pInputText type="text" [(ngModel)]="obra.nombre" required />
+                  </div>
                 </ng-template>
                 <ng-template pTemplate="output">
-                  {{ pedido.factura.idObra }}
+                  <div *ngFor="let obra of pedido.obras">
+                    *{{ obra.nombre }}*
+                  </div>
                 </ng-template>
               </p-cellEditor>
+              
             </td>
             <td>
               <p-cellEditor>
@@ -201,7 +207,7 @@
 
     <!--Inicio dialogo New-->
 
-    <div class="modal fade" id="newPedidoModal" tabindex="-1" aria-labelledby="newObraModalLabel" aria-hidden="true"
+    <!-- <div class="modal fade" id="newPedidoModal" tabindex="-1" aria-labelledby="newObraModalLabel" aria-hidden="true"
       header="Confirm Delete">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -217,7 +223,7 @@
                 <input id="IdUsuario" class="form-control" name="idUsuario" type="text" #name="ngModel"
                   [(ngModel)]="pedido.factura.idUsuario" required>
               </div>
-              <!-- <div class="form-group">
+               <div class="form-group">
                 <label for="IdObra">Id Artwork</label>
                 <input id="IdObra" class="form-control" name="idObra" type="text" #name="ngModel"
                    [(ngModel)]="pedido.factura.idObra" required> 
@@ -226,7 +232,7 @@
                 <label for="Descuento">Discount</label>
                 <input id="Descuento" class="form-control" name="descuento" type="number" #name="ngModel"
                   [(ngModel)]="pedido.factura.descuento" required>
-              </div> -->
+              </div> 
               <div class="form-group">
                 <label for="Direccion">Address</label>
                 <input id="Direccion" class="form-control" name="direccion" type="text" #name="ngModel"
@@ -265,7 +271,7 @@
           </form>
         </div>
       </div>
-    </div>
+    </div> -->
 
 
     <div class="modal fade" id="updateModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="exampleModalLabel" aria-hidden="true">

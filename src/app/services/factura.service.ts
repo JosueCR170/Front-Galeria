@@ -67,4 +67,18 @@ export class FacturaService{
         };
         return this._http.delete(`${this.urlAPI}factura/${id}`, options);
     }
+
+    show(id:number):Observable<any>{
+        let headers;
+        let bearertoken = sessionStorage.getItem('token');
+        if (bearertoken){
+            headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded').set('bearertoken', bearertoken);
+        } else {
+            headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+        }
+        let options = {
+            headers
+        };
+        return this._http.get(`${this.urlAPI}factura/${id}`, options);
+    }
 }

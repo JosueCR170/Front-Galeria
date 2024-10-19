@@ -70,4 +70,12 @@ export class EnvioService{
         return this._http.get(this.urlAPI+'envio/artist', options);
     }
 
+    getByUser(id: string): Observable<any> {
+        let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+        let options = {
+            headers
+        };
+        return this._http.get(`${this.urlAPI}envio/user/${id}`, options);
+    }
+
 }

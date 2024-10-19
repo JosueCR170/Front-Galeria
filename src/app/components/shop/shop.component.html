@@ -35,7 +35,13 @@
               </ul>
             </li>
             <li><a href="/shop" (click)="showHome(true)">Home</a></li>
-            <li><a href="/courses" (click)="navigateToCourses()" target="_blank">Couses</a></li>
+            <li><a href="/courses" (click)="navigateToCourses()" target="_blank">Courses</a></li>
+
+            <li><button class="btnArtist" type="button" data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasOrders" aria-controls="offcanvasOrders"
+              (click)="fillPedidos()">Orders</button></li>
+          <li class="nav-item dropdown">
+
             <li class="logout"><a (click)="logOut()">Log out</a></li>
           </ul>
         </nav>
@@ -251,6 +257,74 @@
         </ul>
       </div>
     </div>
+
+    <!--Offcanvas de envios -->
+    <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasOrders"
+  aria-labelledby="offcanvasOrdersLabel" style="box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.4);">
+  
+  <!-- Header -->
+  <div class="offcanvas-header" style="background-color: #1d1d1d; color: #fff; padding: 20px;">
+    <h5 class="offcanvas-title" id="offcanvasOrdersLabel" style="font-size: 1.5rem;">Order History</h5>
+    <button class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+
+  <!-- Search Bar -->
+  <!-- <div class="busqueda d-flex" style="width: 100%; padding: 15px; background-color: #f8f9fa;">
+    <input class="form-control" style="padding: 12px; border-radius: 30px;" type="search" placeholder="Search orders"
+      aria-label="Search" (input)="searchArtist($event)">
+  </div> -->
+
+  <!-- Order List -->
+  <div style="padding: 15px;">
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item card-item d-flex flex-column align-items-start" *ngFor="let pedido of pedidos">
+        
+        <div style="display: block; justify-content: space-between; width: 100%;">
+          <!-- Artwork List -->
+           
+          <div>
+            <strong>Date: </strong>
+            <span >{{ pedido.factura.fecha }}
+            </span>
+          </div>
+
+          <div>
+            <strong>Artworks: </strong>
+            <span *ngFor="let obra of pedido.obras; let isLast = last">
+              {{ obra.nombre }}<span *ngIf="!isLast">, </span>
+            </span>
+          </div>
+
+          <!-- Artist List -->
+          <div>
+            <strong>Artist: </strong>
+            <span *ngFor="let obra of pedido.obras; let isLast = last">
+              {{ getArtistaById(obra.idArtista)?.nombreArtista }}
+            </span>
+          </div>
+        </div>
+
+        <div>
+          <strong>Total Price: </strong>
+          <span >${{ pedido.factura.total }}
+          </span>
+        </div>
+
+       <div>
+        <span style="font-weight: 500; color: #555;">Address: </span>{{ pedido.envio.direccion }}
+      </div>
+        <div class="mt-2">
+          <span class="badge rounded-pill {{ getBadgeColor(pedido.envio.estado) }}" style="font-size: 15px;">
+            {{ pedido.envio.estado }}
+          </span>
+          
+        </div>
+        
+      </li>
+    </ul>
+  </div>
+</div>
+
 
     <!--Offcanvas de Carrito -->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">

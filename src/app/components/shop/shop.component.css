@@ -611,6 +611,27 @@ border-top-left-radius: 10px;
   right: 0;
 }
 
+.card-item {
+  position: relative;
+  background: #f2f2f2;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  padding: 20px;
+  box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+}
+
+.card-item::after {
+  content: '';
+  position: absolute;
+  bottom: 0; /* Coloca el borde al fondo de la tarjeta */
+  left: 0;
+  right: 0;
+  height: 7px; /* Altura del borde */
+  background-color: #719c2c; /* Color del borde */
+  border-radius: 0 0 10px 10px; /* Esquinas redondeadas */
+}
+
+
 .fade-out {
   opacity: 0;
   transition: opacity 0.5s ease-out;

@@ -157,6 +157,9 @@ export class ArtistaAdministrationComponent {
     this.obraService.getArtworkByArtistId(this.artist['iss']).subscribe({
       next: (response: any) => {
         this.obras = response['data'];
+        this.obras.forEach(o => {if(typeof o.disponibilidad==='string'){o.disponibilidad=o.disponibilidad==='1'||o.disponibilidad===1}
+          
+        });
         console.log("Obras de artista: ",this.obras)
       },
       error: (err: Error) => {
@@ -164,6 +167,7 @@ export class ArtistaAdministrationComponent {
       }
     });
   }
+
 
   showHome(show: boolean) {
     this.delivry = false;
@@ -243,40 +247,6 @@ export class ArtistaAdministrationComponent {
     });
   }
 
-  storePedido(form: any): void {
-    // if (form.valid) {
-    //   let obrita = this.obras.find(o => o.id == this.pedido.factura.idObra);
-    //   if (obrita?.disponibilidad) {
-    //     this.facturaService.create(this.pedido.factura).subscribe({
-    //       next: (response: any) => {
-    //         if (response['Factura'].id) {
-    //           this.pedido.envio.idFactura = response['Factura'].id;
-    //           this.envioService.create(this.pedido.envio).subscribe({
-    //             next: (response2: any) => {
-    //               console.log(response2);
-    //               this.updateDisponibilidadObra(obrita,false);
-    //               this.msgAlert('Order saved successfully','','success');
-    //               //location.reload();
-
-    //             },
-    //             error: (err: any) => {
-    //               console.error(err);
-    //             }
-    //           });
-    //         } else {
-    //           console.error('No se recibió el id de la factura');
-    //         }
-    //       },
-    //       error: (err: any) => {
-    //         console.error(err);
-    //       }
-    //     });
-    //   } else {
-    //     this.msgAlert('Order not save successfully','','error');
-
-    //   }
-    // }
-  }
 
   updatePedido(envio: Envio) {
     //console.log(envio);
@@ -397,7 +367,9 @@ export class ArtistaAdministrationComponent {
               this.obraService.create(this.obra).subscribe({
                 next: (response2: any) => {
                  // console.log(response2); console.log(this.obra)
-                  location.reload();
+
+                  //location.reload();
+
                   this.msgAlert('Saved artwork','','success');
 
                 },
@@ -425,6 +397,9 @@ export class ArtistaAdministrationComponent {
     this.envioService.indexByArtist().subscribe({
       next: (response: any) => {
         this.enviosArtist = response['data'];
+
+        console.log("Data envios",response['data'])
+
         console.log("Envios: ",this.enviosArtist);
         this.fillPedidos();
       },
@@ -454,13 +429,6 @@ export class ArtistaAdministrationComponent {
     this.pedidosArtist = [];
     for (let envio of this.enviosArtist) {
       if(typeof envio.idFactura ==='string'){envio.idFactura=parseInt(envio.idFactura)}
-
-      // this.facturasArtist.forEach(e => {
-      //   console.log("fact: ",e.id)
-      //   console.log("usr: ",e.idUsuario)
-      // });console.log("env: ",envio.id)
-      
-
       let factura = this.facturasArtist.find(f => f.id === envio.idFactura);
 
       console.log("Factura",factura)
@@ -469,7 +437,23 @@ export class ArtistaAdministrationComponent {
         let direccionCompleta = `${envio.direccion}, ${envio.provincia}, ${envio.ciudad}, Postal code: ${envio.codigoPostal}`;
         envio.direccion = direccionCompleta; // Agregar el atributo direcciónCompleta al envío
         let pedido = new Pedido(envio, factura);
-        this.pedidosArtist.push(pedido);
+
+       
+         
+          this.obraService.getArtworkByEnvioId(envio.id.toString()).subscribe({
+            next: (response: any) => {
+              let obrasEnvio=response['data']
+             console.log("obras envio",obrasEnvio);
+             
+             pedido.obras = obrasEnvio.map((obra: any) => obra);
+             this.pedidosArtist.push(pedido);
+            },
+            error: (err: Error) => {
+              console.error('Error al cargar las obras', err);
+              pedido.obras= [];
+              this.pedidosArtist.push(pedido);
+            }
+          });
       }
     }
     console.log("Pedidos: ", this.pedidosArtist);
