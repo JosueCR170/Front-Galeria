@@ -434,11 +434,11 @@ export class AdminComponent {
         next: (response: any) => {
           console.log(response);
           this.selectedObras = [];
-          this.msgAlert('updated artwork', '', 'success')
+          this.msgAlert('Artwork updated successfully', '', 'success')
         },
         error: (err: Error) => {
           console.log(err.message);
-          this.msgAlert('error updating artwork', '', 'error')
+          this.msgAlert('Error updating artwork', '', 'error')
         }
       });
     }
@@ -458,18 +458,15 @@ export class AdminComponent {
       this.msgAlert('Error, empty password', '', 'error')
       return;
     }
-
     this._userService.update(this.userAux).subscribe({
       next: (response: any) => {
-        console.log('Usuario actualizado', response);
-        this.msgAlert('updated user', '', 'success');
-        // this.userAux = new User(1,"",false,"","",null,"");
+        console.log('User updated successfully', response);
+        this.msgAlert('User updated successfully', '', 'success');
         this.selectedUsers = [];
         this.indexUsers();
       },
       error: (err: any) => {
-        console.error('Error al actualizar el usuario', err);
-        this.msgAlert('error updating user', '', 'error')
+        this.msgAlert('Error updating user', '', 'error')
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
@@ -481,24 +478,20 @@ export class AdminComponent {
   }
 
   updateArtista() {
-
     if (this.artistaAux.password == '') {
       this.msgAlert('Error, empty password', '', 'error')
       return;
     }
-
     this._artistaService.update(this.artistaAux).subscribe({
       next: (response: any) => {
-        console.log('Artista actualizado', response);
         this.selectedArtistas = [];
-        this.msgAlert('Artist updated', '', 'success')
+        this.msgAlert('Artist updated successfully', '', 'success')
         this.artistasList = [];
         this.loadArtistaName();
         this.indexArtista()
       },
       error: (err: any) => {
-        console.error('Error al actualizar el artista', err);
-        this.msgAlert('error updating artist', '', 'error')
+        this.msgAlert('Error updating artist', '', 'error')
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
@@ -512,29 +505,35 @@ export class AdminComponent {
   updateTaller(): void {
     this._tallerService.update(this.tallerAux).subscribe({
       next: (response) => {
-        console.log(response);
-        this.msgAlert('Taller actualizado exitosamente', '', 'success');
+        this.msgAlert('Course updated successfully', '', 'success');
         this.indexTalleres();
         this.selectedTalleres = [];
       },
       error: (err: Error) => {
-        console.error('Error al actualizar el taller', err);
-        this.msgAlert('Error al actualizar taller', '', 'error');
+        this.msgAlert('Error updating course', '', 'error');
       }
     });
   }
 
   updateOferta(): void {
+    if (this.ofertaAux.horaFinal  < this.ofertaAux.horaInicio) {
+      this.msgAlert('The end time must be after to the start time.', '', 'error');
+      return;
+    }
+    if (this.ofertaAux.fechaFinal < this.ofertaAux.fechaInicio) {
+      this.msgAlert('The end date must be after or equal to the start date.', '', 'error');
+      return;
+    }
     this._ofertaService.update(this.ofertaAux).subscribe({
       next: (response) => {
         console.log(response);
-        this.msgAlert('Oferta actualizada exitosamente', '', 'success');
+        this.msgAlert('Offer updated successfully', '', 'success');
         this.indexOfertas();
         this.selectedOfertas = [];
       },
       error: (err: Error) => {
-        console.error('Error al actualizar el oferta', err);
-        this.msgAlert('Error al actualizar oferta', '', 'error');
+        this.msgAlert('Error updating offer', '', 'error');
+        this.selectedOfertas = [];
       }
     });
   }
@@ -557,7 +556,7 @@ export class AdminComponent {
               next: (response2: any) => {
                 console.log(response2);
                 this.index()
-                this.msgAlert('saved artwork', '', 'success')
+                this.msgAlert('Artwork saved successfully', '', 'success')
               },
               error: (error: any) => {
                 if (error.status === 406 && error.error && error.error.error) {
@@ -568,9 +567,7 @@ export class AdminComponent {
                       this.errores.push(...errorObj[key]);
                     }
                   }
-                  //console.error(this.errores);
                   this.msgAlert('Error adding artwork', this.errores, 'error');
-
                 } else {
                   console.error('Other type of error:', error);
                   this.msgAlert('Error from the server, contact an administrator', '', 'error');
@@ -578,7 +575,7 @@ export class AdminComponent {
               }
             });
           } else {
-            console.error('No se recibió el nombre del archivo.');
+            console.error('No filename received.');
           }
         },
         error: (error: any) => {
@@ -590,18 +587,17 @@ export class AdminComponent {
                 this.errores.push(...errorObj[key]);
               }
             }
-            //console.error(this.errores);
             this.msgAlert('Error adding artwork', this.errores, 'error');
 
           } else {
             console.error('Other type of error:', error);
             this.msgAlert('Error from the server, contact an administrator', '', 'error');
           }
-
         }
       });
-    } else { this.msgAlert('Error you must choose an image for the artwork', '', 'error'); }
-    // }
+    } else { 
+      this.msgAlert('Error you must choose an image for the artwork', '', 'error'); 
+    }
   }
 
   storeUser(form: any): void {
@@ -609,13 +605,12 @@ export class AdminComponent {
       console.log(this.userAux.tipoUsuario);
       this._userService.create(this.userAux).subscribe({
         next: (response) => {
-
           console.log(response);
           if (response.status == 201) {
             form.reset();
             this.msgAlert('User added successfully', '', 'success');
           } else {
-            console.error('No se pudo ingresar el usuario');
+            console.error('Could not add the user.');
           }
         },
         error: (error: any) => {
@@ -627,14 +622,11 @@ export class AdminComponent {
                 this.errores.push(...errorObj[key]);
               }
             }
-            //console.error(this.errores);
             this.msgAlert('Error adding user', this.errores, 'error');
-
           } else {
             console.error('Other type of error:', error);
             this.msgAlert('Error from the server, contact an administrator', '', 'error');
           }
-
         }
       });
       this.indexUsers();
@@ -643,10 +635,8 @@ export class AdminComponent {
 
   storeArtista(form: any): void {
     if (form.valid) {
-      console.log("Artistia", this.artistaAux)
       this._artistaService.create(this.artistaAux).subscribe({
         next: (response) => {
-
           console.log(response);
           if (response.status == 201) {
             form.reset();
@@ -666,7 +656,6 @@ export class AdminComponent {
                 this.errores.push(...errorObj[key]);
               }
             }
-            //console.error(this.errores);
             this.msgAlert('Error adding artist', this.errores, 'error');
 
           } else {
@@ -686,10 +675,10 @@ export class AdminComponent {
           console.log(response);
           if (response.status === 201) {
             form.reset();
-            this.msgAlert('Taller agregado exitosamente', '', 'success');
+            this.msgAlert('Course added successfully', '', 'success');
             this.indexTalleres();
           } else {
-            console.error('No se pudo ingresar el taller');
+            console.error('Could not add the workshop.');
           }
         },
         error: (error: any) => {
@@ -701,47 +690,37 @@ export class AdminComponent {
                 this.errores.push(...errorObj[key]);
               }
             }
-            this.msgAlert('Error al agregar taller', this.errores, 'error');
+            this.msgAlert('Error adding course', this.errores, 'error');
           } else {
-            console.error('Otro tipo de error:', error);
-            this.msgAlert('Error del servidor, contacta al administrador', '', 'error');
+            console.error('Other error:', error);
+            this.msgAlert('Server error, contact an administrator', '', 'error');
           }
         }
       });
     }
   }
   
-
   storeOferta(form: any): void {
     if (form.valid) {
       this.ofertaAux.fechaInicio = this.formatDate(new Date(this.ofertaAux.fechaInicio));
       this.ofertaAux.fechaFinal = this.formatDate(new Date(this.ofertaAux.fechaFinal));
-
-    // const [horaInicioHours, horaInicioMinutes] = this.ofertaAux.horaInicio.split(':').map(Number);
-    // const [horaFinalHours, horaFinalMinutes] = this.ofertaAux.horaFinal.split(':').map(Number);
-    // const fechaInicioDate = new Date(this.ofertaAux.fechaInicio + 'T' + this.ofertaAux.horaInicio);
-    // const fechaFinalDate = new Date(this.ofertaAux.fechaFinal + 'T' + this.ofertaAux.horaFinal);
-
       if (this.ofertaAux.horaFinal  < this.ofertaAux.horaInicio) {
           this.msgAlert('The end time must be after to the start time.', '', 'error');
           return;
       }
-
       if (this.ofertaAux.fechaFinal < this.ofertaAux.fechaInicio) {
         this.msgAlert('The end date must be after or equal to the start date.', '', 'error');
         return;
       }
-  
-      console.log("Oferta", this.ofertaAux);
       this._ofertaService.create(this.ofertaAux).subscribe({
         next: (response) => {
           console.log(response);
           if (response.status === 201) {
             form.reset();
-            this.msgAlert('Oferta agregada exitosamente', '', 'success');
+            this.msgAlert('Offer added successfully', '', 'success');
             this.indexOfertas();
           } else {
-            console.error('No se pudo ingresar la oferta');
+            console.error('Could not add the offer');
           }
         },
         error: (error: any) => {
@@ -753,10 +732,10 @@ export class AdminComponent {
                 this.errores.push(...errorObj[key]);
               }
             }
-            this.msgAlert('Error al agregar oferta', this.errores, 'error');
+            this.msgAlert('Error adding offer', this.errores, 'error');
           } else {
-            console.error('Otro tipo de error:', error);
-            this.msgAlert('Error del servidor, contacta al administrador', '', 'error');
+            console.error('Other error:', error);
+            this.msgAlert('Server error, contact the administrator', '', 'error');
           }
         }
       });
@@ -764,26 +743,21 @@ export class AdminComponent {
   }
 
   /********************************* DELETE *********************************/
-
-
   deleteImage(filename: string | null) {
-
     if (filename == null) {
-      this.msgAlert('Imagen no eliminada, contiene null', '', 'error');
+      this.msgAlert('Image not deleted, it contains null', '', 'error');
       return;
     }
-
     this._obraService.destroyImage(filename).subscribe({
       next: (response: any) => {
         console.log(response);
-        //this.msgAlert('Imagen eliminada','','success');
       },
       error: (error: any) => {
         console.error(error);
-        // this.msgAlert('Imagen no eliminada','','error');
       }
     });
   }
+
   deleteSelectedObras() {
     let allAvailable = true;
 
@@ -792,13 +766,11 @@ export class AdminComponent {
         allAvailable = false;
       }
     });
-
     if (!allAvailable) {
       this.selectedObras = [];
       this.msgAlert('Error when deleting artwork, check that they are not sold', '', 'error');
       return;
     }
-
     this.selectedObras.forEach(obra => {
       this._obraService.deleted(obra.id).subscribe({
         next: () => {
@@ -808,7 +780,7 @@ export class AdminComponent {
           this.msgAlert('Deleted artwork', '', 'error');
         },
         error: (err: Error) => {
-          console.error('Error al eliminar la obra', err);
+          console.error('Error deleting artwork', err);
           this.msgAlert('Error when deleting artwork', '', 'error');
           this.messageService.add({
             severity: 'error',
@@ -833,7 +805,7 @@ export class AdminComponent {
           this.msgAlert('User Deleted', '', 'error');
         },
         error: (err: Error) => {
-          console.error('Error al eliminar el usuario', err);
+          console.error('Error deleting user', err);
           this.msgAlert('Error deleting user', '', 'error');
           this.messageService.add({
             severity: 'error',
@@ -844,14 +816,11 @@ export class AdminComponent {
         }
       });
     });
-
     this.selectedUsers = [];
     this.displayConfirmationDialog = false;
   }
 
   deleteSelectedArtistas() {
-
-    //verifica si existen artistas con obras vendidas
     this.selectedArtistas.forEach(_artista => {
       this.obras.forEach(element => {
         if (element.idArtista == _artista.id && !element.disponibilidad) {
@@ -862,48 +831,42 @@ export class AdminComponent {
         }
       });
     });
-
-    this.selectedArtistas.forEach(_artista => {
-
-      this._artistaService.deleted(_artista.id).subscribe({
-        next: () => {
-          this.artistas = this.artistas.filter(o => o.id !== _artista.id);
-          this.totalRecords--;
-          this.msgAlert('Artist successfully removed', '', 'success');
-          this.artistasList = [];
-          this.loadArtistaName();
-
-        },
-        error: (err: Error) => {
-          console.error('Error al eliminar el artista', err);
-        }
+      this.selectedArtistas.forEach(_artista => {
+        this._artistaService.deleted(_artista.id).subscribe({
+          next: () => {
+            this.artistas = this.artistas.filter(o => o.id !== _artista.id);
+            this.totalRecords--;
+            this.msgAlert('Artist successfully removed', '', 'success');
+            this.artistasList = [];
+            this.loadArtistaName();
+          },
+          error: (err: Error) => {
+            console.error('Error deleting artist', err);
+          }
+        });
+        this.selectedArtistas = [];
+        this.displayConfirmationDialog = false;
       });
-
-      this.selectedArtistas = [];
+    }
+    hideConfirmationDialog() {
       this.displayConfirmationDialog = false;
-    });
-  }
-  hideConfirmationDialog() {
-    this.displayConfirmationDialog = false;
-  }
+    }
 
-  /** */
   deleteSelectedTalleres(): void {
     this.selectedTalleres.forEach(taller => {
       this._tallerService.deleted(taller.id).subscribe({
         next: () => {
           this.talleres = this.talleres.filter(t => t.id !== taller.id);
           this.totalRecords--;
-          this.msgAlert('Taller eliminado', '', 'success');
+          this.msgAlert('Course deleted', '', 'success');
           this.indexTalleres();
         },
         error: (err: Error) => {
-          console.error('Error al eliminar el taller', err);
-          this.msgAlert('Error al eliminar taller', '', 'error');
+          console.error('Error deleting workshop', err);
+          this.msgAlert('Error deleting workshop', '', 'error');
         }
       });
     });
-  
     this.selectedTalleres = [];
     this.displayConfirmationDialog = false;
   }
@@ -914,26 +877,23 @@ export class AdminComponent {
         next: () => {
           this.ofertas = this.ofertas.filter(o => o.id !== oferta.id);
           this.totalRecords--;
-          this.msgAlert('Oferta eliminada', '', 'success');
+          this.msgAlert('Offer deleted', '', 'success');
           this.indexOfertas();
         },
         error: (err: Error) => {
-          console.error('Error al eliminar la oferta', err);
-          this.msgAlert('Error al eliminar oferta', '', 'error');
+          console.error('Error deleting offer', err);
+          this.msgAlert('Error deleting offer', '', 'error');
         }
       });
     });
-  
     this.selectedOfertas = [];
     this.displayConfirmationDialog = false;
   }
 
   /*****************************  Obtener nombre  *****************************/
-
   loadArtistaName() {
     this._artistaService.index().subscribe({
       next: (response: any) => {
-        //console.log(response)
         let artistas = response['data'];
         artistas.forEach((e: any) => {
           this.artistasList.push({
@@ -956,7 +916,6 @@ export class AdminComponent {
   loadTallerName() {
     this._tallerService.index().subscribe({
       next: (response: any) => {
-        //console.log(response)
         let talleres = response['data'];
         talleres.forEach((e: any) => {
           this.talleresList.push({
@@ -971,24 +930,17 @@ export class AdminComponent {
     });
   }
 
-  getTallerNameById(id: number): string {
-    const taller = this.talleresList.find(p => p.key === id);
-    return taller ? taller.value : 'Desconocido';
-  }
-
   /************************************************************************ */
-
   isVirtual = false;  
   onModalidadChange(modalidad: string): void {
     this.isVirtual = modalidad === 'Online';
     if (this.isVirtual) {
       this.ofertaAux.ubicacion = '';
     }
-    console.log(this.ofertaAux);  // Verificar si se actualizan los datos correctamente
+    console.log(this.ofertaAux);  
   }
   
   // PARA LAS FECHAS 
-
   fechaSeleccionada: string = '';
   ano: number | null = null;
   mes: string | null = null;
@@ -998,45 +950,38 @@ export class AdminComponent {
     const input = event.target as HTMLInputElement;
     const fecha = new Date(input.value);
     this.ano = fecha.getFullYear();
-    this.mes = ('0' + (fecha.getMonth() + 1)).slice(-2); // Mes se cuenta desde 0
+    this.mes = ('0' + (fecha.getMonth() + 1)).slice(-2);
     this.dia = ('0' + fecha.getDate()).slice(-2);
     this.fechaSeleccionada = `${this.ano}-${this.mes}-${this.dia}`;
   }
 
   private formatDate(date: Date): string {
     console.log(date);
-
     const year = date.getFullYear();
-    const month = date.getMonth() + 1; // Agrega un cero al mes si es necesario
-    const day = date.getDate(); // Agrega un cero al día si es necesario
+    const month = date.getMonth() + 1; 
+    const day = date.getDate(); 
     return `${year}-${month}-${day}`;
   }
 
   // PARA LAS HORAS 
-
   onHoraChange(event: Event): void {
     const input = event.target as HTMLInputElement;
-    const horaCompleta = input.value; // Ejemplo: "03:42:00.0000000"
-
-    // Obtener solo la parte de horas y minutos
+    const horaCompleta = input.value; 
     const [horaInput, minutoInput] = horaCompleta.split(':');
-    this.hora = horaInput.padStart(2, '0'); // Asegura que la hora tenga 2 dígitos
-    this.minuto = minutoInput.padStart(2, '0'); // Asegura que el minuto tenga 2 dígitos
-    
-    this.horaSeleccionada = `${this.hora}:${this.minuto}`; // Almacenar en el formato deseado
+    this.hora = horaInput.padStart(2, '0'); 
+    this.minuto = minutoInput.padStart(2, '0'); 
+    this.horaSeleccionada = `${this.hora}:${this.minuto}`; 
 }
   horaSeleccionada: string = '';
   hora: string | null = null;
   minuto: string | null = null;
   
   private formatTime(hour: string, minute: string): string {
-    // Asegúrate de que la hora y los minutos tengan dos dígitos
     const formattedHour = ('0' + hour).slice(-2);
     const formattedMinute = ('0' + minute).slice(-2);
-    return `${formattedHour}:${formattedMinute}`; // Devuelve el formato HH:mm
+    return `${formattedHour}:${formattedMinute}`; 
   }
   
-
   msgAlert = (title: any, text: any, icon: any) => {
     Swal.fire({
       title,
@@ -1044,9 +989,7 @@ export class AdminComponent {
       icon,
     })
   }
-
   public parseInt(value: string){
     return parseInt(value, 10);
   }
-
 }

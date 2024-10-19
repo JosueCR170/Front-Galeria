@@ -13,6 +13,11 @@ import Swal from 'sweetalert2';
 import { User } from '../../models/user';
 
 import { MessageService } from 'primeng/api';
+import { EnvioService } from '../../services/envio.service';
+import { Pedido } from '../../models/Pedido';
+import { Envio } from '../../models/Envio';
+import { Factura } from '../../models/Factura';
+import { FacturaService } from '../../services/factura.service';
 
 
 @Component({
@@ -35,9 +40,11 @@ export class ShopComponent {
   obrasAgrupadasPorArtista: any[] = [];
   constructor(
     private _obraService: ObraService,
+    private _envioService:EnvioService,
     private _router: Router,
     private _artistas: ArtistService,
     private userService: UserService,
+    private _facturaService:FacturaService,
     private messageService: MessageService
   ) {
     this.status = -1;
@@ -45,7 +52,6 @@ export class ShopComponent {
    // this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, null);
     this.artista = new Artista(1, "", "", "", "", "");
   }
-
   flagNoti: boolean = false;
   items: any[] | undefined;
   selectedItem: any;
@@ -64,6 +70,13 @@ export class ShopComponent {
   artistaMenu: boolean = false;
   total: number = 1;
   user: any;
+
+
+
+  pedidos:Pedido[]=[];
+  envios: Envio[] = [];
+  facturas: Factura[] = [];
+
   public acc: any[] = [];
   userAux = new User(1, "", false, "", "", null, "");
 
@@ -71,6 +84,9 @@ export class ShopComponent {
     this.index();
     this.loadLoggedUser();
     this.indexCarrito();
+    this.fillPedidos();
+    
+    
   }
 
   logOut() {
@@ -82,13 +98,15 @@ export class ShopComponent {
     this._obraService.index().subscribe({
       next: (response: any) => {
         this.obras = response['data'].map((obra: any) => {
+          if(typeof obra.idArtista==='string'){obra.idArtista=parseInt(obra.idArtista)}
           obra.disponibilidad = obra.disponibilidad === '1' || obra.disponibilidad === 1;
           return obra;
         });
         this.loadCategorysExists();
         this.indexArtista();
-        console.log("Obras: ",this.obras);
-        console.log("AuxObras: ",this.auxObras);
+        this.indexEnvios();
+        //console.log("Obras: ",this.obras);
+        //console.log("AuxObras: ",this.auxObras);
       },
       error: (err: Error) => {
 
@@ -101,16 +119,86 @@ export class ShopComponent {
     this._artistas.index().subscribe({
       next: (response: any) => {
         this.auxArtistas = this.artistas = response['data'];
-        console.log(this.artistas)
-
+        console.log("artistas",this.artistas)
       },
       error: (err: Error) => {
-
       }
     });
-
-
   }
+
+  indexEnvios() {
+    this._envioService.getByUser(this.user['iss']).subscribe({
+      next: (response: any) => {
+        this.envios = response['data'];
+        //console.log("Envios user: ",this.envios)
+        this.envios.forEach(e => {
+          if(typeof e.idFactura==='string'){e.idFactura=parseInt(e.idFactura)}
+          this.getFacturas(e.idFactura);
+        });
+        //console.log("factura user: ",this.facturas)
+        
+      },
+      error: (err: Error) => {
+      }
+    });
+  }
+
+  getFacturas(id:number) {
+    this._facturaService.show(id).subscribe({
+      next: (response: any) => {
+        this.facturas.push(response['data']);
+        
+        //console.log("factura creada: ",response)
+      },
+      error: (err: Error) => {
+      }
+    });
+  }
+
+  fillPedidos() {
+    this.pedidos = [];
+    this.envios.forEach(e => {
+      let factura = this.facturas.find(f => f.id === e.idFactura);
+  
+      if (factura) {
+        if (typeof factura.idUsuario === 'string') {
+          factura.idUsuario = parseInt(factura.idUsuario);
+        }
+        let pedido = new Pedido(e, factura);
+        this._obraService.getArtworkByEnvioId(e.id.toString()).subscribe({
+          next: (response: any) => {
+            let obrasEnvio = response['data'];
+            console.log("obras envio", obrasEnvio);
+            
+            const artistasAgregados = new Set<number>(); // Cambia a Set<string> si idArtista es un string
+            
+            pedido.obras = obrasEnvio.map((obra: any) => {
+              if (typeof obra.idArtista === 'string') {
+                obra.idArtista = parseInt(obra.idArtista);
+              }
+              obra.disponibilidad = obra.disponibilidad === '1' || obra.disponibilidad === 1;
+  
+              // Verifica si el artista ya ha sido agregado en este pedido
+              if (!artistasAgregados.has(obra.idArtista)) {
+                artistasAgregados.add(obra.idArtista); // Agrega el artista al conjunto
+                return obra; // Retorna la obra si el artista no está en el conjunto
+              }
+              return null; // Retorna null para artistas duplicados
+            }).filter((obra: any) => obra !== null); // Filtra los nulls
+  
+            this.pedidos.push(pedido);
+            console.log("Pedidos: ", this.pedidos);
+          },
+          error: (err: Error) => {
+            console.error('Error al cargar las obras', err);
+            pedido.obras = [];
+            this.pedidos.push(pedido);
+          }
+        });
+      }
+    });
+  }
+  
 
   indexCarrito() {
     const carrito = sessionStorage.getItem('obrasCarrito');
@@ -221,6 +309,7 @@ export class ShopComponent {
     }
     return this.artistas.find(artista => artista.id === id);
   }
+
   loadAuxObras(category: string) {
     this.auxObras = this.obras.filter(obra => obra.categoria === category);
   }
@@ -413,4 +502,23 @@ export class ShopComponent {
   public parseBool(value: string):boolean{
     return value==='1';
   }
+
+
+  getBadgeColor(estado: string): string {
+    switch (estado) {
+      case 'On hold':
+        return 'bg-warning'; // Amarillo
+      case 'Sent':
+        return 'bg-info'; // Azul claro
+      case 'On the way':
+        return 'bg-primary'; // Azul
+      case 'Received':
+        return 'bg-success'; // Verde
+      default:
+        return 'bg-secondary'; // Gris por defecto
+    }
+  }
+  
+    
+  
 }

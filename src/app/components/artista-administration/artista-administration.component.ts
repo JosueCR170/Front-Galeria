@@ -25,6 +25,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { RippleModule } from 'primeng/ripple';
 import { DetalleFacturaService } from '../../services/detalleFactura.service';
 import { Taller } from '../../models/Taller';
+import { Oferta } from '../../models/Oferta';
+import { OfertaService } from '../../services/oferta.service';
 
 @Component({
   selector: 'app-artista-administration',
@@ -50,18 +52,11 @@ export class ArtistaAdministrationComponent {
   /*-------*/
   displayConfirmationDialog: boolean = false;
 
-  /*----------
-  
-  Talleres
-
-  selectedTalleres!: Taller[];
-  talleres: Taller[] = [];
-  talleresPorArtista: Taller[] = [];
-  public taller: Taller;
-
- */
   delivry: boolean = false;
   administration: boolean = true;
+  tallerClick: boolean = false;
+  offerClick: boolean = false;
+
   obras: Obra[] = [];
   facturasArtist: Factura[] = [];
   enviosArtist: Envio[] = [];
@@ -82,6 +77,21 @@ export class ArtistaAdministrationComponent {
   selectedFile: File | null = null;
   urlAPI: string;
 
+  /** Valriables y elementos de Talleres  */
+  taller : any;
+  tallerAux = new Taller (1,1, "", "", 1, 1,"");
+  talleres: Taller[] = [];
+  selectedTalleres!: Taller[];
+  selectedTaller!: Taller[];
+  public talleresList: { key: number, value: string }[] = [];
+  public artistasList: { key: number, value: string }[] = [];
+
+  /** Valriables y elementos de Ofertas  */
+  oferta : any;
+  ofertas: Oferta[] = [];
+  selectedOfertas: Oferta[] = [];
+  ofertaAux: Oferta = new Oferta(0, 0, "", "", "", "", "", "", 0);
+
   artStyles: string[] = [
     'Cubism', 'Impressionism', 'Expressionism', 'Realism', 'Surrealism', 'Abstract', 'Renaissance',
     'Baroque', 'Rococo', 'Romanticism', 'Neoclassicism', 'Modernism', 'Pop Art', 'Naïve Art'
@@ -93,13 +103,16 @@ export class ArtistaAdministrationComponent {
     'Digital art', 'Collage', 'Pyrography', 'Bronze sculpture'
   ]
 
+  categorias: string[] = ['3D', 'Photograph',  'Fashion', 'Art', 'UI-UX']
+
   constructor(
     private obraService: ObraService,
     private messageService: MessageService,
     private facturaService: FacturaService,
     private detalleFacturaService:DetalleFacturaService,
     private envioService: EnvioService,
-    //private tallerService: TallerService,
+    private tallerService: TallerService,
+    private ofertaService : OfertaService,
     private _router: Router,
   ) {
     this.status = -1;
@@ -157,6 +170,9 @@ export class ArtistaAdministrationComponent {
     this.obraService.getArtworkByArtistId(this.artist['iss']).subscribe({
       next: (response: any) => {
         this.obras = response['data'];
+        this.obras.forEach(o => {if(typeof o.disponibilidad==='string'){o.disponibilidad=o.disponibilidad==='1'||o.disponibilidad===1}
+          
+        });
         console.log("Obras de artista: ",this.obras)
       },
       error: (err: Error) => {
@@ -165,17 +181,36 @@ export class ArtistaAdministrationComponent {
     });
   }
 
+
   showHome(show: boolean) {
     this.delivry = false;
     this.administration = false;
+    this.tallerClick = false; 
+    this.offerClick = false;
   }
   showDelivery(show: boolean) {
     this.delivry = show;
     this.administration = false;
+    this.tallerClick = false; 
+    this.offerClick = false;
   }
   adminObras(show: boolean) {
+    this.tallerClick = false; 
+    this.offerClick = false;
     this.delivry = false;
     this.administration = show;
+  }
+  showTaller(all: boolean) {
+    this.delivry = false;
+    this.administration = false;
+    this.tallerClick = true; 
+    this.offerClick = false;
+  }
+  showOferta(all: boolean) {
+    this.delivry = false;
+    this.administration = false;
+    this.tallerClick = false; 
+    this.offerClick = true;
   }
 
   /************************* */
@@ -243,40 +278,6 @@ export class ArtistaAdministrationComponent {
     });
   }
 
-  storePedido(form: any): void {
-    // if (form.valid) {
-    //   let obrita = this.obras.find(o => o.id == this.pedido.factura.idObra);
-    //   if (obrita?.disponibilidad) {
-    //     this.facturaService.create(this.pedido.factura).subscribe({
-    //       next: (response: any) => {
-    //         if (response['Factura'].id) {
-    //           this.pedido.envio.idFactura = response['Factura'].id;
-    //           this.envioService.create(this.pedido.envio).subscribe({
-    //             next: (response2: any) => {
-    //               console.log(response2);
-    //               this.updateDisponibilidadObra(obrita,false);
-    //               this.msgAlert('Order saved successfully','','success');
-    //               //location.reload();
-
-    //             },
-    //             error: (err: any) => {
-    //               console.error(err);
-    //             }
-    //           });
-    //         } else {
-    //           console.error('No se recibió el id de la factura');
-    //         }
-    //       },
-    //       error: (err: any) => {
-    //         console.error(err);
-    //       }
-    //     });
-    //   } else {
-    //     this.msgAlert('Order not save successfully','','error');
-
-    //   }
-    // }
-  }
 
   updatePedido(envio: Envio) {
     //console.log(envio);
@@ -397,7 +398,9 @@ export class ArtistaAdministrationComponent {
               this.obraService.create(this.obra).subscribe({
                 next: (response2: any) => {
                  // console.log(response2); console.log(this.obra)
-                  location.reload();
+
+                  //location.reload();
+
                   this.msgAlert('Saved artwork','','success');
 
                 },
@@ -425,6 +428,9 @@ export class ArtistaAdministrationComponent {
     this.envioService.indexByArtist().subscribe({
       next: (response: any) => {
         this.enviosArtist = response['data'];
+
+        console.log("Data envios",response['data'])
+
         console.log("Envios: ",this.enviosArtist);
         this.fillPedidos();
       },
@@ -454,13 +460,6 @@ export class ArtistaAdministrationComponent {
     this.pedidosArtist = [];
     for (let envio of this.enviosArtist) {
       if(typeof envio.idFactura ==='string'){envio.idFactura=parseInt(envio.idFactura)}
-
-      // this.facturasArtist.forEach(e => {
-      //   console.log("fact: ",e.id)
-      //   console.log("usr: ",e.idUsuario)
-      // });console.log("env: ",envio.id)
-      
-
       let factura = this.facturasArtist.find(f => f.id === envio.idFactura);
 
       console.log("Factura",factura)
@@ -469,7 +468,23 @@ export class ArtistaAdministrationComponent {
         let direccionCompleta = `${envio.direccion}, ${envio.provincia}, ${envio.ciudad}, Postal code: ${envio.codigoPostal}`;
         envio.direccion = direccionCompleta; // Agregar el atributo direcciónCompleta al envío
         let pedido = new Pedido(envio, factura);
-        this.pedidosArtist.push(pedido);
+
+       
+         
+          this.obraService.getArtworkByEnvioId(envio.id.toString()).subscribe({
+            next: (response: any) => {
+              let obrasEnvio=response['data']
+             console.log("obras envio",obrasEnvio);
+             
+             pedido.obras = obrasEnvio.map((obra: any) => obra);
+             this.pedidosArtist.push(pedido);
+            },
+            error: (err: Error) => {
+              console.error('Error al cargar las obras', err);
+              pedido.obras= [];
+              this.pedidosArtist.push(pedido);
+            }
+          });
       }
     }
     console.log("Pedidos: ", this.pedidosArtist);
@@ -530,4 +545,230 @@ export class ArtistaAdministrationComponent {
         }
     })
   }
+
+
+
+
+  /****************** PARTE DE LOS TALLERES DE ARTISTAS  *************************/
+
+  loadTallerName() {
+    this.tallerService.index().subscribe({
+      next: (response: any) => {
+        let talleres = response['data'];
+        talleres.forEach((e: any) => {
+          this.talleresList.push({
+            key: e.id,
+            value: e.nombre
+          });
+        });
+      },
+      error: (err: Error) => {
+        console.error('Error al buscar el taller', err);
+      }
+    });
+  }
+
+  openNewTaller() {
+    this.tallerAux = new Taller(1, 1,"", "", 1, 1, "")
+    this.submitted = false;
+    this.productDialog = true;
+  }
+  openNewOferta() {
+    this.ofertaAux = new Oferta(1,1,"","","","","","",1)
+    this.submitted = false;
+    this.productDialog = true;
+  }
+
+  editTaller(taller: Taller) {
+    this.tallerAux = { ...taller };
+    this.productDialog = true;
+  }
+
+  editOferta(oferta: Oferta) {
+    this.ofertaAux = { ...oferta };
+    this.productDialog = true;
+  }
+
+  indexTalleres() {
+    this.tallerService.index().subscribe({
+      next: (response: any) => {
+        console.log('Respuesta del servicio:', response); 
+        this.talleres = response['data']; 
+      },
+      error: (err: Error) => {
+        console.error('Error al cargar los talleres', err);
+      }
+    });
+  }    
+
+  indexOfertas() {
+    this.ofertaService.index().subscribe({
+      next: (response: any) => {
+        console.log('Respuesta del servicio:', response); 
+        this.ofertas = response['data']; 
+        this.loadTallerName();
+      },
+      error: (err: Error) => {
+        console.error('Error al cargar los ofertas', err);
+      }
+    });
+  }    
+
+  updateTaller(): void {
+    this.tallerService.update(this.tallerAux).subscribe({
+      next: (response) => {
+        this.msgAlert('Course updated successfully', '', 'success');
+        this.indexTalleres();
+        this.selectedTalleres = [];
+      },
+      error: (err: Error) => {
+        this.msgAlert('Error updating course', '', 'error');
+      }
+    });
+  }
+
+  updateOferta(): void {
+    if (this.ofertaAux.horaFinal  < this.ofertaAux.horaInicio) {
+      this.msgAlert('The end time must be after to the start time.', '', 'error');
+      return;
+    }
+    if (this.ofertaAux.fechaFinal < this.ofertaAux.fechaInicio) {
+      this.msgAlert('The end date must be after or equal to the start date.', '', 'error');
+      return;
+    }
+    this.ofertaService.update(this.ofertaAux).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.msgAlert('Offer updated successfully', '', 'success');
+        this.indexOfertas();
+        this.selectedOfertas = [];
+      },
+      error: (err: Error) => {
+        this.msgAlert('Error updating offer', '', 'error');
+        this.selectedOfertas = [];
+      }
+    });
+  }
+
+  storeTaller(form: any): void {
+    if (form.valid) {
+      this.tallerService.create(this.tallerAux).subscribe({
+        next: (response) => {
+          console.log(response);
+          if (response.status === 201) {
+            form.reset();
+            this.msgAlert('Course added successfully', '', 'success');
+            this.indexTalleres();
+          } else {
+            console.error('Could not add the workshop.');
+          }
+        },
+        error: (error: any) => {
+          if (error.status === 406 && error.error && error.error.errors) {
+            this.errors = [];
+            const errorObj = error.error.errors;
+            for (const key in errorObj) {
+              if (errorObj.hasOwnProperty(key)) {
+                this.errors.push(...errorObj[key]);
+              }
+            }
+            this.msgAlert('Error adding course', this.errors, 'error');
+          } else {
+            console.error('Other error:', error);
+            this.msgAlert('Server error, contact an administrator', '', 'error');
+          }
+        }
+      });
+    }
+  }
+  
+  storeOferta(form: any): void {
+    if (form.valid) {
+      //this.ofertaAux.fechaInicio = this.formatDate(new Date(this.ofertaAux.fechaInicio));
+      //this.ofertaAux.fechaFinal = this.formatDate(new Date(this.ofertaAux.fechaFinal));
+      if (this.ofertaAux.horaFinal  < this.ofertaAux.horaInicio) {
+          this.msgAlert('The end time must be after to the start time.', '', 'error');
+          return;
+      }
+      if (this.ofertaAux.fechaFinal < this.ofertaAux.fechaInicio) {
+        this.msgAlert('The end date must be after or equal to the start date.', '', 'error');
+        return;
+      }
+      this.ofertaService.create(this.ofertaAux).subscribe({
+        next: (response) => {
+          console.log(response);
+          if (response.status === 201) {
+            form.reset();
+            this.msgAlert('Offer added successfully', '', 'success');
+            this.indexOfertas();
+          } else {
+            console.error('Could not add the offer');
+          }
+        },
+        error: (error: any) => {
+          if (error.status === 406 && error.error && error.error.errors) {
+            this.errors = [];
+            const errorObj = error.error.errors;
+            for (const key in errorObj) {
+              if (errorObj.hasOwnProperty(key)) {
+                this.errors.push(...errorObj[key]);
+              }
+            }
+            this.msgAlert('Error adding offer', this.errors, 'error');
+          } else {
+            console.error('Other error:', error);
+            this.msgAlert('Server error, contact the administrator', '', 'error');
+          }
+        }
+      });
+    }
+  }
+
+  deleteSelectedTalleres(): void {
+    this.selectedTalleres.forEach(taller => {
+      this.tallerService.deleted(taller.id).subscribe({
+        next: () => {
+          this.talleres = this.talleres.filter(t => t.id !== taller.id);
+          this.totalRecords--;
+          this.msgAlert('Course deleted', '', 'success');
+          this.indexTalleres();
+        },
+        error: (err: Error) => {
+          console.error('Error deleting workshop', err);
+          this.msgAlert('Error deleting workshop', '', 'error');
+        }
+      });
+    });
+    this.selectedTalleres = [];
+    this.displayConfirmationDialog = false;
+  }
+  
+  deleteSelectedOfertas(): void {
+    this.selectedOfertas.forEach(oferta => {
+      this.ofertaService.deleted(oferta.id).subscribe({
+        next: () => {
+          this.ofertas = this.ofertas.filter(o => o.id !== oferta.id);
+          this.totalRecords--;
+          this.msgAlert('Offer deleted', '', 'success');
+          this.indexOfertas();
+        },
+        error: (err: Error) => {
+          console.error('Error deleting offer', err);
+          this.msgAlert('Error deleting offer', '', 'error');
+        }
+      });
+    });
+    this.selectedOfertas = [];
+    this.displayConfirmationDialog = false;
+  }
+
+  isVirtual = false;  
+  onModalidadChange(modalidad: string): void {
+    this.isVirtual = modalidad === 'Online';
+    if (this.isVirtual) {
+      this.ofertaAux.ubicacion = '';
+    }
+    console.log(this.ofertaAux);  
+  }
+
 }

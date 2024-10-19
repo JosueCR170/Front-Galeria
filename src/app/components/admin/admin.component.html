@@ -17,7 +17,7 @@
                 <li><a style="cursor: pointer;" (click)="showUser(true)">Users</a></li> <!--Cambie acá-->
                 <li><a style="cursor: pointer;" (click)="showArtist(true)">Artist</a></li> <!--Cambie acá-->
                 <li><a style="cursor: pointer;" (click)="showWork(true)">Art Work</a></li> <!--Cambie acá-->
-                <li><a style="cursor: pointer;" (click)="showTaller(true)">Taller</a></li> <!--Cambie acá-->
+                <li><a style="cursor: pointer;" (click)="showTaller(true)">Course</a></li> <!--Cambie acá-->
                 <li><a style="cursor: pointer;" (click)="showOferta(true)">Offer</a></li> <!--Cambie acá-->
                 <li class="logout"><a (click)="logOut()">Log out</a></li>
               </ul>
@@ -928,7 +928,7 @@
     }
     @if(tallerClick){
       <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
-        <p class="work"><span class="workGradient">Taller</span> </p>
+        <p class="work"><span class="workGradient">Courses</span> </p>
       </div>
       
       <div class="card">
@@ -956,7 +956,7 @@
           
           <!--el buscar-->
           <div class="align-items-center justify-content-between" style="display: flex;">
-            <h5 style="margin-right: 40px; color: rgb(255, 255, 255);">Manage Talleres</h5>
+            <h5 style="margin-right: 40px; color: rgb(255, 255, 255);">Manage Courses</h5>
             <span style="margin-right: 10px;">
               <input class="search__input" type="text" #input (input)="dt.filterGlobal(input.value, 'contains')"
                 placeholder="Search..." />
@@ -1133,7 +1133,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                <p>Are you sure you want to delete the selected workshop?</p>
+                <p>Are you sure you want to delete the selected course?</p>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -1199,7 +1199,7 @@
 
       @if(offerClick){
         <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
-          <p class="work"><span class="workGradient">Offer</span> </p>
+          <p class="work"><span class="workGradient">Offers</span> </p>
         </div>
         
         <div class="card">
@@ -1250,7 +1250,7 @@
                   <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                 </th>
                 <th pSortableColumn="id" style="width:15%">ID <p-sortIcon field="id"></p-sortIcon></th>
-                <th pSortableColumn="idTaller" style="width:15%">Workshop <p-sortIcon field="idTaller"></p-sortIcon></th>
+                <th pSortableColumn="idTaller" style="width:15%"> Course <p-sortIcon field="idTaller"></p-sortIcon></th>
                 <th pSortableColumn="fechaInicio" style="width:20%">Start Date <p-sortIcon field="fechaInicio"></p-sortIcon></th>
                 <th pSortableColumn="fechaFinal" style="width:20%">End Date <p-sortIcon field="fechaFinal"></p-sortIcon></th>
                 <th pSortableColumn="horaInicio" style="width:15%">Start Time <p-sortIcon field="horaInicio"></p-sortIcon></th>
@@ -1373,7 +1373,7 @@
                 <div class="form-group" style="margin-bottom: 10px;">
                   <label for="idTaller">Workshop</label>
                   <select id="idTaller" required class="form-select input" [(ngModel)]="ofertaAux.idTaller" name="idTaller">
-                    <option disabled selected value="">Select a Workshop</option>
+                    <option disabled selected value="">Select a Course</option>
                     @for (item of talleresList; track $index) {<option [value]="item.key">{{ item.value }}</option>}
                   </select>
                 </div>
@@ -1406,7 +1406,7 @@
                 </div>
                 <div class="form-group" style="margin-bottom: 10px;">
                   <label for="cuposOferta">Cupos</label>
-                  <input id="cuposOferta" class="form-control" name="cupos" type="number" [(ngModel)]="ofertaAux.cupos" required>
+                  <input id="cuposOferta" class="form-control" name="cupos" type="number"  min="1" max="100" [(ngModel)]="ofertaAux.cupos" required>
                 </div>
               </div>
               <div class="modal-footer">
@@ -1453,7 +1453,7 @@
                 <div class="form-group" style="margin-bottom: 10px;">
                   <label for="idTallerUpdate">Workshop</label>
                   <select id="idTallerUpdate" class="form-select" [(ngModel)]="ofertaAux.idTaller" name="idTaller" required>
-                    <option disabled value="">Select a Workshop</option>
+                    <option disabled value="">Select a Course</option>
                     <option *ngFor="let taller of talleresList" [value]="taller.key">{{ taller.value }}</option>
                   </select>
                 </div>
@@ -1474,16 +1474,17 @@
                   <input id="horaFinalUpdate" class="form-control" name="horaFinal" type="time" [(ngModel)]="ofertaAux.horaFinal" required>
                 </div>
                 <div class="form-group" style="margin-bottom: 10px;">
-                  <label for="ubicacionUpdate">Location</label>
-                  <input id="ubicacionUpdate" class="form-control" name="ubicacion" type="text" [(ngModel)]="ofertaAux.ubicacion" required>
-                </div>
-                <div class="form-group" style="margin-bottom: 10px;">
                   <label for="modalidadUpdate">Modality</label>
-                  <select id="modalidadUpdate" class="form-select" name="modalidad" [(ngModel)]="ofertaAux.modalidad" required>
+                  <select id="modalidadUpdate" class="form-select" name="modalidad" (ngModelChange)="onModalidadChange($event)" [(ngModel)]="ofertaAux.modalidad" required>
                     <option value="Online">Online</option>
                     <option value="In-person">In-person</option>
                   </select>
                 </div>
+                <div class="form-group" style="margin-bottom: 10px;">
+                  <label for="ubicacionUpdate">Location</label>
+                  <input id="ubicacionUpdate" class="form-control" name="ubicacion" type="text" [disabled]="isVirtual" [(ngModel)]="ofertaAux.ubicacion" required>
+                </div>
+                
                 <div class="form-group" style="margin-bottom: 10px;">
                   <label for="cuposUpdate">Places</label>
                   <input id="cuposUpdate" class="form-control" name="cupos" type="number" min="1" max="100" [(ngModel)]="ofertaAux.cupos" required>
