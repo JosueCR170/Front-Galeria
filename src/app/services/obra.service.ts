@@ -33,6 +33,14 @@ export class ObraService{
         };
         return this._http.get(`${this.urlAPI}obra/${id}`, options);
     }
+
+    getArtworkByArtistId(id: string): Observable<any> {
+        let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+        let options = {
+            headers
+        };
+        return this._http.get(`${this.urlAPI}obra/artista/${id}`, options);
+    }
     
     deleted(id:number):Observable<any>{
         let headers;

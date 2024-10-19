@@ -114,7 +114,9 @@ export class ArtistaAdministrationComponent {
   ngOnInit(): void {
     this.loadLoggedArtist();
     this.index();
+    
     this.getFacturasByArtist();
+
     this.indexEnvioByArtist();
 
   }
@@ -152,21 +154,15 @@ export class ArtistaAdministrationComponent {
   }
 
   index() {
-    this.obraService.index().subscribe({
+    this.obraService.getArtworkByArtistId(this.artist['iss']).subscribe({
       next: (response: any) => {
         this.obras = response['data'];
-        this.filterObrasByArtista(this.artist.iss);
-        //console.log(this.obrasPorArtista);
-        this.obras = this.obrasPorArtista;
+        console.log("Obras de artista: ",this.obras)
       },
       error: (err: Error) => {
         console.error('Error al cargar las obras', err);
       }
     });
-  }
-
-  filterObrasByArtista(idArtista: number) {
-    this.obrasPorArtista = this.obras.filter(obra => obra.idArtista === idArtista);
   }
 
   showHome(show: boolean) {
@@ -429,7 +425,7 @@ export class ArtistaAdministrationComponent {
     this.envioService.indexByArtist().subscribe({
       next: (response: any) => {
         this.enviosArtist = response['data'];
-        //console.log(this.enviosArtist);
+        console.log("Envios: ",this.enviosArtist);
         this.fillPedidos();
       },
       error: (err: Error) => {
@@ -440,11 +436,13 @@ export class ArtistaAdministrationComponent {
 
 
   getFacturasByArtist() {
+    console.log("idArtista: ", this.artist['iss'])
+
     this.facturaService.indexByArtistId(this.artist['iss']).subscribe({
       next: (response: any) => {
         this.facturasArtist = response['data'];
-       //console.log(this.facturasArtist);
-        // this.fillPedidos();
+       console.log("data: ",this.facturasArtist);
+        this.fillPedidos();
       },
       error: (err: Error) => {
         console.error('Error al cargar las facturas', err);
@@ -455,15 +453,26 @@ export class ArtistaAdministrationComponent {
   fillPedidos() {
     this.pedidosArtist = [];
     for (let envio of this.enviosArtist) {
+      if(typeof envio.idFactura ==='string'){envio.idFactura=parseInt(envio.idFactura)}
+
+      // this.facturasArtist.forEach(e => {
+      //   console.log("fact: ",e.id)
+      //   console.log("usr: ",e.idUsuario)
+      // });console.log("env: ",envio.id)
+      
+
       let factura = this.facturasArtist.find(f => f.id === envio.idFactura);
+
+      console.log("Factura",factura)
       if (factura) {
+        if(typeof factura.idUsuario ==='string'){factura.idUsuario=parseInt(factura.idUsuario)}
         let direccionCompleta = `${envio.direccion}, ${envio.provincia}, ${envio.ciudad}, Postal code: ${envio.codigoPostal}`;
         envio.direccion = direccionCompleta; // Agregar el atributo direcciónCompleta al envío
         let pedido = new Pedido(envio, factura);
         this.pedidosArtist.push(pedido);
       }
     }
-    //console.log("Pedidos: ", this.pedidosArtist);
+    console.log("Pedidos: ", this.pedidosArtist);
   }
 
   dateToString(date: Date): string {
