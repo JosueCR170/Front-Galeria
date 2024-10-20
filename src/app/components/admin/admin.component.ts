@@ -701,17 +701,23 @@ export class AdminComponent {
   }
   
   storeOferta(form: any): void {
+    if (this.ofertaAux.cupos <= 0) {
+      this.msgAlert('The number of seats must be greater than 0.', '', 'error');
+      return;
+    }
     if (form.valid) {
       this.ofertaAux.fechaInicio = this.formatDate(new Date(this.ofertaAux.fechaInicio));
       this.ofertaAux.fechaFinal = this.formatDate(new Date(this.ofertaAux.fechaFinal));
-      if (this.ofertaAux.horaFinal  < this.ofertaAux.horaInicio) {
-          this.msgAlert('The end time must be after to the start time.', '', 'error');
-          return;
-      }
-      if (this.ofertaAux.fechaFinal < this.ofertaAux.fechaInicio) {
-        this.msgAlert('The end date must be after or equal to the start date.', '', 'error');
+      
+      if (this.ofertaAux.horaFinal < this.ofertaAux.horaInicio) {
+        this.msgAlert('The end time must be after the start time.', '', 'error');
         return;
       }
+      if (this.ofertaAux.fechaFinal < this.ofertaAux.fechaInicio) {
+        this.msgAlert('The end date must be equal to or after the start date.', '', 'error');
+        return;
+      }
+      
       this._ofertaService.create(this.ofertaAux).subscribe({
         next: (response) => {
           console.log(response);
@@ -741,6 +747,8 @@ export class AdminComponent {
       });
     }
   }
+  
+  
 
   /********************************* DELETE *********************************/
   deleteImage(filename: string | null) {
@@ -853,28 +861,35 @@ export class AdminComponent {
     }
 
     deleteSelectedTalleres(): void {
+      for (const taller of this.selectedTalleres) {
+        const hasOffers = this.ofertas.some(oferta => oferta.idTaller === taller.id);
+        if (hasOffers) {
+          this.msgAlert('Error, the course cannot be deleted because it has linked offers', '', 'error');
+          this.selectedTalleres = [];
+          this.displayConfirmationDialog = false;
+          return;
+        }
+      }
       this.selectedTalleres.forEach(taller => {
-          this._tallerService.deleted(taller.id).subscribe({
-              next: () => {
-                  // Eliminar el taller de la lista en caso de éxito
-                  this.talleres = this.talleres.filter(t => t.id !== taller.id);
-                  this.totalRecords--;
-                  this.msgAlert('Course deleted', '', 'success');
-                  this.indexTalleres();
-              },
-              error: (err: Error) => {
-                  // Verificamos si el error es debido a ofertas asociadas
-                  if (err.message === 'This workshop cannot be deleted because it has associated offers.') {
-                      this.msgAlert('Cannot delete this course because it has associated offers', '', 'error');
-                  } else {
-                      this.msgAlert('Error deleting workshop', '', 'error');
-                  }
-              }
-          });
+        this._tallerService.deleted(taller.id).subscribe({
+          next: () => {
+            this.talleres = this.talleres.filter(t => t.id !== taller.id);
+            this.totalRecords--;
+            this.msgAlert('Course deleted successfully', '', 'success');
+            this.indexTalleres();
+          },
+          error: (err: Error) => {
+            console.error('Error deleting course', err);
+            this.msgAlert('Error deleting course', '', 'error');
+          }
+        });
       });
+    
       this.selectedTalleres = [];
       this.displayConfirmationDialog = false;
-  }
+    }
+    
+  
   
   
   deleteSelectedOfertas(): void {

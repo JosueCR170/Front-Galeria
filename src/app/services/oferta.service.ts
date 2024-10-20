@@ -83,4 +83,19 @@ export class OfertaService{
         return this._http.put(`${this.urlAPI}oferta/${id}`, params, options);
     }
 
+
+    indexFiltrado(): Observable<any> {
+        let headers;
+        let bearertoken = sessionStorage.getItem('token');
+        if (bearertoken) {
+            headers = new HttpHeaders().set('Content-Type', 'application/json').set('bearertoken', bearertoken);
+        } else {
+            headers = new HttpHeaders().set('Content-Type', 'application/json');
+        }
+    
+        return this._http.get(`${this.urlAPI}ofertas/artista`, { headers });
+    }
+    
+ 
+
 }

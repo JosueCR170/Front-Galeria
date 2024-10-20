@@ -756,7 +756,6 @@
                 <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
               </th>
               <th pSortableColumn="id" style="width:15%">ID <p-sortIcon field="id"></p-sortIcon></th>
-              <th pSortableColumn="idArtista" style="width:15%">idArtist <p-sortIcon field="idArtista"></p-sortIcon></th>
               <th pSortableColumn="nombre" style="width:20%">Name <p-sortIcon field="nombre"></p-sortIcon></th>
               <th pSortableColumn="descripcion" style="width:20%">Description <p-sortIcon field="descripcion"></p-sortIcon></th>
               <th pSortableColumn="duracion" style="width:15%">Duration <p-sortIcon field="duracion"></p-sortIcon></th>
@@ -777,16 +776,6 @@
                   </ng-template>
                   <ng-template pTemplate="output">
                     {{ taller.id }}
-                  </ng-template>
-                </p-cellEditor>
-              </td>
-              <td>
-                <p-cellEditor>
-                  <ng-template pTemplate="input">
-                    <input pInputText type="text" [(ngModel)]="taller.idArtista" />
-                  </ng-template>
-                  <ng-template pTemplate="output">
-                    {{ taller.idArtista }}
                   </ng-template>
                 </p-cellEditor>
               </td>
@@ -850,7 +839,7 @@
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="newTallerModalLabel">New WorckShop</h5>
+                <h5 class="modal-title" id="newTallerModalLabel">New Course</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <form #newTallerForm="ngForm" (ngSubmit)="storeTaller(newTallerForm)">
@@ -858,15 +847,6 @@
                   <div class="form-group" style="margin-bottom: 10px;">
                     <label for="nombreTaller">Name</label>
                     <input id="nombreTaller" class="form-control" name="nombre" type="text" [(ngModel)]="tallerAux.nombre" required>
-                  </div>
-                  <div class="form-group" style="margin-bottom: 10px;" >
-                    <label  for="idArtist">idArtist</label>
-                    <select id="idArtist" required class="form-select input" [(ngModel)]="tallerAux.idArtista" name="idArtist">
-                      <option disabled selected value="">Selecciona un artista</option>
-                        @for (item of artistasList; track $index) {
-                            <option [value]="item.key">{{ item.key }} - {{ item.value }}</option>
-                        }
-                    </select>
                   </div>
                   <div class="form-group" style="margin-bottom: 10px;">
                     <label for="descripcionTaller">Description</label>
