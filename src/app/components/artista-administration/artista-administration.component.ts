@@ -127,7 +127,9 @@ export class ArtistaAdministrationComponent {
   ngOnInit(): void {
     this.loadLoggedArtist();
     this.index();
-    
+    this.indexTalleres();
+    this.indexOfertas();
+    this.loadTallerName(); 
     this.getFacturasByArtist();
 
     this.indexEnvioByArtist();
@@ -546,27 +548,32 @@ export class ArtistaAdministrationComponent {
     })
   }
 
-
-
-
   /****************** PARTE DE LOS TALLERES DE ARTISTAS  *************************/
 
   loadTallerName() {
-    this.tallerService.index().subscribe({
-      next: (response: any) => {
-        let talleres = response['data'];
-        talleres.forEach((e: any) => {
-          this.talleresList.push({
-            key: e.id,
-            value: e.nombre
-          });
+    console.log('Artist ID from session:', sessionStorage.getItem('artistId'));
+    const artistId = this.artist['iss']
+    if (artistId) {
+        this.tallerService.getTalleresByArtist(Number(artistId)).subscribe({
+            next: (response: any) => {
+                let talleres = response['data'];
+                this.talleresList = []; 
+                talleres.forEach((e: any) => {
+                    this.talleresList.push({
+                        key: e.id,
+                        value: e.nombre
+                    });
+                });
+            },
+            error: (err: Error) => {
+                console.error('Error al buscar el taller', err);
+            }
         });
-      },
-      error: (err: Error) => {
-        console.error('Error al buscar el taller', err);
-      }
-    });
-  }
+    } else {
+        console.error('No se encontró el ID del artista en la sesión');
+    }
+}
+
 
   openNewTaller() {
     this.tallerAux = new Taller(1, 1,"", "", 1, 1, "")
@@ -590,29 +597,30 @@ export class ArtistaAdministrationComponent {
   }
 
   indexTalleres() {
-    this.tallerService.index().subscribe({
+    this.tallerService.getTalleresByArtist(this.artist['iss']).subscribe({
       next: (response: any) => {
-        console.log('Respuesta del servicio:', response); 
-        this.talleres = response['data']; 
+        console.log('Respuesta del servicio:', response);
+        this.talleres = response['data'];
       },
       error: (err: Error) => {
         console.error('Error al cargar los talleres', err);
       }
     });
-  }    
-
+  }
+  
   indexOfertas() {
-    this.ofertaService.index().subscribe({
+    this.ofertaService.indexFiltrado().subscribe({
       next: (response: any) => {
-        console.log('Respuesta del servicio:', response); 
-        this.ofertas = response['data']; 
-        this.loadTallerName();
+        console.log('Respuesta del servicio:', response);
+        this.ofertas = response['data'];
       },
       error: (err: Error) => {
-        console.error('Error al cargar los ofertas', err);
+        console.error('Error al cargar las ofertas filtradas', err);
       }
     });
-  }    
+  }
+  
+  
 
   updateTaller(): void {
     this.tallerService.update(this.tallerAux).subscribe({
@@ -652,6 +660,9 @@ export class ArtistaAdministrationComponent {
 
   storeTaller(form: any): void {
     if (form.valid) {
+      // Asigna el ID del artista al nuevo taller
+      this.tallerAux.idArtista = this.artist.iss; // O la propiedad correspondiente
+  
       this.tallerService.create(this.tallerAux).subscribe({
         next: (response) => {
           console.log(response);
@@ -681,6 +692,7 @@ export class ArtistaAdministrationComponent {
       });
     }
   }
+  
   
   storeOferta(form: any): void {
     if (form.valid) {

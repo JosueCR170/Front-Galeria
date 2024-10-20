@@ -63,6 +63,7 @@ export class TallerService{
         };
         return this._http.delete(`${this.urlAPI}taller/${id}`, options);
     }
+    
 
     update(taller:Taller): Observable<any> {
         console.log(taller);
@@ -81,5 +82,20 @@ export class TallerService{
         };
         return this._http.put(`${this.urlAPI}taller/${id}`, params, options);
     }
+
+    getTalleresByArtist(artistId: number): Observable<any> {
+        let headers;
+        let bearertoken = sessionStorage.getItem('token');
+        if (bearertoken) {
+            headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded').set('bearertoken', bearertoken);
+        } else {
+            headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+        }
+        let options = {
+            headers
+        };
+        return this._http.get(`${this.urlAPI}taller/artist/${artistId}`, options);
+    }
+    
 
 }
