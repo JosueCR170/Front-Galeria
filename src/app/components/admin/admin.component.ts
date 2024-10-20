@@ -26,6 +26,7 @@ import { Taller } from '../../models/Taller';
 import { TallerService } from '../../services/taller.service';
 import { Oferta } from '../../models/Oferta';
 import { OfertaService } from '../../services/oferta.service';
+import { backupRestoreService } from '../../services/backupRestore.service';
 
 @Component({
   selector: 'app-admin',
@@ -68,6 +69,7 @@ export class AdminComponent {
     private _artistaService: ArtistService,
     private _tallerService: TallerService,
     private _ofertaService: OfertaService,
+    private _backupRestoreService:backupRestoreService,
     private _router: Router,
     private _routes: ActivatedRoute,
     private messageService: MessageService,
@@ -1013,4 +1015,22 @@ export class AdminComponent {
   public parseInt(value: string){
     return parseInt(value, 10);
   }
+
+  
+  downloadBackup(): void {
+    this._backupRestoreService.backupBD().subscribe(
+        (response: Blob) => {
+            const url = window.URL.createObjectURL(response);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'galeria_db_Backup.bak';  // Nombre por defecto del archivo
+            a.click();
+            window.URL.revokeObjectURL(url);  // Limpiamos el URL temporal
+        },
+        error => {
+            console.error('Error al hacer el backup', error);
+        }
+    );
+}
+
 }

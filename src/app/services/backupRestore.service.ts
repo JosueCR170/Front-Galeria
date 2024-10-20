@@ -8,7 +8,7 @@ import { BackupRestoreBD } from "../models/BackupRestoreBD";
     providedIn: 'root'
 })
 
-export class ArtistService{
+export class backupRestoreService{
     private urlAPI:string;
     private backupRestoreSubject = new BehaviorSubject<any>(null);
     public backupRestore$ = this.backupRestoreSubject.asObservable();
@@ -36,22 +36,17 @@ export class ArtistService{
         return this._http.put(`${this.urlAPI}adminBD/restore`, params, options);
     }
 
-    backupBD(backupRestore:BackupRestoreBD): Observable<any> {
-        console.log(backupRestore);
-        let backupRestoreJson=JSON.stringify(backupRestore);
-        let params='data='+backupRestoreJson;
-        let headers;
+
+    backupBD(): Observable<Blob> {
         let bearertoken = sessionStorage.getItem('token');
-        if (bearertoken){
-            headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded').set('bearertoken', bearertoken);
-        } else {
-            headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-        }
-        let options = {
-            headers
-        };
-        return this._http.put(`${this.urlAPI}adminBD/backup`, params, options);
+        let headers = new HttpHeaders().set('bearertoken', bearertoken ? bearertoken : '');
+    
+        return this._http.post(`${this.urlAPI}adminBD/backup`, {}, {
+            headers: headers,
+            responseType: 'blob'
+        });
     }
+    
 
 
 }

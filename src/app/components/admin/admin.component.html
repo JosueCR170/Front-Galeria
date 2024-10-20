@@ -44,6 +44,18 @@
       <p class="work"><span class="workGradient">Select </span>some model</p>
       </div>
 
+      <div>
+        <div style="width: 100%; color: white;">
+          <p class="work">Manage Database</p>
+        </div>
+
+        <div style="display: flex;">
+          <button (click)="downloadBackup()">Backup</button>
+          <button>Restore</button>
+        </div>
+      </div>
+      
+
       }
       @if(userClick){
           <div style="width: 100%; color: white;  border-bottom: solid 5px rgb(142, 141, 141);">
