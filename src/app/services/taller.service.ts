@@ -50,10 +50,10 @@ export class TallerService{
     }
 
 
-    deleted(id:number):Observable<any>{
+    deleted(id: number): Observable<any> {
         let headers;
         let bearertoken = sessionStorage.getItem('token');
-        if (bearertoken){
+        if (bearertoken) {
             headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded').set('bearertoken', bearertoken);
         } else {
             headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
@@ -61,8 +61,17 @@ export class TallerService{
         let options = {
             headers
         };
-        return this._http.delete(`${this.urlAPI}taller/${id}`, options);
+        return this._http.delete(`${this.urlAPI}taller/${id}`, options).pipe(
+            tap({
+                error: (error) => {
+                    if (error.status === 400 && error.error.message === 'No se puede eliminar el taller, tiene ofertas asociadas') {
+                        throw new Error('This workshop cannot be deleted because it has associated offers.');
+                    }
+                }
+            })
+        );
     }
+    
 
     update(taller:Taller): Observable<any> {
         console.log(taller);

@@ -852,24 +852,30 @@ export class AdminComponent {
       this.displayConfirmationDialog = false;
     }
 
-  deleteSelectedTalleres(): void {
-    this.selectedTalleres.forEach(taller => {
-      this._tallerService.deleted(taller.id).subscribe({
-        next: () => {
-          this.talleres = this.talleres.filter(t => t.id !== taller.id);
-          this.totalRecords--;
-          this.msgAlert('Course deleted', '', 'success');
-          this.indexTalleres();
-        },
-        error: (err: Error) => {
-          console.error('Error deleting workshop', err);
-          this.msgAlert('Error deleting workshop', '', 'error');
-        }
+    deleteSelectedTalleres(): void {
+      this.selectedTalleres.forEach(taller => {
+          this._tallerService.deleted(taller.id).subscribe({
+              next: () => {
+                  // Eliminar el taller de la lista en caso de éxito
+                  this.talleres = this.talleres.filter(t => t.id !== taller.id);
+                  this.totalRecords--;
+                  this.msgAlert('Course deleted', '', 'success');
+                  this.indexTalleres();
+              },
+              error: (err: Error) => {
+                  // Verificamos si el error es debido a ofertas asociadas
+                  if (err.message === 'This workshop cannot be deleted because it has associated offers.') {
+                      this.msgAlert('Cannot delete this course because it has associated offers', '', 'error');
+                  } else {
+                      this.msgAlert('Error deleting workshop', '', 'error');
+                  }
+              }
+          });
       });
-    });
-    this.selectedTalleres = [];
-    this.displayConfirmationDialog = false;
+      this.selectedTalleres = [];
+      this.displayConfirmationDialog = false;
   }
+  
   
   deleteSelectedOfertas(): void {
     this.selectedOfertas.forEach(oferta => {
