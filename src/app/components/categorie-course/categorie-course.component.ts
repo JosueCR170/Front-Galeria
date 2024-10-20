@@ -169,6 +169,23 @@ getArtist(artistId: number) {
 }
 
 createPay(): void {
+  let tokene: any = '';
+    if (!this.user || !tokene) {
+      this.user = sessionStorage.getItem('identity');
+        tokene = sessionStorage.getItem('token');
+      if (this.user) {
+        this.user = JSON.parse(this.user);
+      }
+    }
+    if (!this.user || isNaN(this.user['iss']) || !this.user['iss']|| !tokene ) {
+      const mensaje = `
+        <p>Error when making purchase</p>
+        <p>Session expired or purchase processing error, try again</p>`;
+      this.msgAlertHTML('Error when registering', mensaje, 'error');
+      this.router.navigate(['/login']);
+      return; // Salir de la función si hay un error con 'iss'
+    }
+
   const fechaActual = new Date();
   this.matricula.costo = this.selectedCourse.costo;
   this.matricula.fechaMatricula = fechaActual.toISOString().split('T')[0];
@@ -178,9 +195,9 @@ createPay(): void {
   let respuesta: any;
   this._matriculaService.create(this.matricula).subscribe({
     next: (facturaResponse) => {
-      respuesta = facturaResponse; // Guardamos la respuesta para usarla luego en getArtist.
-      this.respuesta = respuesta;  // Almacena respuesta para verificar el status luego en getArtist
-      this.getArtist(this.selectedCourse.idArtista); // Llamamos a getArtist y manejamos el mensaje allí.
+      respuesta = facturaResponse; 
+      this.respuesta = respuesta;  
+      this.getArtist(this.selectedCourse.idArtista);
     },
     error: (err) => {
       console.error('Error al realizar matrícula', err);
