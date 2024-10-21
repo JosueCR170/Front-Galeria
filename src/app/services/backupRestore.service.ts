@@ -23,8 +23,8 @@ export class backupRestoreService{
         console.log(backupRestore);
         let backupRestoreJson=JSON.stringify(backupRestore);
         let params='data='+backupRestoreJson;
-        let headers;
         let bearertoken = sessionStorage.getItem('token');
+        let headers;
         if (bearertoken){
             headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded').set('bearertoken', bearertoken);
         } else {
@@ -37,15 +37,19 @@ export class backupRestoreService{
     }
 
 
-    backupBD(): Observable<Blob> {
+    backupBD(): Observable<any> {
         let bearertoken = sessionStorage.getItem('token');
-        let headers = new HttpHeaders().set('bearertoken', bearertoken ? bearertoken : '');
+        let headers = new HttpHeaders().set('bearertoken', bearertoken || ''); // Solo incluye el token si existe
     
-        return this._http.post(`${this.urlAPI}adminBD/backup`, {}, {
-            headers: headers,
-            responseType: 'blob'
-        });
+        // Definir las opciones con los encabezados
+        let options = {
+            headers,
+            responseType: 'blob' as 'json' // Asegúrate de que el responseType esté configurado correctamente
+        };
+    
+        return this._http.get(this.urlAPI + 'admin/backup', options);
     }
+    
     
 
 

@@ -148,15 +148,25 @@ export class ArtistaAdministrationComponent {
   authTokenArtist() {
     let aux = sessionStorage.getItem('identity');
     if (aux == null) {
-      return false;
-    } else {
-      let jason = JSON.parse(aux);
-      if (jason.nombreArtista == null) {
         return false;
-      }
-      return true;
+    } else {
+        let jason = JSON.parse(aux);
+        if (!jason.nombreArtista) {
+            return false;
+        }
+        return true;
     }
+}
+authTokenUserAdmin() {
+  let aux = sessionStorage.getItem('identity');
+  if (aux == null) {
+    return false;
+  } else {
+    let jason = JSON.parse(aux);
+    return jason.tipoUsuario;
   }
+}
+
 
   reloadTablePedidos() {
     this.indexEnvioByArtist();

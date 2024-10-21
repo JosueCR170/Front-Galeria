@@ -44,14 +44,18 @@
       <p class="work"><span class="workGradient">Select </span>some model</p>
       </div>
 
-      <div>
-        <div style="width: 100%; color: white;">
-          <p class="work">Manage Database</p>
+      <div style="width: 100%; display: block; align-items: center; margin: auto;">
+        <div style="text-align: center; color: white;">
+          <p class="manageDB">-Manage Database-</p>
         </div>
 
-        <div style="display: flex;">
-          <button (click)="downloadBackup()">Backup</button>
-          <button>Restore</button>
+        <div style="display: flex; width: 50%; margin: auto;">
+
+          <button class="button-backup" (click)="downloadBackup()">
+            <i class="fa-solid fa-database" style="padding-inline: 5px;"></i>Backup</button>
+
+          <!-- <button class="button-restore"><i class="fa-solid fa-rotate" style="margin: 0px; padding-right: 8px;"></i>Restore</button> -->
+
         </div>
       </div>
       

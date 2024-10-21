@@ -1,9 +1,6 @@
 @if(!authTokenArtist()){
   {{redirectToArtistLogin()}}
 }@else{
-
-
-
 <div class="artist-body">
   <div class="conteiner">
     <header class="miniMenu">
@@ -206,75 +203,6 @@
         </ng-template>
       </p-table>
     </div>
-
-    <!--Inicio dialogo New-->
-
-    <!-- <div class="modal fade" id="newPedidoModal" tabindex="-1" aria-labelledby="newObraModalLabel" aria-hidden="true"
-      header="Confirm Delete">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="newObraModalLabel">New Shipments
-            </h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="reloadTablePedidos()"></button>
-          </div>
-          <form enctype="multipart/form-data" #newPedidoForm="ngForm" (ngSubmit)="storePedido(newPedidoForm)">
-            <div class="modal-body">
-              <div class="form-group">
-                <label for="IdUsuario">Id User</label>
-                <input id="IdUsuario" class="form-control" name="idUsuario" type="text" #name="ngModel"
-                  [(ngModel)]="pedido.factura.idUsuario" required>
-              </div>
-               <div class="form-group">
-                <label for="IdObra">Id Artwork</label>
-                <input id="IdObra" class="form-control" name="idObra" type="text" #name="ngModel"
-                   [(ngModel)]="pedido.factura.idObra" required> 
-              </div>
-              <div class="form-group">
-                <label for="Descuento">Discount</label>
-                <input id="Descuento" class="form-control" name="descuento" type="number" #name="ngModel"
-                  [(ngModel)]="pedido.factura.descuento" required>
-              </div> 
-              <div class="form-group">
-                <label for="Direccion">Address</label>
-                <input id="Direccion" class="form-control" name="direccion" type="text" #name="ngModel"
-                  [(ngModel)]="pedido.envio.direccion" required>
-              </div>
-              <div>
-                <label for="Province" class="form-label">Province</label>
-                <select id="Province" required class="form-select" [(ngModel)]="pedido.envio.provincia" name="province">
-                  <option selected disabled hidden>Choose...</option>
-                  <option>Guanacaste</option>
-                  <option>Alajuela</option>
-                  <option>Heredia</option>
-                  <option>Puntarenas</option>
-                  <option>Limon</option>
-                  <option>San Jose</option>
-                  <option>Cartago</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="Ciudad">Ciudad</label>
-                <input id="Ciudad" class="form-control" name="ciudad" type="text" #size="ngModel"
-                  [(ngModel)]="pedido.envio.ciudad" required>
-              </div>
-              <div class="form-group">
-                <label for="CodigoPostal">Postal Code</label>
-                <input id="CodigoPostal" class="form-control" name="codigoPostal" type="text" #size="ngModel"
-                  [(ngModel)]="pedido.envio.codigoPostal" required>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" icon="pi pi-check">Close</button>
-              <input type="submit" class="btn btn-primary"
-                style="color: rgb(255, 255, 255); background-color: rgb(124, 10, 10); border: none;" value="Add"
-                data-bs-dismiss="modal">
-            </div>
-          </form>
-        </div>
-      </div>
-    </div> -->
-
 
     <div class="modal fade" id="updateModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
@@ -1256,8 +1184,6 @@
         </div>
       </div>
       <!-- Final diálogo Update Oferta -->
-
-
       }
 
   </div>
