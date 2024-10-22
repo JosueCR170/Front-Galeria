@@ -544,9 +544,9 @@ export class AdminComponent {
   /********************************* STORE *********************************/
   storeObra(form: any): void {
     // if (form.valid) {
-    console.log('Obra:', this.obra);
+    //console.log('Obra:', this.obra);
     if (this.selectedFile) {
-      console.log('Imagen:', this.selectedFile);
+      //console.log('Imagen:', this.selectedFile);
       this._obraService.upLoadImage(this.selectedFile).subscribe({
         next: (response: any) => {
           console.log(response);
@@ -556,11 +556,26 @@ export class AdminComponent {
             this.obra.fechaRegistro = this.formattedDate;
             this._obraService.create(this.obra).subscribe({
               next: (response2: any) => {
-                console.log(response2);
+                //console.log(response2);
                 this.index()
                 this.msgAlert('Artwork saved successfully', '', 'success')
               },
               error: (error: any) => {
+                this.deleteImage(this.obra.imagen);
+
+                if (error.status === 500 && error.error && error.error.error) {
+                  this.errores = [];
+                  const errorObj = error.error.error;
+                  if (errorObj.includes('La fecha de registro debe ser igual o posterior a la fecha de creación en las obras')) {
+                    this.msgAlert('The registration date must be equal to or later than the creation date', '', 'error');
+                  } else {
+                    if (errorObj.includes('El precio no puede ser negativo en las obras')) {
+                      this.msgAlert('The price cannot be negative in the artworks', '', 'error');
+                    } else {
+                  this.msgAlert('Error adding artwork', this.errores, 'error');
+                } }
+              }else
+
                 if (error.status === 406 && error.error && error.error.error) {
                   this.errores = [];
                   const errorObj = error.error.error;
@@ -570,7 +585,9 @@ export class AdminComponent {
                     }
                   }
                   this.msgAlert('Error adding artwork', this.errores, 'error');
-                } else {
+                } 
+                
+                else {
                   console.error('Other type of error:', error);
                   this.msgAlert('Error from the server, contact an administrator', '', 'error');
                 }
@@ -616,6 +633,7 @@ export class AdminComponent {
           }
         },
         error: (error: any) => {
+          console.log("error al agregar user",error)
           if (error.status === 406 && error.error && error.error.error) {
             this.errores = [];
             const errorObj = error.error.error;
@@ -817,12 +835,12 @@ export class AdminComponent {
         error: (err: Error) => {
           console.error('Error deleting user', err);
           this.msgAlert('Error deleting user', '', 'error');
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: `Failed to delete user: ${_user.nombre}`,
-            life: 3000
-          });
+          // this.messageService.add({
+          //   severity: 'error',
+          //   summary: 'Error',
+          //   detail: `Failed to delete user: ${_user.nombre}`,
+          //   life: 3000
+          // });
         }
       });
     });
