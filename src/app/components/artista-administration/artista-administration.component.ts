@@ -386,30 +386,21 @@ export class ArtistaAdministrationComponent {
 
   storeImage(form: any) {
     if (form.valid) {
-      //console.log('Obra:', this.obra);
       if (this.selectedFile) {
-        //console.log('Imagen:', this.selectedFile);
         this.obraService.upLoadImage(this.selectedFile).subscribe({
           next: (response: any) => {
             console.log(response);
             if (response.filename) {
               this.obra.imagen = response.filename;
-              //this.obra.fechaCreacion = this.fechaSeleccionada;
               this.obra.fechaRegistro = this.dateToString(new Date());
-              //console.log(this.obra);
               this.obraService.create(this.obra).subscribe({
                 next: (response2: any) => {
-                 // console.log(response2); console.log(this.obra)
-
-                  //location.reload();
-
                   this.msgAlert('Saved artwork','','success');
-
+                  this.index();
                 },
                 error: (err: any) => {
                   console.error(err);
                  this.msgAlert('Error, the artwork was not saved','','error');
-
                 }
               });
             } else {
@@ -470,14 +461,9 @@ export class ArtistaAdministrationComponent {
         let direccionCompleta = `${envio.direccion}, ${envio.provincia}, ${envio.ciudad}, Postal code: ${envio.codigoPostal}`;
         envio.direccion = direccionCompleta; // Agregar el atributo direcciónCompleta al envío
         let pedido = new Pedido(envio, factura);
-
-       
-         
           this.obraService.getArtworkByEnvioId(envio.id.toString()).subscribe({
             next: (response: any) => {
               let obrasEnvio=response['data']
-             console.log("obras envio",obrasEnvio);
-             
              pedido.obras = obrasEnvio.map((obra: any) => obra);
              this.pedidosArtist.push(pedido);
             },
@@ -523,11 +509,9 @@ export class ArtistaAdministrationComponent {
 
     this.obraService.updateDisponibilidad(obrita).subscribe({
       next:(response)=>{
-        //console.log('obraResponse',response);
         if(response.status==201){
           this.msgAlert('Successfully updated availability','', 'success');
         }else{
-          //this.changeStatus(1);
         }
       },
       error:(error:HttpErrorResponse)=>{
@@ -619,8 +603,6 @@ export class ArtistaAdministrationComponent {
       }
     });
   }
-  
-  
 
   updateTaller(): void {
     this.tallerService.update(this.tallerAux).subscribe({
@@ -660,9 +642,7 @@ export class ArtistaAdministrationComponent {
 
   storeTaller(form: any): void {
     if (form.valid) {
-      // Asigna el ID del artista al nuevo taller
-      this.tallerAux.idArtista = this.artist.iss; // O la propiedad correspondiente
-  
+      this.tallerAux.idArtista = this.artist.iss;
       this.tallerService.create(this.tallerAux).subscribe({
         next: (response) => {
           console.log(response);
@@ -695,15 +675,17 @@ export class ArtistaAdministrationComponent {
   
   
   storeOferta(form: any): void {
+    if (this.ofertaAux.cupos <= 0) {
+      this.msgAlert('The number of seats must be greater than 0.', '', 'error');
+      return;
+    }
     if (form.valid) {
-      //this.ofertaAux.fechaInicio = this.formatDate(new Date(this.ofertaAux.fechaInicio));
-      //this.ofertaAux.fechaFinal = this.formatDate(new Date(this.ofertaAux.fechaFinal));
-      if (this.ofertaAux.horaFinal  < this.ofertaAux.horaInicio) {
-          this.msgAlert('The end time must be after to the start time.', '', 'error');
-          return;
+      if (this.ofertaAux.horaFinal < this.ofertaAux.horaInicio) {
+        this.msgAlert('The end time must be after the start time.', '', 'error');
+        return;
       }
       if (this.ofertaAux.fechaFinal < this.ofertaAux.fechaInicio) {
-        this.msgAlert('The end date must be after or equal to the start date.', '', 'error');
+        this.msgAlert('The end date must be equal to or after the start date.', '', 'error');
         return;
       }
       this.ofertaService.create(this.ofertaAux).subscribe({
@@ -728,7 +710,6 @@ export class ArtistaAdministrationComponent {
             }
             this.msgAlert('Error adding offer', this.errors, 'error');
           } else {
-            console.error('Other error:', error);
             this.msgAlert('Server error, contact the administrator', '', 'error');
           }
         }
@@ -737,23 +718,33 @@ export class ArtistaAdministrationComponent {
   }
 
   deleteSelectedTalleres(): void {
-    this.selectedTalleres.forEach(taller => {
-      this.tallerService.deleted(taller.id).subscribe({
-        next: () => {
-          this.talleres = this.talleres.filter(t => t.id !== taller.id);
-          this.totalRecords--;
-          this.msgAlert('Course deleted', '', 'success');
-          this.indexTalleres();
-        },
-        error: (err: Error) => {
-          console.error('Error deleting workshop', err);
-          this.msgAlert('Error deleting workshop', '', 'error');
+      for (const taller of this.selectedTalleres) {
+        const hasOffers = this.ofertas.some(oferta => Number(oferta.idTaller) === taller.id);
+        if (hasOffers) {
+          this.msgAlert('Error, the course cannot be deleted because it has linked offers', '', 'error');
+          this.selectedTalleres = [];
+          this.displayConfirmationDialog = false;
+          return;
+        } else {
+          console.log(`Taller ${taller.id} no tiene ofertas`); 
         }
+      }
+      this.selectedTalleres.forEach(taller => {
+        this.tallerService.deleted(taller.id).subscribe({
+          next: () => {
+            this.talleres = this.talleres.filter(t => t.id !== taller.id);
+            this.totalRecords--;
+            this.msgAlert('Course deleted successfully', '', 'success');
+            this.indexTalleres();
+          },
+          error: (err: Error) => {
+            this.msgAlert('Error deleting course', '', 'error');
+          }
+        });
       });
-    });
-    this.selectedTalleres = [];
-    this.displayConfirmationDialog = false;
-  }
+      this.selectedTalleres = [];
+      this.displayConfirmationDialog = false;
+    }
   
   deleteSelectedOfertas(): void {
     this.selectedOfertas.forEach(oferta => {
@@ -781,6 +772,16 @@ export class ArtistaAdministrationComponent {
       this.ofertaAux.ubicacion = '';
     }
     console.log(this.ofertaAux);  
+  }
+
+
+  onFechaChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const fecha = new Date(input.value);
+    this.ano = fecha.getFullYear();
+    this.mes = ('0' + (fecha.getMonth() + 1)).slice(-2);
+    this.dia = ('0' + fecha.getDate()).slice(-2);
+    this.fechaSeleccionada = `${this.ano}-${this.mes}-${this.dia}`;
   }
 
 }
