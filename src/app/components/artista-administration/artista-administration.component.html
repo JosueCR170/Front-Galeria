@@ -1056,7 +1056,7 @@
             <form #newOfertaForm="ngForm" (ngSubmit)="storeOferta(newOfertaForm)">
               <div class="modal-body">
                 <div class="form-group" style="margin-bottom: 10px;">
-                  <label for="idTaller">Workshop</label>
+                  <label for="idTaller">Course</label>
                   <select id="idTaller" required class="form-select input" [(ngModel)]="ofertaAux.idTaller" name="idTaller">
                     <option disabled selected value="">Select a Course</option>
                     @for (item of talleresList; track $index) {<option [value]="item.key">{{ item.value }}</option>}
@@ -1064,11 +1064,11 @@
                 </div>
                 <div class="form-group" style="margin-bottom: 10px;">
                   <label for="fechaInicio">Start Date</label>
-                  <input id="fechaInicio" class="form-control" name="fechaInicio" type="date" [(ngModel)]="ofertaAux.fechaInicio" required>
+                  <input id="fechaInicio" class="form-control" name="fechaInicio" type="date" [(ngModel)]="ofertaAux.fechaInicio" (change)="formatDate($event)" required>
                 </div>
                 <div class="form-group" style="margin-bottom: 10px;">
                   <label for="fechaFinal">End Date</label>
-                  <input id="fechaFinal" class="form-control" name="fechaFinal" type="date" [(ngModel)]="ofertaAux.fechaFinal" required>
+                  <input id="fechaFinal" class="form-control" name="fechaFinal" type="date" [(ngModel)]="ofertaAux.fechaFinal" (change)="formatDate($event)" required>
                 </div>
                 <div class="form-group" style="margin-bottom: 10px;">
                   <label for="horaInicio">Start Time</label>
