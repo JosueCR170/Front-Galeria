@@ -447,7 +447,7 @@ authTokenUserAdmin() {
         this.fillPedidos();
       },
       error: (err: Error) => {
-        console.error('Error al cargar los envios del artista', err);
+        console.log('Error al cargar los envios del artista', err);
       }
     });
   }

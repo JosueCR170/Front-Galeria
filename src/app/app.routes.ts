@@ -29,7 +29,6 @@ export const routes: Routes = [
     {path:'signupArtist', component:SignupArtistComponent},
     {path:'artistaAdministration', component:ArtistaAdministrationComponent},
     {path:'admin', component:AdminComponent},
-
     {path:'courses',component: CoursesComponent,
     children: [
         { path: '', component: InitCourseComponent},

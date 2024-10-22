@@ -344,7 +344,7 @@ export class AdminComponent {
   indexUsers() {
     this._userService.index().subscribe({
       next: (response: any) => {
-        console.log(response);
+        //console.log(response);
         this.users = response['data'].filter((user: any) => user.id !== this.user.iss);
       },
       error: (err: Error) => {
@@ -368,7 +368,7 @@ export class AdminComponent {
   indexTalleres() {
     this._tallerService.index().subscribe({
       next: (response: any) => {
-        console.log('Respuesta del servicio:', response); 
+        //console.log('Respuesta del servicio:', response); 
         this.talleres = response['data']; 
       },
       error: (err: Error) => {
@@ -380,7 +380,7 @@ export class AdminComponent {
   indexOfertas() {
     this._ofertaService.index().subscribe({
       next: (response: any) => {
-        console.log('Respuesta del servicio:', response); 
+       // console.log('Respuesta del servicio:', response); 
         this.ofertas = response['data']; 
         this.loadTallerName();
       },
