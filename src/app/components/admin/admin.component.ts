@@ -333,7 +333,6 @@ export class AdminComponent {
         this.artistasList = [];
         this.loadArtistaName();
 
-        console.log();
       },
       error: (err: Error) => {
         console.error('Error al cargar las obras', err);
@@ -434,19 +433,19 @@ export class AdminComponent {
     if (this.selectedFile) {
       this._obraService.updateImage(this.selectedFile, filename).subscribe({
         next: (response: any) => {
-          console.log(response);
+         // console.log(response);
           this.selectedObras = [];
           this.msgAlert('Artwork updated successfully', '', 'success')
         },
         error: (err: Error) => {
-          console.log(err.message);
+         // console.log(err.message);
           this.msgAlert('Error updating artwork', '', 'error')
         }
       });
     }
     this._obraService.update(this.obra).subscribe({
       next: (response: any) => {
-        console.log(response);
+        //console.log(response);
         this.index()
       },
       error: (err: Error) => {
@@ -462,7 +461,7 @@ export class AdminComponent {
     }
     this._userService.update(this.userAux).subscribe({
       next: (response: any) => {
-        console.log('User updated successfully', response);
+        //console.log('User updated successfully', response);
         this.msgAlert('User updated successfully', '', 'success');
         this.selectedUsers = [];
         this.indexUsers();
@@ -528,7 +527,7 @@ export class AdminComponent {
     }
     this._ofertaService.update(this.ofertaAux).subscribe({
       next: (response) => {
-        console.log(response);
+       // console.log(response);
         this.msgAlert('Offer updated successfully', '', 'success');
         this.indexOfertas();
         this.selectedOfertas = [];
@@ -549,7 +548,7 @@ export class AdminComponent {
       //console.log('Imagen:', this.selectedFile);
       this._obraService.upLoadImage(this.selectedFile).subscribe({
         next: (response: any) => {
-          console.log(response);
+          //console.log(response);
           if (response.filename) {
             this.obra.imagen = response.filename;
             this.obra.fechaCreacion = this.fechaSeleccionada;
@@ -588,7 +587,7 @@ export class AdminComponent {
                 } 
                 
                 else {
-                  console.error('Other type of error:', error);
+                  //console.error('Other type of error:', error);
                   this.msgAlert('Error from the server, contact an administrator', '', 'error');
                 }
               }
@@ -621,10 +620,10 @@ export class AdminComponent {
 
   storeUser(form: any): void {
     if (form.valid) {
-      console.log(this.userAux.tipoUsuario);
+      //console.log(this.userAux.tipoUsuario);
       this._userService.create(this.userAux).subscribe({
         next: (response) => {
-          console.log(response);
+          //console.log(response);
           if (response.status == 201) {
             form.reset();
             this.msgAlert('User added successfully', '', 'success');
@@ -657,7 +656,7 @@ export class AdminComponent {
     if (form.valid) {
       this._artistaService.create(this.artistaAux).subscribe({
         next: (response) => {
-          console.log(response);
+          //console.log(response);
           if (response.status == 201) {
             form.reset();
             this.msgAlert('Artist added successfully', '', 'success');
@@ -692,7 +691,7 @@ export class AdminComponent {
     if (form.valid) {
       this._tallerService.create(this.tallerAux).subscribe({
         next: (response) => {
-          console.log(response);
+          //console.log(response);
           if (response.status === 201) {
             form.reset();
             this.msgAlert('Course added successfully', '', 'success');
@@ -740,7 +739,7 @@ export class AdminComponent {
       
       this._ofertaService.create(this.ofertaAux).subscribe({
         next: (response) => {
-          console.log(response);
+         // console.log(response);
           if (response.status === 201) {
             form.reset();
             this.msgAlert('Offer added successfully', '', 'success');
@@ -778,7 +777,7 @@ export class AdminComponent {
     }
     this._obraService.destroyImage(filename).subscribe({
       next: (response: any) => {
-        console.log(response);
+        //console.log(response);
       },
       error: (error: any) => {
         console.error(error);
@@ -826,21 +825,24 @@ export class AdminComponent {
 
   deleteSelectedUsers() {
     this.selectedUsers.forEach(_user => {
+      if(_user.id==this.user['iss']){
+        this.msgAlert('The logged in user cannot be deleted', '', 'error');
+        return
+      }
       this._userService.deleted(_user.id).subscribe({
         next: () => {
           this.users = this.users.filter(o => o.id !== _user.id);
           this.totalRecords--;
-          this.msgAlert('User Deleted', '', 'error');
+          this.msgAlert('User Deleted', '', 'success');
         },
-        error: (err: Error) => {
-          console.error('Error deleting user', err);
-          this.msgAlert('Error deleting user', '', 'error');
-          // this.messageService.add({
-          //   severity: 'error',
-          //   summary: 'Error',
-          //   detail: `Failed to delete user: ${_user.nombre}`,
-          //   life: 3000
-          // });
+        error: (err: any) => {
+          if (err.error && err.error.error) {
+            const backendErrorMessage = err.error.error;
+            this.msgAlert(`Error deleting user: ${backendErrorMessage}`, '', 'error');
+          } else {
+            console.error('Error deleting user:', err);
+            this.msgAlert('Error deleting user. Please try again later.', '', 'error');
+          }
         }
       });
     });
@@ -997,7 +999,7 @@ export class AdminComponent {
   }
 
   private formatDate(date: Date): string {
-    console.log(date);
+    //console.log(date);
     const year = date.getFullYear();
     const month = date.getMonth() + 1; 
     const day = date.getDate(); 
