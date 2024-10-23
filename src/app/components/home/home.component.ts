@@ -43,7 +43,7 @@ obras: Obra[] = [];
         });
 
         this.images=this.getRandomImages(this.allImages,12);
-        console.log('Randomized Images:', this.images);
+        //console.log('Randomized Images:', this.images);
       },
       error: (err: Error) => {
         console.log('error',err)

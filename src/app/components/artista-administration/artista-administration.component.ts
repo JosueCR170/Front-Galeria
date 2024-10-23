@@ -185,7 +185,7 @@ authTokenUserAdmin() {
         this.obras.forEach(o => {if(typeof o.disponibilidad==='string'){o.disponibilidad=o.disponibilidad==='1'||o.disponibilidad===1}
           
         });
-        console.log("Obras de artista: ",this.obras)
+       // console.log("Obras de artista: ",this.obras)
       },
       error: (err: Error) => {
         console.error('Error al cargar las obras', err);
@@ -269,10 +269,14 @@ authTokenUserAdmin() {
   }
 
   updateObra(filename: any) {
+    if(!this.obra.disponibilidad){
+      this.msgAlert('A sold work cannot be modified','','error');
+      return
+    }
     if (this.selectedFile) {
       this.obraService.updateImage(this.selectedFile, filename).subscribe({
         next: (response: any) => {
-          console.log(response);
+          //console.log(response);
         },
         error: (err: Error) => {
           console.log(err.message);
@@ -281,7 +285,7 @@ authTokenUserAdmin() {
     }
     this.obraService.update(this.obra).subscribe({
       next: (response: any) => {
-        console.log(response);
+        //console.log(response);
         location.reload();
       },
       error: (err: Error) => {
@@ -319,7 +323,7 @@ authTokenUserAdmin() {
 
     this.obraService.destroyImage(filename).subscribe({
       next:(response:any)=>{
-        console.log(response);
+        //console.log(response);
         //this.msgAlert('Imagen eliminada','','success');
       },
       error:(error:any)=>{
@@ -399,7 +403,7 @@ authTokenUserAdmin() {
       if (this.selectedFile) {
         this.obraService.upLoadImage(this.selectedFile).subscribe({
           next: (response: any) => {
-            console.log(response);
+           // console.log(response);
             if (response.filename) {
               this.obra.imagen = response.filename;
               this.obra.fechaRegistro = this.dateToString(new Date());
@@ -432,9 +436,9 @@ authTokenUserAdmin() {
       next: (response: any) => {
         this.enviosArtist = response['data'];
 
-        console.log("Data envios",response['data'])
+       // console.log("Data envios",response['data'])
 
-        console.log("Envios: ",this.enviosArtist);
+        //console.log("Envios: ",this.enviosArtist);
         this.fillPedidos();
       },
       error: (err: Error) => {
@@ -445,12 +449,12 @@ authTokenUserAdmin() {
 
 
   getFacturasByArtist() {
-    console.log("idArtista: ", this.artist['iss'])
+    //console.log("idArtista: ", this.artist['iss'])
 
     this.facturaService.indexByArtistId(this.artist['iss']).subscribe({
       next: (response: any) => {
         this.facturasArtist = response['data'];
-       console.log("data: ",this.facturasArtist);
+      // console.log("data: ",this.facturasArtist);
         this.fillPedidos();
       },
       error: (err: Error) => {
@@ -465,7 +469,7 @@ authTokenUserAdmin() {
       if(typeof envio.idFactura ==='string'){envio.idFactura=parseInt(envio.idFactura)}
       let factura = this.facturasArtist.find(f => f.id === envio.idFactura);
 
-      console.log("Factura",factura)
+      //console.log("Factura",factura)
       if (factura) {
         if(typeof factura.idUsuario ==='string'){factura.idUsuario=parseInt(factura.idUsuario)}
         let direccionCompleta = `${envio.direccion}, ${envio.provincia}, ${envio.ciudad}, Postal code: ${envio.codigoPostal}`;
@@ -485,7 +489,7 @@ authTokenUserAdmin() {
           });
       }
     }
-    console.log("Pedidos: ", this.pedidosArtist);
+    //console.log("Pedidos: ", this.pedidosArtist);
   }
 
   dateToString(date: Date): string {
@@ -545,7 +549,7 @@ authTokenUserAdmin() {
   /****************** PARTE DE LOS TALLERES DE ARTISTAS  *************************/
 
   loadTallerName() {
-    console.log('Artist ID from session:', sessionStorage.getItem('artistId'));
+    //console.log('Artist ID from session:', sessionStorage.getItem('artistId'));
     const artistId = this.artist['iss']
     if (artistId) {
         this.tallerService.getTalleresByArtist(Number(artistId)).subscribe({
@@ -593,7 +597,7 @@ authTokenUserAdmin() {
   indexTalleres() {
     this.tallerService.getTalleresByArtist(this.artist['iss']).subscribe({
       next: (response: any) => {
-        console.log('Respuesta del servicio:', response);
+       // console.log('Respuesta del servicio:', response);
         this.talleres = response['data'];
       },
       error: (err: Error) => {
@@ -605,7 +609,7 @@ authTokenUserAdmin() {
   indexOfertas() {
     this.ofertaService.indexFiltrado().subscribe({
       next: (response: any) => {
-        console.log('Respuesta del servicio:', response);
+        //console.log('Respuesta del servicio:', response);
         this.ofertas = response['data'];
       },
       error: (err: Error) => {
@@ -638,7 +642,7 @@ authTokenUserAdmin() {
     }
     this.ofertaService.update(this.ofertaAux).subscribe({
       next: (response) => {
-        console.log(response);
+       // console.log(response);
         this.msgAlert('Offer updated successfully', '', 'success');
         this.indexOfertas();
         this.selectedOfertas = [];
@@ -655,7 +659,7 @@ authTokenUserAdmin() {
       this.tallerAux.idArtista = this.artist.iss;
       this.tallerService.create(this.tallerAux).subscribe({
         next: (response) => {
-          console.log(response);
+         // console.log(response);
           if (response.status === 201) {
             form.reset();
             this.msgAlert('Course added successfully', '', 'success');
@@ -700,7 +704,7 @@ authTokenUserAdmin() {
       }
       this.ofertaService.create(this.ofertaAux).subscribe({
         next: (response) => {
-          console.log(response);
+          //console.log(response);
           if (response.status === 201) {
             form.reset();
             this.msgAlert('Offer added successfully', '', 'success');
@@ -781,7 +785,7 @@ authTokenUserAdmin() {
     if (this.isVirtual) {
       this.ofertaAux.ubicacion = '';
     }
-    console.log(this.ofertaAux);  
+    //console.log(this.ofertaAux);  
   }
 
 

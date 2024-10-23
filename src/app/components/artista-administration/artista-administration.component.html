@@ -406,7 +406,7 @@
                   <input pInputText type="text" [(ngModel)]="obra.disponibilidad" required />
                 </ng-template>
                 <ng-template pTemplate="output">
-                  {{ obra.disponibilidad ? 'En venta' : 'Vendido' }}
+                  {{ obra.disponibilidad ? 'On sale' : 'Sold' }}
                 </ng-template>
               </p-cellEditor>
             </td>
@@ -560,7 +560,7 @@
           </div>
           <div class="modal-body">
             <!-- #updateObraForm="ngForm" (ngSubmit)="storeImage(updateObraForm)" -->
-            <form>
+            <form >
               <div class="mb-3">
                 <label for="recipient-name" class="col-form-label">Name:</label>
                 <input type="text" class="form-control" id="recipient-name" [(ngModel)]="obra.nombre" name="nombre">
