@@ -62,6 +62,7 @@ export class AdminComponent {
   public currentDate = new Date();
   public formattedDate = this.formatDate(this.currentDate);
   public errores: string[] = [];
+  public fechaSeleccionada: string = '';
 
   constructor(
     private _obraService: ObraService,
@@ -430,28 +431,31 @@ export class AdminComponent {
   }
   /********************************* UPDATE *********************************/
   updateObra(filename: any) {
+    if(this.obra.disponibilidad){
     if (this.selectedFile) {
       this._obraService.updateImage(this.selectedFile, filename).subscribe({
         next: (response: any) => {
          // console.log(response);
-          this.selectedObras = [];
-          this.msgAlert('Artwork updated successfully', '', 'success')
+          //this.selectedObras = [];
+         
         },
         error: (err: Error) => {
-         // console.log(err.message);
           this.msgAlert('Error updating artwork', '', 'error')
         }
       });
     }
     this._obraService.update(this.obra).subscribe({
       next: (response: any) => {
-        //console.log(response);
+        this.msgAlert('Artwork updated successfully', '', 'success')
+        this.selectedObras = [];
         this.index()
       },
       error: (err: Error) => {
         console.log(err);
       }
     });
+  }else{this.selectedObras = [];
+    this.msgAlert('Sold works cannot be updated', '', 'error')}
   }
 
   updateUser() {
@@ -662,6 +666,8 @@ export class AdminComponent {
             this.msgAlert('Artist added successfully', '', 'success');
             this.artistasList = [];
             this.loadArtistaName();
+            this.indexArtista()
+
           } else {
             console.error('The artist could not be entered');
           }
@@ -983,19 +989,14 @@ export class AdminComponent {
     console.log(this.ofertaAux);  
   }
   
-  // PARA LAS FECHAS 
-  fechaSeleccionada: string = '';
-  ano: number | null = null;
-  mes: string | null = null;
-  dia: string | null = null;
+
+
+ 
 
   onFechaChange(event: Event): void {
     const input = event.target as HTMLInputElement;
-    const fecha = new Date(input.value);
-    this.ano = fecha.getFullYear();
-    this.mes = ('0' + (fecha.getMonth() + 1)).slice(-2);
-    this.dia = ('0' + fecha.getDate()).slice(-2);
-    this.fechaSeleccionada = `${this.ano}-${this.mes}-${this.dia}`;
+    let [year, month, day] = input.value.split('-').map(Number);
+    this.fechaSeleccionada = `${year}-${month}-${day}`;
   }
 
   private formatDate(date: Date): string {

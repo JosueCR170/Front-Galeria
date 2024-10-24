@@ -152,7 +152,7 @@
   
   .dropdown-menu.show {
     border: solid 2px white;
-    background-color: black;
+    background-color: rgb(186 186 186);
   }
   
   .dropdown-menu li {

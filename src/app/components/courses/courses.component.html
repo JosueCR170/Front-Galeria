@@ -117,17 +117,24 @@
         getIconForCategory(item.taller.categoria)
       }}
       </span>
-      <div class="textBox">
-        <div class="textContent">
+      <div class="textBox" style="width: 100%;">
+        <div class="textContent" style="display: flex; justify-content: space-between;">
           <p class="h5">{{item.taller?.nombre}}</p>
+          <p class="p">{{item.oferta.fechaInicio}}</p>
+
+
         </div>
+
         <div class="text-inf">
-          <p class="p" style="font-weight: 500">$ {{ item.taller.costo }}</p>
+          <p class="p" style="font-weight: 500">$ {{ item.matricula.costo }}</p>
         </div>
         <p class="p" style="margin-top: 5px; font-weight: 500">
           {{ getLongerNameCategory(item.taller?.categoria) }}
         </p>
-        <div></div>
+
+        <div>
+
+        </div>
       </div>
     </div>
     </div>

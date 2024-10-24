@@ -146,7 +146,7 @@ export class CoursesComponent {
    filterCourses() {
     const userMatriculas = this.matriculas.filter(matricula => matricula.idUsuario == this.user.iss);
     this.filteredCourses = [];
-    console.log(this.matriculas.filter(matricula => matricula.idUsuario == this.user.iss))
+    //console.log(this.matriculas.filter(matricula => matricula.idUsuario == this.user.iss))
     userMatriculas.forEach(matricula => {
     const oferta = this.ofertas.find(oferta => oferta.id === matricula.idOferta);
     if (oferta) {
@@ -154,12 +154,14 @@ export class CoursesComponent {
       if (taller) {  
         this.filteredCourses.push({
           taller: taller,
-          oferta: oferta
+          oferta: oferta,
+          matricula:matricula
         });
         
       }
     }
   });
+  console.log(this.filteredCourses)
   this.isLoading = false; 
   }
 

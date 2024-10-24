@@ -585,7 +585,7 @@
             </button>
             <button pButton class="aas" style="background: rgb(236, 144, 32); margin-left: 5px;"
             pRipple data-bs-toggle="modal" data-bs-target="#updateModal"
-              (onClick)="editObra(selectedObras[0])"
+              (onClick)="editObra(selectedObras[0])" (click)="editObra(selectedObras[0])"
               [disabled]="!selectedObras || selectedObras.length !== 1" label="Ø Update">
             </button>
           </div>
@@ -708,7 +708,7 @@
                     <input pInputText type="text" [(ngModel)]="obra.disponibilidad" required />
                   </ng-template>
                   <ng-template pTemplate="output">
-                    {{ obra.disponibilidad ? 'En venta' : 'Vendido' }}
+                    {{ obra.disponibilidad ? 'On sale' : 'Sold' }}
                   </ng-template>
                 </p-cellEditor>
               </td>
@@ -814,11 +814,9 @@
                 </div>
                 <div class="form-group">
                   <label for="CreateDate">Create Date</label>
-                  <input id="CreateDate" class="form-control" name="createDate" type="date" (change)="onFechaChange($event)" #createDate="ngModel"
+                  <input id="CreateDate" class="form-control" name="createDate" type="date" 
+                  (change)="onFechaChange($event)" #createDate="ngModel"
                     [(ngModel)]="obra.fechaCreacion" required>
-                </div>
-                <div *ngIf="fechaSeleccionada">
-                  <p>Selected date: Year: {{ ano }}, Month: {{ mes }}, Day: {{ dia }}</p>
                 </div>
                 <div class="form-group">
                   <label for="Image">Image</label>
@@ -911,10 +909,13 @@
                   </div>
                 </div>
                 <!-- <div class="mb-3">
-                  <label for="recipient-disponibilidad" class="col-form-label">Disponibilidad:</label>
-                  <input type="text" class="form-control" id="recipient-disponibilidad" [(ngModel)]="obra.disponibilidad"
-                    name="disponibilidad">
+                  <label for="recipient-disponibilidad" class="col-form-label">Availability:</label>
+                  <select class="form-control" id="recipient-disponibilidad" [(ngModel)]="obra.disponibilidad" name="disponibilidad">
+                    <option [ngValue]="true">On sale</option>
+                    <option [ngValue]="false">Sold</option>
+                  </select>
                 </div> -->
+                
                 <div class="mb-3">
                   <label for="recipient-tamano" class="col-form-label">Size:</label>
                   <input type="text" class="form-control" id="recipient-tamano" [(ngModel)]="obra.tamano" name="tamano">
