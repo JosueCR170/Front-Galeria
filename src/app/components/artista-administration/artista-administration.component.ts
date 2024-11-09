@@ -118,7 +118,7 @@ export class ArtistaAdministrationComponent {
     this.status = -1;
     this.urlAPI = server.url + 'obra/getimage/';
 
-    this.pedido = new Pedido(new Envio(1, 0, "Espera", "", "", "", "", "", ""),
+    this.pedido = new Pedido(new Envio(1, 0, "On hold", "", "", "", "", "", ""),
       new Factura(0,null,"",0));
     this.obra = new Obra(1, 1, "", "", "", 0 , true, "", null, null, "");
     //this.taller = new Taller(1,"","",1,1);
@@ -296,14 +296,22 @@ authTokenUserAdmin() {
 
 
   updatePedido(envio: Envio) {
-    //console.log(envio);
+    envio.id=this.selectedPedidos[0].envio.id;
+    envio.idFactura=this.selectedPedidos[0].envio.idFactura;
+
+    // envio.fechaEnviado=this.selectedPedidos[0].envio.fechaEnviado;
+    // envio.fechaRecibido=this.selectedPedidos[0].envio.fechaRecibido;
+
+    console.log("este pedido:",this.pedido);
     this.envioService.update(envio).subscribe({
       next: (response: any) => {
 
-       // console.log(response);
+        console.log("response",response);
+
         this.msgAlert('Order updated successfully','','success');
+        
         this.selectedPedidos = [];
-       // this.indexEnvioByArtist();
+       this.indexEnvioByArtist();
 
       },
       error: (err: Error) => {
@@ -510,7 +518,7 @@ authTokenUserAdmin() {
 
 
   openNewPedido() {
-    this.pedido = new Pedido(new Envio(1, 0, "Espera", "", "", "", "", "", ""),
+    this.pedido = new Pedido(new Envio(1, 0, "On hold", "", "", "", "", "", ""),
     new Factura(0,null,"",0));
     this.submitted = false;
     this.productDialog = true;

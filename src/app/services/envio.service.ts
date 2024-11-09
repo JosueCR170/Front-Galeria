@@ -35,7 +35,7 @@ export class EnvioService{
     }
 
     update(envio:Envio): Observable<any> {
-        console.log(envio);
+        //console.log(envio);
         let obraJson=JSON.stringify(envio);
         let id = envio.id;
         //let formData = new FormData();
@@ -43,8 +43,6 @@ export class EnvioService{
         let headers;
         let bearertoken = sessionStorage.getItem('token');
         
-        //formData.append('_method', 'PUT');
-        //formData.append('data', JSON.stringify(obra));
         if (bearertoken){
             headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded').set('bearertoken', bearertoken);
         } else {

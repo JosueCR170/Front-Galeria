@@ -50,7 +50,7 @@
       </button> -->
       <button pButton style="background: rgb(236, 144, 32); margin-left: 5px;"
       pRipple  label="Update" class="aas" data-bs-toggle="modal" 
-        data-bs-target="#updateModal"(onClick)="editPedido(selectedPedidos[0])"
+        data-bs-target="#updateModal"(onClick)="editPedido(selectedPedidos[0])" (click)="editPedido(selectedPedidos[0])"
         [disabled]="!selectedPedidos || selectedPedidos.length !== 1">
       </button>
       </div>
@@ -209,7 +209,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="exampleModalLabel">UPDATE</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="reloadTablePedidos()"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <form>
@@ -272,8 +272,8 @@
             label="X Delete">
           </button>
           <button pButton class="aas" style="background: rgb(236, 144, 32); margin-left: 5px;"
-          pRipple data-bs-toggle="modal" data-bs-target="#updateModal"
-            (onClick)="editObra(selectedObras[0])"
+          pRipple data-bs-toggle="modal" data-bs-target="#updateModalObras"
+            (onClick)="editObra(selectedObras[0])" (click)="editObra(selectedObras[0])" 
             [disabled]="!selectedObras || selectedObras.length !== 1" label="Ø Update">
           </button>
         </div>
@@ -551,7 +551,7 @@
     </div>
 
     <!--Final dialogo Delete-->
-    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="updateModalObras" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
