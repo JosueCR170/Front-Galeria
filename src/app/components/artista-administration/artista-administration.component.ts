@@ -27,6 +27,7 @@ import { DetalleFacturaService } from '../../services/detalleFactura.service';
 import { Taller } from '../../models/Taller';
 import { Oferta } from '../../models/Oferta';
 import { OfertaService } from '../../services/oferta.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-artista-administration',
@@ -103,7 +104,9 @@ export class ArtistaAdministrationComponent {
     'Digital art', 'Collage', 'Pyrography', 'Bronze sculpture'
   ]
 
-  categorias: string[] = ['3D', 'Photograph',  'Fashion', 'Art', 'UI-UX']
+  categorias: string[] = ['3D', 'Photograph',  'Fashion', 'Art', 'UI-UX'];
+
+  private checkIdentity;
 
   constructor(
     private obraService: ObraService,
@@ -113,6 +116,7 @@ export class ArtistaAdministrationComponent {
     private envioService: EnvioService,
     private tallerService: TallerService,
     private ofertaService : OfertaService,
+    private userService:UserService,
     private _router: Router,
   ) {
     this.status = -1;
@@ -122,6 +126,11 @@ export class ArtistaAdministrationComponent {
       new Factura(0,null,"",0));
     this.obra = new Obra(1, 1, "", "", "", 0 , true, "", null, null, "");
     //this.taller = new Taller(1,"","",1,1);
+    this.checkIdentity=setInterval(()=>{
+      //this.identity=_userService.getIdentityFromStorage()
+      // console.log('nuevo token',this.identity)
+      this.verificarToken()
+    },5000)
   }
 
   ngOnInit(): void {
@@ -134,6 +143,28 @@ export class ArtistaAdministrationComponent {
 
     this.indexEnvioByArtist();
 
+  }
+
+   //---------VERIFICAR TOKEN-----------------
+   verificarToken() {
+    this.userService.verifyToken().subscribe({
+      next: (response: any) => {
+        console.log('response',response);
+        if (!response) {
+          sessionStorage.clear();
+          console.log("Sesión borrada");
+          this._router.navigate(['']);
+          //location.reload();
+          this.msgAlert('Token caducado','Inicia sesión nuevamente','error');
+        } else {
+         this.artist = this.userService.getIdentityFromStorage();
+          console.log(this.artist);
+        }
+      },
+      error: (err: Error) => {
+        console.log('error del response',err);
+      }
+    });
   }
 
   logOut() {

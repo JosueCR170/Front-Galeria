@@ -38,6 +38,8 @@ export class ShopComponent {
 
   public artista: Artista;
   obrasAgrupadasPorArtista: any[] = [];
+  private checkIdentity;
+
   constructor(
     private _obraService: ObraService,
     private _envioService:EnvioService,
@@ -45,12 +47,19 @@ export class ShopComponent {
     private _artistas: ArtistService,
     private userService: UserService,
     private _facturaService:FacturaService,
-    private messageService: MessageService
+    private messageService: MessageService,
+
   ) {
     this.status = -1;
     this.urlAPI = server.url + 'obra/getimage/';
    // this.obra = new Obra(1, 1, "", "", "", 1, true, "", null, null, null);
     this.artista = new Artista(1, "", "", "", "", "");
+
+    this.checkIdentity=setInterval(()=>{
+      //this.identity=_userService.getIdentityFromStorage()
+      // console.log('nuevo token',this.identity)
+      this.verificarToken()
+    },5000)
   }
   flagNoti: boolean = false;
   items: any[] | undefined;
@@ -87,6 +96,28 @@ export class ShopComponent {
     this.fillPedidos();
     
     
+  }
+
+  //---------VERIFICAR TOKEN-----------------
+  verificarToken() {
+    this.userService.verifyToken().subscribe({
+      next: (response: any) => {
+        console.log('response',response);
+        if (!response) {
+          sessionStorage.clear();
+          console.log("Sesión borrada");
+          this._router.navigate(['']);
+          //location.reload();
+          this.msgAlert('Token caducado','Inicia sesión nuevamente','error');
+        } else {
+         this.user = this.userService.getIdentityFromStorage();
+          console.log(this.user);
+        }
+      },
+      error: (err: Error) => {
+        console.log('error del response',err);
+      }
+    });
   }
 
   logOut() {

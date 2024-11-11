@@ -44,6 +44,15 @@ export class UserService{
         return this._http.get(this.urlAPI+'user/getidentity', options);
     }
 
+    getIdentityFromStorage(){
+        let identity=sessionStorage.getItem('identity')
+        if(identity){
+            
+            return JSON.parse(identity)
+        }
+        return null
+    }
+
     create(user:User):Observable<any>{
         let userJson=JSON.stringify(user);
         let params='data='+userJson;
@@ -104,5 +113,20 @@ export class UserService{
         };
         return this._http.put(`${this.urlAPI}user/${id}`, params, options);
     }
+
+    verifyToken(): Observable<any> {
+        let headers;
+        let bearertoken = sessionStorage.getItem('token');
+        if (bearertoken) {
+          headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded').set('bearertoken', bearertoken);
+        } else {
+          headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+        }
+        let options = {
+          headers
+        };
+    
+        return this._http.get(this.urlAPI + 'verifyToken', options);
+      }
 
 }

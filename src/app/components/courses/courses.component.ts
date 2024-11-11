@@ -22,11 +22,16 @@ import { CommonModule } from '@angular/common';
   styleUrl: './courses.component.css'
 })
 export class CoursesComponent {
+  private checkIdentity;
   constructor(private router: Router,
     private userService: UserService,
     private _talleresService: TallerService,
     private _ofertaService: OfertaService,
-    private _matricula: MatriculaService) {}
+    private _matricula: MatriculaService) {
+      this.checkIdentity=setInterval(()=>{
+        this.verificarToken()
+      },5000)
+    }
   user: any;
   userAux = new User(1, "", false, "", "", null, "");
   filteredCourses: any[] = [];
@@ -43,6 +48,28 @@ export class CoursesComponent {
 
   navigateTo(course: string) {
     this.router.navigate([`courses/${course}`]);
+  }
+
+   //---------VERIFICAR TOKEN-----------------
+   verificarToken() {
+    this.userService.verifyToken().subscribe({
+      next: (response: any) => {
+        console.log('response',response);
+        if (!response) {
+          sessionStorage.clear();
+          console.log("Sesión borrada");
+          this.router.navigate(['']);
+          //location.reload();
+          this.msgAlert('Token caducado','Inicia sesión nuevamente','error');
+        } else {
+         this.user = this.userService.getIdentityFromStorage();
+          console.log(this.user);
+        }
+      },
+      error: (err: Error) => {
+        console.log('error del response',err);
+      }
+    });
   }
 
   loadLoggedUser() {
