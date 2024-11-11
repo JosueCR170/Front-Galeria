@@ -13,11 +13,13 @@ import { TableModule } from 'primeng/table';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  public identity:any;
+public identity:any;
 constructor(
-  private primengConfig: PrimeNGConfig
+private primengConfig: PrimeNGConfig
 
 ){}
+
+
 ngOnInit() {
   this.primengConfig.ripple = true;
   this.primengConfig.zIndex = {
@@ -27,4 +29,6 @@ ngOnInit() {
     tooltip: 1100   // tooltip
 };
 }
+
+
 }

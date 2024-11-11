@@ -66,8 +66,6 @@ public formattedDate = this.formatDate(this.currentDate);
   }
 
   private formatDate(date: Date): string {
-    console.log(date);
-    
     const year = date.getFullYear();
     const month = date.getMonth() + 1; // Agrega un cero al mes si es necesario
     const day = date.getDate(); // Agrega un cero al día si es necesario
@@ -75,12 +73,14 @@ public formattedDate = this.formatDate(this.currentDate);
   }
 
   ngOnInit(): void {
+    this.loadLoggedUser();
+    if(this.user == null){
+      this.msgAlert('debe iniciar sesion',' ','error');
+      this._router.navigate(['/login']);
+    }else{
     const id = this._routes.snapshot.paramMap.get('id');
     const artistId = this._routes.snapshot.paramMap.get('artistId');
-
-    console.log('ID obtenido de la ruta:', id);
-    console.log('ID del artista obtenido de la ruta:', artistId);
-
+  
     if (id) {
       this.getObra(id);
     }else{
@@ -88,18 +88,15 @@ public formattedDate = this.formatDate(this.currentDate);
       if (artistId !== null) {
         this.getArtist(this.parseInt(artistId));
       }
-      
     }
-    this.loadLoggedUser();
+    }
+    
   }
 
   getArtist(artistId: number) {
-    // console.log('idArtista: ', artistId);
     this._artistService.showArtist(artistId).subscribe({
       next:(response)=>{
         this.artista = response.Artista;
-        // console.log('Artista:', this.artista);
-        
       },
       error:(error)=>{
         console.log('Error al obtener el artista:', error);
@@ -113,15 +110,11 @@ getObrasCarrito(artistId:any):void
   const carrito= sessionStorage.getItem('obrasCarrito');
   this.obras=carrito? JSON.parse(carrito):[];
   this.obras = Array.isArray( this.obras) ?  this.obras : [];
- 
   this.obras.forEach(o => {if(typeof o.idArtista==='string'){o.idArtista=this.parseInt(o.idArtista)}
   });
-
   this.obras = this.obras.filter(obra => obra.idArtista == artistId);
-  console.log('Obras',this.obras);
 
-  // this.obras.forEach(o => {console.log('Cada obra',o)
-  // });
+
 }
 
 //METODO PARA CREAR LAS FACTURAS DE LAS OBRAS
@@ -132,11 +125,7 @@ getObrasCarrito(artistId:any):void
        this._obraService.getArtworkById(id).subscribe(
          data => {
         this.obras.push(data['obra']);
-
         this.artista=data['obra'].artista;
-        console.log('Artista: ',this.artista);
-        console.log('Obras: ',this.obras);
-
         this.status = 1;
       },
       error => {
@@ -154,7 +143,7 @@ getObrasCarrito(artistId:any):void
   loadLoggedUser(){
     this.user = sessionStorage.getItem('identity');
     this.user = JSON.parse(this.user);
-    //console.log( this.user)
+
   }
 
 
@@ -172,7 +161,6 @@ getObrasCarrito(artistId:any):void
       if(typeof o.precio==='string'){
         o.precio=parseFloat(o.precio);
       }
-      //console.log("Precio de obra: ", o.precio)
       total=total+ o.precio;});
 
     if (selectedValue === 'Home delivery') {
@@ -189,7 +177,6 @@ getObrasCarrito(artistId:any):void
       this.shippingCost = '';
       this.totalCost = total.toString();
     }
-    //console.log("Factura",this.factura);
 
   }
   
@@ -205,8 +192,7 @@ getObrasCarrito(artistId:any):void
     let flag = true;
     this.obras.forEach(o => {
       if(typeof o.disponibilidad==='string'){o.disponibilidad = o.disponibilidad === '1' || o.disponibilidad === 1;}
-      console.log("tipo dato",typeof o.disponibilidad)
-      console.log("valor",o.disponibilidad)
+    
 
       if (!o.disponibilidad) {
         flag = false;
@@ -218,14 +204,9 @@ getObrasCarrito(artistId:any):void
       this.factura.idUsuario = this.user['iss'];
 
       this._facturaService.create(this.factura).subscribe({
-        next: (facturaResponse) => {
-
-        //console.log("Factura",this.factura);
-        respuesta = facturaResponse;
-        console.log('facturaResponse', respuesta);
-  
+        next: (facturaResponse) => {  
+        respuesta = facturaResponse;  
           if (respuesta.status === 201) {
-            console.log('facturaResponseFactura', respuesta.factura);
             this.envio.idFactura = respuesta.factura['id'];
   
             try {
@@ -236,11 +217,8 @@ getObrasCarrito(artistId:any):void
                 this.detallesFactura.idObra = o.id;
                 if (typeof o.precio === 'string') {
                   this.detallesFactura.subtotal = parseFloat(o.precio);
-                  console.log("Valor cambiado en subtotal")
               }
-                else{this.detallesFactura.subtotal =o.precio;}
-
-                console.log("detallesFactura",this.detallesFactura);
+                else{this.detallesFactura.subtotal =o.precio;} 
                 this.detallesFacturaCreate();
               });
             } catch (err) {
@@ -280,7 +258,6 @@ getObrasCarrito(artistId:any):void
   envioCreate(){
     this._envioService.create(this.envio).subscribe({
       next:(envioResponse)=>{
-        console.log('envioResponse',envioResponse);
         if(envioResponse.status==201){
 
         var mensaje = `Take screenshot<br>
@@ -314,10 +291,9 @@ getObrasCarrito(artistId:any):void
   detallesFacturaCreate(){
     this._detallesFacturaService.create(this.detallesFactura).subscribe({
       next:(detallesResponse)=>{
-        console.log('detallesResponse',detallesResponse);
         if(detallesResponse.status==201){
 
-          this.msgAlert('detalles factura registered successfully','', 'success');
+          //this.msgAlert('detalles factura registered successfully','', 'success');
           this._router.navigate(['/shop'])
         }else{
           //this.changeStatus(1);

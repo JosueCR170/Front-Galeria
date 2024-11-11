@@ -53,7 +53,7 @@ indexCourses(){
   this._talleresService.index().subscribe({
     next: (response: any) =>{
       this.courses = response['data']; 
-      console.log(this.courses)
+    
     },
     error: (err) => {
       console.error('Error al cargar los talleres:', err);
@@ -97,9 +97,7 @@ getArtistaName(artistaId: number | null): string | undefined {
 
 loadLoggedUser() {
   this.user = sessionStorage.getItem('identity');
-  console.log('User', this.user);
   this.user = JSON.parse(this.user);
-  console.log(this.user)
 }
 
 
@@ -142,7 +140,7 @@ loadOferta():void{
     } else {
       this.selectedOffer = null;
     }
-    console.log(this.selectedOffer)
+
   }
 
   getCourse(course: Taller){
@@ -187,7 +185,6 @@ loadOferta():void{
     });
     this.router.navigate([`courses`]);
   }
-
   CloseCanvas(){
     this.selectedOffer = null;
    }

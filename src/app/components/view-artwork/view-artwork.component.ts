@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Obra } from '../../models/Obra';
 import { ObraService } from '../../services/obra.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import Swal from 'sweetalert2';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user';
 import { ArtistService } from '../../services/artist.service';
@@ -37,21 +38,23 @@ export class ViewArtworkComponent {
   
 
 
-  ngOnInit(): void {
+  ngOnInit(): void {this.loadLoggedUser();
+    if(this.user == null){
+      this.msgAlert('debe iniciar sesion',' ','error');
+      this._router.navigate(['/login']);
+    }else{
     const id = this._routes.snapshot.paramMap.get('id');
-    console.log('ID obtenido de la ruta:', id); // Verificar que el ID se está obteniendo correctamente
+
     if (id) {
       this.getObra(id);
-      //console.log(this.obra);
-      //this.getArtista(this.obra.idArtista);
     }
-    this.loadLoggedUser();
+  }
+
   }
   
   getObra(id: string): void {
     this._obraService.getArtworkById(id).subscribe(
       data => {
-        console.log('Obra obtenida:', data); // Verificar los datos obtenidos
         this.obra = data['obra'];
 
         if (typeof this.obra.disponibilidad === 'string')
@@ -89,6 +92,14 @@ export class ViewArtworkComponent {
 
 redirectToSale() {
   this._router.navigate(['sale', this.obra.id]);
+}
+
+msgAlert = (title: any, text: any, icon: any) => {
+  Swal.fire({
+    title,
+    text,
+    icon,
+  })
 }
 
 }

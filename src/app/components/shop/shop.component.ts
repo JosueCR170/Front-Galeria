@@ -57,7 +57,7 @@ export class ShopComponent {
 
     this.checkIdentity=setInterval(()=>{
       //this.identity=_userService.getIdentityFromStorage()
-      // console.log('nuevo token',this.identity)
+
       this.verificarToken()
     },5000)
   }
@@ -89,12 +89,16 @@ export class ShopComponent {
   public acc: any[] = [];
   userAux = new User(1, "", false, "", "", null, "");
 
-  ngOnInit(): void { 
-    this.index();
+  ngOnInit(): void {
     this.loadLoggedUser();
+    if(this.user == null){
+      this.msgAlert('debe iniciar sesion',' ','error');
+      this._router.navigate(['/login']);
+    }else{
+    this.index();
     this.indexCarrito();
     this.fillPedidos();
-    
+    }
     
   }
 
@@ -102,16 +106,13 @@ export class ShopComponent {
   verificarToken() {
     this.userService.verifyToken().subscribe({
       next: (response: any) => {
-        console.log('response',response);
         if (!response) {
           sessionStorage.clear();
-          console.log("Sesión borrada");
           this._router.navigate(['']);
           //location.reload();
           this.msgAlert('Token caducado','Inicia sesión nuevamente','error');
         } else {
          this.user = this.userService.getIdentityFromStorage();
-          console.log(this.user);
         }
       },
       error: (err: Error) => {
@@ -136,8 +137,6 @@ export class ShopComponent {
         this.loadCategorysExists();
         this.indexArtista();
         this.indexEnvios();
-        //console.log("Obras: ",this.obras);
-        //console.log("AuxObras: ",this.auxObras);
       },
       error: (err: Error) => {
 
@@ -150,7 +149,6 @@ export class ShopComponent {
     this._artistas.index().subscribe({
       next: (response: any) => {
         this.auxArtistas = this.artistas = response['data'];
-        console.log("artistas",this.artistas)
       },
       error: (err: Error) => {
       }
@@ -161,12 +159,11 @@ export class ShopComponent {
     this._envioService.getByUser(this.user['iss']).subscribe({
       next: (response: any) => {
         this.envios = response['data'];
-        //console.log("Envios user: ",this.envios)
+
         this.envios.forEach(e => {
           if(typeof e.idFactura==='string'){e.idFactura=parseInt(e.idFactura)}
           this.getFacturas(e.idFactura);
         });
-        //console.log("factura user: ",this.facturas)
         
       },
       error: (err: Error) => {
@@ -178,8 +175,6 @@ export class ShopComponent {
     this._facturaService.show(id).subscribe({
       next: (response: any) => {
         this.facturas.push(response['data']);
-        
-        //console.log("factura creada: ",response)
       },
       error: (err: Error) => {
       }
@@ -199,7 +194,6 @@ export class ShopComponent {
         this._obraService.getArtworkByEnvioId(e.id.toString()).subscribe({
           next: (response: any) => {
             let obrasEnvio = response['data'];
-            console.log("obras envio", obrasEnvio);
             
             const artistasAgregados = new Set<number>(); // Cambia a Set<string> si idArtista es un string
             
@@ -218,7 +212,6 @@ export class ShopComponent {
             }).filter((obra: any) => obra !== null); // Filtra los nulls
   
             this.pedidos.push(pedido);
-            console.log("Pedidos: ", this.pedidos);
           },
           error: (err: Error) => {
             console.error('Error al cargar las obras', err);
@@ -240,7 +233,7 @@ export class ShopComponent {
 
   addCarFuncion(id: number) {
     let obra = this.obras.find((o: any) => o.id === id);
-    console.log(obra)
+
     if (obra) {
       const yaEnCarrito = this.obrasCarrito.some((item: any) => item.id === obra?.id);
       if (!yaEnCarrito) {
@@ -275,7 +268,7 @@ export class ShopComponent {
     sessionStorage.setItem('obrasCarrito', JSON.stringify(this.obrasCarrito));
     if (this.obrasCarrito.length != 0) {
       this.agrupamiento();
-      console.log(this.obrasCarrito.length)
+
     } else { this.indexCarrito() }
   }
   agrupamiento() {
@@ -284,8 +277,6 @@ export class ShopComponent {
       if(typeof obra.idArtista==='string'){
         idArtista= parseInt(obra.idArtista);
       }else{ idArtista = obra.idArtista;}
-
-      //console.log("idArtista tipo: ",typeof idArtista)
 
       if (typeof idArtista === 'number') {
         if (!acc[idArtista]) {
@@ -296,14 +287,10 @@ export class ShopComponent {
       return acc;
     }, {} as { [key: number]: any[] });
 
-    //console.log("Obras agrupadas", groupedObras);
 
     this.obrasAgrupadasPorArtista = Object.entries(groupedObras);
     this.obrasAgrupadasPorArtista.forEach(grupo => {
       grupo.total = this.calcularTotalPrecios(grupo[1]);
-
-      //console.log("Total", grupo.total)
-      console.log("Grupo", grupo)
     });
   }
   calcularTotalPrecios(obras: any[]): number {
@@ -357,9 +344,7 @@ export class ShopComponent {
 
   loadLoggedUser() {
     this.user = sessionStorage.getItem('identity');
-    console.log('User', this.user);
     this.user = JSON.parse(this.user);
-    //console.log('User',this.user);
     this.userAux = { ...this.user };
   }
 
@@ -414,7 +399,7 @@ export class ShopComponent {
     const lowercaseQuery = query.toLowerCase();
 
     // Si el input está vacío, muestra todas las obras
-    console.log(lowercaseQuery)
+
     if (lowercaseQuery === '') {
       this.index();
       this.auxObras = [...this.obras];
@@ -429,8 +414,7 @@ export class ShopComponent {
       this.flag = false;
       this.onClick = false;
       this.artistaMenu = false;
-      console.log("EL aux obras" + this.auxObras)
-      console.log(this.obras)
+   
     }
   }
 
@@ -439,7 +423,7 @@ export class ShopComponent {
     const lowercaseQuery = query.toLowerCase();
 
     // Si el input está vacío, muestra todas las obras
-    console.log(lowercaseQuery)
+ 
     if (lowercaseQuery === '') {
       this.indexArtista();
       this.auxArtistas = [...this.artistas];
@@ -449,15 +433,14 @@ export class ShopComponent {
       // Filtra las obras de arte que coinciden con el texto de búsqueda en el nombre de la obra
       this.auxArtistas = this.artistas.filter(artista => artista.nombre.toLowerCase().includes(lowercaseQuery));
       this.artistas = this.auxArtistas;
-      console.log("EL aux obras" + this.auxArtistas)
-      console.log(this.artistas)
+   
     }
   }
 
   searchObrasByArtist(id: number) {
     this.obras.forEach(obra => {
       this.auxObras2 = this.obras.filter(obra => obra.idArtista == id);
-      console.log(this.auxObras);
+   
     });
     this.getArtistaById(id);
     this.all = false;
@@ -470,10 +453,9 @@ export class ShopComponent {
   updateUser() {
 
     this.user.id = this.user.iss;
-    console.log('User antes de ', this.user);
+  
     this.userService.update(this.user).subscribe({
       next: (response: any) => {
-        console.log('Usuario actualizado', response);
         this.msgAlert('updated user', '', 'success');
         //this.loadLoggedUser();
 
@@ -492,8 +474,6 @@ export class ShopComponent {
         sessionStorage.setItem('identity', JSON.stringify(userInfo));
         location.reload();
         this._router.navigate(['/shop']);
-        console.log('User', this.user);
-        // console.log('UserAUX',this.userAux);
       },
       error: (err: any) => {
         console.error('Error al actualizar el usuario', err.error.message);

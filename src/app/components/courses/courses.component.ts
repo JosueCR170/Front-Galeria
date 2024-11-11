@@ -54,16 +54,14 @@ export class CoursesComponent {
    verificarToken() {
     this.userService.verifyToken().subscribe({
       next: (response: any) => {
-        console.log('response',response);
+
         if (!response) {
           sessionStorage.clear();
-          console.log("Sesión borrada");
           this.router.navigate(['']);
           //location.reload();
           this.msgAlert('Token caducado','Inicia sesión nuevamente','error');
         } else {
          this.user = this.userService.getIdentityFromStorage();
-          console.log(this.user);
         }
       },
       error: (err: Error) => {
@@ -77,7 +75,7 @@ export class CoursesComponent {
     if (!this.user){
       this.router.navigate(['/login']);
     }else{
-     console.log('User', this.user);
+  
     this.user = JSON.parse(this.user);
     }
   }
@@ -188,7 +186,7 @@ export class CoursesComponent {
       }
     }
   });
-  console.log(this.filteredCourses)
+
   this.isLoading = false; 
   }
 

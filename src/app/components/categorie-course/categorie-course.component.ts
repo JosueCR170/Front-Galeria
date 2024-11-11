@@ -103,9 +103,7 @@ ngOnInit(): void {
 
 loadLoggedUser() {
   this.user = sessionStorage.getItem('identity');
-  console.log('User', this.user);
   this.user = JSON.parse(this.user);
-  console.log(this.user)
 }
 
 
