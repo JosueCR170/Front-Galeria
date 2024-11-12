@@ -67,7 +67,7 @@ export class ObraService{
     
     
     update(obra:Obra): Observable<any> {
-        console.log(obra);
+       // console.log(obra);
         let obraJson=JSON.stringify(obra);
         let id = obra.id;
         //let formData = new FormData();
@@ -89,7 +89,7 @@ export class ObraService{
     }
 
     updateDisponibilidad(obra:Obra): Observable<any> {
-        console.log(obra);
+        //console.log(obra);
         let obraJson=JSON.stringify(obra);
         let id = obra.id;
         //let formData = new FormData();
@@ -113,7 +113,7 @@ export class ObraService{
     
 
     create(obra:Obra):Observable<any>{
-        console.log(obra);
+        //console.log(obra);
         let headers;
         let obraJson=JSON.stringify(obra);
         let params='data='+obraJson;

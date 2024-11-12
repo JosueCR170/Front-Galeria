@@ -616,6 +616,7 @@ export class AdminComponent {
             this.msgAlert('Error from the server, contact an administrator', '', 'error');
           }
         }
+        
       });
     } else { 
       this.msgAlert('Error you must choose an image for the artwork', '', 'error'); 

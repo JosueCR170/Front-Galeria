@@ -443,11 +443,43 @@ authTokenUserAdmin() {
                   this.msgAlert('Saved artwork','','success');
                   this.index();
                 },
-                error: (err: any) => {
-                  console.error(err);
-                 this.msgAlert('Error, the artwork was not saved','','error');
+                error: (error: any) => {
+                  this.deleteImage(this.obra.imagen);
+
+                  if (error.status === 500 && error.error && error.error.error) {
+                    this.errors = [];
+                    const errorObj = error.error.error;
+                    if (errorObj.includes('La fecha de registro debe ser igual o posterior a la fecha de creación en las obras')) {
+                      this.msgAlert('The registration date must be equal to or later than the creation date', '', 'error');
+                    } else {
+                      if (errorObj.includes('El precio no puede ser negativo en las obras')) {
+                        this.msgAlert('The price cannot be negative in the artworks', '', 'error');
+                      } else {
+                    this.msgAlert('Error adding artwork', this.errors, 'error');
+                  } }
+                }else
+
+                if (error.status === 406 && error.error && error.error.error) {
+                  this.errors = [];
+                  const errorObj = error.error.error;
+                  for (const key in errorObj) {
+                    if (errorObj.hasOwnProperty(key)) {
+                      this.errors.push(...errorObj[key]);
+                    }
+                  }
+                  this.msgAlert('Error adding artwork', this.errors, 'error');
+                } 
+                
+                else {
+                  //console.error('Other type of error:', error);
+                  this.msgAlert('Error from the server, contact an administrator', '', 'error');
                 }
+
+              }
+
+                
               });
+
             } else {
               console.error('No se recibió el nombre del archivo.');
             }
@@ -455,9 +487,13 @@ authTokenUserAdmin() {
           error: (err: any) => {
             console.error(err);
           }
+
+          
         });
       }else{this.msgAlert('Error, file not chosen','','error');}
-    }else{console.error('No se hizo nada');}
+    }else{console.error('No se hizo nada');
+      this.msgAlert('All data must be filled in','','error');
+    }
   }
 
 

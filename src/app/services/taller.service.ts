@@ -66,7 +66,7 @@ export class TallerService{
     
 
     update(taller:Taller): Observable<any> {
-        console.log(taller);
+        //console.log(taller);
         let TallerJson=JSON.stringify(taller);
         let id = taller.id;
         let params='data='+TallerJson;

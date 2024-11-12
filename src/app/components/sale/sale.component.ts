@@ -53,7 +53,7 @@ public formattedDate = this.formatDate(this.currentDate);
   ) {
     this.status = -1;
     this.urlAPI = server.url+'obra/getimage/';
-    this.envio=new Envio(1,0,"Espera","","","","","","");
+    this.envio=new Envio(1,0,"On hold","","","","","","");
     this.factura=new Factura(1,1,this.formattedDate,null);
     this.detallesFactura=new DetalleFactura(0,null,null,null);
   }
